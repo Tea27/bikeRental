@@ -1,27 +1,27 @@
 # bikeRental
 
-###General Info
+### General Info
   - This project is a bike rental system where users can : register, rent a bike, and return it after use.
   - In addition, system administrators have access to statistical data and can manage users and bikes.
   - The project also includes information about bike stations located throughout the city and potential cycling events to other cities.
 
-###Features
+### Features
   - User registration
   - Bike rental
   - Bike return
   - Administrative access to statistical data
   - Management of users and bikes
 
-###Database Model
+### Database Model
 ...
 
-###Technologies & Languages
+### Technologies & Languages
   - .NET
   - C#
   - Visual Studio
   ...
 
-###Authors
+### Authors
   - [Vera Marija Guja](https://www.github.com/VeraMarija)
   - [Tea Basic](https://www.github.com/Tea27)
   - [Ante Melvan] (https://github.com/ante31)
