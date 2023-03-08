@@ -13,7 +13,8 @@
   - Management of users and bikes
 
 ### Database Model
-...
+![database](https://user-images.githubusercontent.com/79653091/223775534-1bce525d-71d0-40d1-98e8-a9b793a0998f.svg)
+
 
 ### Technologies & Languages
   - .NET
