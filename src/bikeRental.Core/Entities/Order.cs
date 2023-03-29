@@ -1,23 +1,23 @@
-﻿using System;
+﻿using bikeRental.Core.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using bikeRental.Core.Common;
 
 namespace bikeRental.Core.Entities
 {
-    internal class Customer : BaseEntity, IAuditedEntity
+    internal class Order : BaseEntity, IAuditedEntity
     {
-        public string FirstName { get; set; }
+        public Guid CustomerID { get; set; }
 
-        public string LastName { get; set; }
+        public Guid BikeID { get; set; }
 
-        public string Email { get; set; }
+        public DateTime RentalStartTime { get; set; }
 
-        public string Password { get; set; }
+        public DateTime RentalEndTime { get; set; }
 
-        public List<Order> Posts { get; set; }
+        public string RentalPrice { get; set; }
 
         public string CreatedBy { get; set; }
 

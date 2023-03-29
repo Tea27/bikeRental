@@ -1,23 +1,24 @@
-﻿using System;
+﻿using bikeRental.Core.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using bikeRental.Core.Common;
 
 namespace bikeRental.Core.Entities
 {
-    internal class Customer : BaseEntity, IAuditedEntity
+    internal class Station : BaseEntity, IAuditedEntity
     {
-        public string FirstName { get; set; }
+        public string address { get; set; }
 
-        public string LastName { get; set; }
+        public string PartOfCity { get; set; }
 
-        public string Email { get; set; }
+        public int NumberOfBikes { get; set; }
 
-        public string Password { get; set; }
+        public int NumberOfElectricBikes { get; set; }
 
-        public List<Order> Posts { get; set; }
+        public List<Bicycle> Bicycles { get; set; }
+
 
         public string CreatedBy { get; set; }
 
