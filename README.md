@@ -13,7 +13,7 @@
   - Management of users and bikes
 
 ### Database Model
-![database](https://user-images.githubusercontent.com/79653091/223776693-ce24cda2-72e0-4486-b86c-91f51e752abf.svg)
+![dbms](https://user-images.githubusercontent.com/79653091/228393965-45586c8d-0bf9-47a4-941b-5310c2ed2995.png)
 
 
 
