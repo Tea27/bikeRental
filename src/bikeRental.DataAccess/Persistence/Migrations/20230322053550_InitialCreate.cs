@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DSMS.DataAccess.Persistence.Migrations
+namespace bikeRental.DataAccess.Persistence.Migrations
 {
     public partial class InitialCreate : Migration
     {

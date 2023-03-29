@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using DSMS.Application.Models;
-using DSMS.Application.Models.User;
-using DSMS.Application.Services;
+using bikeRental.Application.Models;
+using bikeRental.Application.Models.User;
+using bikeRental.Application.Services;
 
-namespace DSMS.API.Controllers;
+namespace bikeRental.API.Controllers;
 
 public class UsersController : ApiController
 {

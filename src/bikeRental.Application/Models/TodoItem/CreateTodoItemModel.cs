@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Models.TodoItem;
+﻿namespace bikeRental.Application.Models.TodoItem;
 
 public class CreateTodoItemModel
 {

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace DSMS.Application.Services.Impl;
+namespace bikeRental.Application.Services.Impl;
 
 public class TemplateService : ITemplateService
 {

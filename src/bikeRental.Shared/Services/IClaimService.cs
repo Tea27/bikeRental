@@ -1,4 +1,4 @@
-﻿namespace DSMS.Shared.Services
+﻿namespace bikeRental.Shared.Services
 {
     public interface IClaimService
     {

@@ -1,6 +1,6 @@
-﻿using DSMS.Core.Common;
+﻿using bikeRental.Core.Common;
 
-namespace DSMS.Core.Entities
+namespace bikeRental.Core.Entities
 {
     public class TodoItem : BaseEntity, IAuditedEntity
     {

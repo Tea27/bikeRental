@@ -1,13 +1,13 @@
 ﻿using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using DSMS.API.Filters;
-using DSMS.API.Middleware;
-using DSMS.Application;
-using DSMS.Application.Models.Validators;
-using DSMS.DataAccess;
+using bikeRental.API.Filters;
+using bikeRental.API.Middleware;
+using bikeRental.Application;
+using bikeRental.Application.Models.Validators;
+using bikeRental.DataAccess;
 using Npgsql;
 
-namespace DSMS.API;
+namespace bikeRental.API;
 
 public class Startup
 {

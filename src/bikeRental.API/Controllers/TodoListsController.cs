@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using DSMS.Application.Models;
-using DSMS.Application.Models.TodoItem;
-using DSMS.Application.Models.TodoList;
-using DSMS.Application.Services;
+using bikeRental.Application.Models;
+using bikeRental.Application.Models.TodoItem;
+using bikeRental.Application.Models.TodoList;
+using bikeRental.Application.Services;
 
-namespace DSMS.API.Controllers;
+namespace bikeRental.API.Controllers;
 
 [Authorize]
 public class TodoListsController : ApiController

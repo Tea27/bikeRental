@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using DSMS.Application.Models;
+using bikeRental.Application.Models;
 
-namespace DSMS.API.Filters;
+namespace bikeRental.API.Filters;
 
 public class ValidateModelAttribute : Attribute, IAsyncResultFilter
 {

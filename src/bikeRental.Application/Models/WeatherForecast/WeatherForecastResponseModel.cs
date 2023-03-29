@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Models.WeatherForecast;
+﻿namespace bikeRental.Application.Models.WeatherForecast;
 
 public class WeatherForecastResponseModel
 {

@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using DSMS.Application.Models.User;
-using DSMS.DataAccess.Identity;
+using bikeRental.Application.Models.User;
+using bikeRental.DataAccess.Identity;
 
-namespace DSMS.Application.Models.Validators.User;
+namespace bikeRental.Application.Models.Validators.User;
 
 public class CreateUserModelValidator : AbstractValidator<CreateUserModel>
 {

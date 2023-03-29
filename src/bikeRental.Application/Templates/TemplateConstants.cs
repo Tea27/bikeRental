@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Templates;
+﻿namespace bikeRental.Application.Templates;
 
 public static class TemplateConstants
 {

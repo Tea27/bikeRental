@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Models.User;
+﻿namespace bikeRental.Application.Models.User;
 
 public class LoginUserModel
 {

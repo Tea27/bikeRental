@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using DSMS.Application.Models.User;
-using DSMS.DataAccess.Identity;
+using bikeRental.Application.Models.User;
+using bikeRental.DataAccess.Identity;
 
-namespace DSMS.Application.MappingProfiles;
+namespace bikeRental.Application.MappingProfiles;
 
 public class UserProfile : Profile
 {

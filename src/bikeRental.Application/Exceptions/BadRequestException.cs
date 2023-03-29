@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Exceptions;
+﻿namespace bikeRental.Application.Exceptions;
 
 [Serializable]
 public class BadRequestException : Exception

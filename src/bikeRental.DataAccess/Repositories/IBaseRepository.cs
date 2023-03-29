@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
-using DSMS.Core.Common;
+using bikeRental.Core.Common;
 
-namespace DSMS.DataAccess.Repositories;
+namespace bikeRental.DataAccess.Repositories;
 
 public interface IBaseRepository<TEntity> where TEntity : BaseEntity
 {

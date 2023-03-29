@@ -1,7 +1,7 @@
-﻿using DSMS.Application.Models;
-using DSMS.Application.Models.User;
+﻿using bikeRental.Application.Models;
+using bikeRental.Application.Models.User;
 
-namespace DSMS.Application.Services;
+namespace bikeRental.Application.Services;
 
 public interface IUserService
 {

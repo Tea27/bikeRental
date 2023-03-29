@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using DSMS.Application.Common.Email;
+using bikeRental.Application.Common.Email;
 
-namespace DSMS.Application.Services.DevImpl;
+namespace bikeRental.Application.Services.DevImpl;
 
 public class DevEmailService : IEmailService
 {

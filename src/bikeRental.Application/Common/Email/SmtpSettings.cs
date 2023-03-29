@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Common.Email;
+﻿namespace bikeRental.Application.Common.Email;
 
 public class SmtpSettings
 {

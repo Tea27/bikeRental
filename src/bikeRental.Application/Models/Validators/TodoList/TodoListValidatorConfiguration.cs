@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Models.Validators.TodoList;
+﻿namespace bikeRental.Application.Models.Validators.TodoList;
 
 public static class TodoListValidatorConfiguration
 {

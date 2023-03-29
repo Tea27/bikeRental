@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using DSMS.Application.Models.TodoList;
-using DSMS.Core.Entities;
+using bikeRental.Application.Models.TodoList;
+using bikeRental.Core.Entities;
 
-namespace DSMS.Application.MappingProfiles;
+namespace bikeRental.Application.MappingProfiles;
 
 public class TodoListProfile : Profile
 {

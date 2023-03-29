@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using DSMS.Application.Models.User;
+using bikeRental.Application.Models.User;
 
-namespace DSMS.Application.Models.Validators.User;
+namespace bikeRental.Application.Models.Validators.User;
 
 public class ConfirmEmailModelValidator : AbstractValidator<ConfirmEmailModel>
 {

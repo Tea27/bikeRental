@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace DSMS.Core.Exceptions
+namespace bikeRental.Core.Exceptions
 {
     [Serializable]
     public class ResourceNotFoundException : Exception

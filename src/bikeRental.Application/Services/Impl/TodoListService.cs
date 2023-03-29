@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using DSMS.Application.Exceptions;
-using DSMS.Application.Models;
-using DSMS.Application.Models.TodoList;
-using DSMS.Core.Entities;
-using DSMS.DataAccess.Repositories;
-using DSMS.Shared.Services;
+using bikeRental.Application.Exceptions;
+using bikeRental.Application.Models;
+using bikeRental.Application.Models.TodoList;
+using bikeRental.Core.Entities;
+using bikeRental.DataAccess.Repositories;
+using bikeRental.Shared.Services;
 
-namespace DSMS.Application.Services.Impl;
+namespace bikeRental.Application.Services.Impl;
 
 public class TodoListService : ITodoListService
 {

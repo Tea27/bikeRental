@@ -1,7 +1,7 @@
-﻿using DSMS.Application.Models;
-using DSMS.Application.Models.TodoItem;
+﻿using bikeRental.Application.Models;
+using bikeRental.Application.Models.TodoItem;
 
-namespace DSMS.Application.Services;
+namespace bikeRental.Application.Services;
 
 public interface ITodoItemService
 {

@@ -1,7 +1,7 @@
-﻿using DSMS.Core.Entities;
-using DSMS.DataAccess.Persistence;
+﻿using bikeRental.Core.Entities;
+using bikeRental.DataAccess.Persistence;
 
-namespace DSMS.DataAccess.Repositories.Impl;
+namespace bikeRental.DataAccess.Repositories.Impl;
 
 public class TodoListRepository : BaseRepository<TodoList>, ITodoListRepository
 {

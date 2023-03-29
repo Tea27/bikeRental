@@ -1,6 +1,6 @@
-﻿using DSMS.DataAccess.Persistence;
+﻿using bikeRental.DataAccess.Persistence;
 
-namespace DSMS.API.Middleware;
+namespace bikeRental.API.Middleware;
 
 public class TransactionMiddleware
 {

@@ -1,7 +1,7 @@
-﻿using DSMS.Application.Helpers;
-using DSMS.Application.Models.WeatherForecast;
+﻿using bikeRental.Application.Helpers;
+using bikeRental.Application.Models.WeatherForecast;
 
-namespace DSMS.Application.Services.Impl;
+namespace bikeRental.Application.Services.Impl;
 
 public class WeatherForecastService : IWeatherForecastService
 {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using DSMS.Core.Entities;
+using bikeRental.Core.Entities;
 
-namespace DSMS.DataAccess.Persistence.Configurations;
+namespace bikeRental.DataAccess.Persistence.Configurations;
 
 public class TodoListConfiguration : IEntityTypeConfiguration<TodoList>
 {

@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Exceptions;
+﻿namespace bikeRental.Application.Exceptions;
 
 public class NotFoundException : Exception
 {

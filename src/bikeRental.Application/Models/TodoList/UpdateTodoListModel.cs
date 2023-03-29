@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Models.TodoList;
+﻿namespace bikeRental.Application.Models.TodoList;
 
 public class UpdateTodoListModel
 {

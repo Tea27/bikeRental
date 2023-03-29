@@ -2,15 +2,15 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using DSMS.Application.Common.Email;
-using DSMS.Application.MappingProfiles;
-using DSMS.Application.Services;
-using DSMS.Application.Services.DevImpl;
-using DSMS.Application.Services.Impl;
-using DSMS.Shared.Services;
-using DSMS.Shared.Services.Impl;
+using bikeRental.Application.Common.Email;
+using bikeRental.Application.MappingProfiles;
+using bikeRental.Application.Services;
+using bikeRental.Application.Services.DevImpl;
+using bikeRental.Application.Services.Impl;
+using bikeRental.Shared.Services;
+using bikeRental.Shared.Services.Impl;
 
-namespace DSMS.Application;
+namespace bikeRental.Application;
 
 public static class ApplicationDependencyInjection
 {

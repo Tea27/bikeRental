@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Services;
+﻿namespace bikeRental.Application.Services;
 
 public interface ITemplateService
 {

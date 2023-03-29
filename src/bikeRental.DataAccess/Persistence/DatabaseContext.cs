@@ -1,12 +1,12 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using DSMS.Core.Common;
-using DSMS.Core.Entities;
-using DSMS.DataAccess.Identity;
-using DSMS.Shared.Services;
+using bikeRental.Core.Common;
+using bikeRental.Core.Entities;
+using bikeRental.DataAccess.Identity;
+using bikeRental.Shared.Services;
 
-namespace DSMS.DataAccess.Persistence;
+namespace bikeRental.DataAccess.Persistence;
 
 public class DatabaseContext : IdentityDbContext<ApplicationUser>
 {

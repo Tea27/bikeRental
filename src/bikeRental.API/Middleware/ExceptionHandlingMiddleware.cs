@@ -1,9 +1,9 @@
-﻿using DSMS.Application.Exceptions;
-using DSMS.Application.Models;
-using DSMS.Core.Exceptions;
+﻿using bikeRental.Application.Exceptions;
+using bikeRental.Application.Models;
+using bikeRental.Core.Exceptions;
 using Newtonsoft.Json;
 
-namespace DSMS.API.Middleware;
+namespace bikeRental.API.Middleware;
 
 public class ExceptionHandlingMiddleware
 {

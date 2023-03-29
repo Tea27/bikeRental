@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
-namespace DSMS.Shared.Services.Impl
+namespace bikeRental.Shared.Services.Impl
 {
     public class ClaimService : IClaimService
     {

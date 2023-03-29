@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Models;
+﻿namespace bikeRental.Application.Models;
 
 public class BaseResponseModel
 {

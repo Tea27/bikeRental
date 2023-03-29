@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace DSMS.DataAccess.Identity;
+namespace bikeRental.DataAccess.Identity;
 
 public class ApplicationUser : IdentityUser { }

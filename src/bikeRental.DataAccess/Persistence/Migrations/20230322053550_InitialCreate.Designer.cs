@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using DSMS.DataAccess.Persistence;
+using bikeRental.DataAccess.Persistence;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DSMS.DataAccess.Persistence.Migrations
+namespace bikeRental.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
     [Migration("20230322053550_InitialCreate")]

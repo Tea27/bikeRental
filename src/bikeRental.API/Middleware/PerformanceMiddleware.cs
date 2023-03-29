@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace DSMS.API.Middleware;
+namespace bikeRental.API.Middleware;
 
 public class PerformanceMiddleware
 {

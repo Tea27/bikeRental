@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using DSMS.DataAccess.Identity;
+using bikeRental.DataAccess.Identity;
 
-namespace DSMS.DataAccess.Persistence;
+namespace bikeRental.DataAccess.Persistence;
 
 public static class DatabaseContextSeed
 {

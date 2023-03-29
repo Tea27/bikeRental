@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Helpers;
+﻿namespace bikeRental.Application.Helpers;
 
 public static class RandomGenerator
 {

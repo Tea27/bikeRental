@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Models.Validators.TodoItem;
+﻿namespace bikeRental.Application.Models.Validators.TodoItem;
 
 public static class TodoItemValidatorConfiguration
 {

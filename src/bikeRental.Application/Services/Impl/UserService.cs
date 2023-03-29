@@ -2,15 +2,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using DSMS.Application.Common.Email;
-using DSMS.Application.Exceptions;
-using DSMS.Application.Helpers;
-using DSMS.Application.Models;
-using DSMS.Application.Models.User;
-using DSMS.Application.Templates;
-using DSMS.DataAccess.Identity;
+using bikeRental.Application.Common.Email;
+using bikeRental.Application.Exceptions;
+using bikeRental.Application.Helpers;
+using bikeRental.Application.Models;
+using bikeRental.Application.Models.User;
+using bikeRental.Application.Templates;
+using bikeRental.DataAccess.Identity;
 
-namespace DSMS.Application.Services.Impl;
+namespace bikeRental.Application.Services.Impl;
 
 public class UserService : IUserService
 {

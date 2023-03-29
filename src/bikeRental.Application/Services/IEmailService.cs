@@ -1,6 +1,6 @@
-﻿using DSMS.Application.Common.Email;
+﻿using bikeRental.Application.Common.Email;
 
-namespace DSMS.Application.Services;
+namespace bikeRental.Application.Services;
 
 public interface IEmailService
 {

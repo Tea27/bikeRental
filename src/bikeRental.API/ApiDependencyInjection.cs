@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace DSMS.API;
+namespace bikeRental.API;
 
 public static class ApiDependencyInjection
 {

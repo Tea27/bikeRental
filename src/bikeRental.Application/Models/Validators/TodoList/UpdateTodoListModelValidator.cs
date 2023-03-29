@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using DSMS.Application.Models.TodoList;
+using bikeRental.Application.Models.TodoList;
 
-namespace DSMS.Application.Models.Validators.TodoList;
+namespace bikeRental.Application.Models.Validators.TodoList;
 
 public class UpdateTodoListModelValidator : AbstractValidator<UpdateTodoListModel>
 {

@@ -3,9 +3,9 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using DSMS.DataAccess.Identity;
+using bikeRental.DataAccess.Identity;
 
-namespace DSMS.Application.Helpers;
+namespace bikeRental.Application.Helpers;
 
 public static class JwtHelper
 {

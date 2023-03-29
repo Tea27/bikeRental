@@ -1,4 +1,4 @@
-﻿namespace DSMS.Core.Common
+﻿namespace bikeRental.Core.Common
 {
     public interface IAuditedEntity
     {

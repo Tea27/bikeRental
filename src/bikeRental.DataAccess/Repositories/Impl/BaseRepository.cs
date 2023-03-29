@@ -1,10 +1,10 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using DSMS.Core.Common;
-using DSMS.Core.Exceptions;
-using DSMS.DataAccess.Persistence;
+using bikeRental.Core.Common;
+using bikeRental.Core.Exceptions;
+using bikeRental.DataAccess.Persistence;
 
-namespace DSMS.DataAccess.Repositories.Impl;
+namespace bikeRental.DataAccess.Repositories.Impl;
 
 public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
 {

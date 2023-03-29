@@ -1,5 +1,5 @@
-﻿using DSMS.Core.Entities;
+﻿using bikeRental.Core.Entities;
 
-namespace DSMS.DataAccess.Repositories;
+namespace bikeRental.DataAccess.Repositories;
 
 public interface ITodoListRepository : IBaseRepository<TodoList> { }

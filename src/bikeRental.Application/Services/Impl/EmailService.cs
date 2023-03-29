@@ -1,8 +1,8 @@
 ﻿using MailKit.Net.Smtp;
 using MimeKit;
-using DSMS.Application.Common.Email;
+using bikeRental.Application.Common.Email;
 
-namespace DSMS.Application.Services.Impl;
+namespace bikeRental.Application.Services.Impl;
 
 public class EmailService : IEmailService
 {

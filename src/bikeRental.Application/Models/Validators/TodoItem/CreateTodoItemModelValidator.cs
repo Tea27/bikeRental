@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using DSMS.Application.Models.TodoItem;
+using bikeRental.Application.Models.TodoItem;
 
-namespace DSMS.Application.Models.Validators.TodoItem;
+namespace bikeRental.Application.Models.Validators.TodoItem;
 
 public class CreateTodoItemModelValidator : AbstractValidator<CreateTodoItemModel>
 {

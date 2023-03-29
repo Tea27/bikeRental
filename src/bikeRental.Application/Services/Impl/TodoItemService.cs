@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using DSMS.Application.Models;
-using DSMS.Application.Models.TodoItem;
-using DSMS.Core.Entities;
-using DSMS.DataAccess.Repositories;
+using bikeRental.Application.Models;
+using bikeRental.Application.Models.TodoItem;
+using bikeRental.Core.Entities;
+using bikeRental.DataAccess.Repositories;
 
-namespace DSMS.Application.Services.Impl;
+namespace bikeRental.Application.Services.Impl;
 
 public class TodoItemService : ITodoItemService
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace DSMS.API.Controllers;
+namespace bikeRental.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

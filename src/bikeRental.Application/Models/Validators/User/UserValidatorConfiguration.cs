@@ -1,4 +1,4 @@
-﻿namespace DSMS.Application.Models.Validators.User;
+﻿namespace bikeRental.Application.Models.Validators.User;
 
 public static class UserValidatorConfiguration
 {

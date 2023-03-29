@@ -1,6 +1,6 @@
-using DSMS.DataAccess.Persistence;
+﻿using bikeRental.DataAccess.Persistence;
 
-namespace DSMS.API;
+namespace bikeRental.API;
 
 public static class Program
 {

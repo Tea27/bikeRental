@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using DSMS.DataAccess.Identity;
-using DSMS.DataAccess.Persistence;
-using DSMS.DataAccess.Repositories;
-using DSMS.DataAccess.Repositories.Impl;
+using bikeRental.DataAccess.Identity;
+using bikeRental.DataAccess.Persistence;
+using bikeRental.DataAccess.Repositories;
+using bikeRental.DataAccess.Repositories.Impl;
 
-namespace DSMS.DataAccess;
+namespace bikeRental.DataAccess;
 
 public static class DataAccessDependencyInjection
 {
