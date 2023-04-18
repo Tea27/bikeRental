@@ -12,7 +12,7 @@ using bikeRental.Application.Exceptions;
 using bikeRental.Application.Models.User;
 using bikeRental.Application.Services;
 using bikeRental.Application.Services.Impl;
-using bikeRental.DataAccess.Identity;
+using bikeRental.Core.Identity;
 using NSubstitute;
 using Xunit;
 

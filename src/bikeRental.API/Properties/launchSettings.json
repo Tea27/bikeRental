@@ -1,4 +1,4 @@
-{
+﻿{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
@@ -25,7 +25,7 @@
       "useSSL": true,
       "publishAllPorts": true
     },
-    "DSMS.API": {
+    "bikeRental.API": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

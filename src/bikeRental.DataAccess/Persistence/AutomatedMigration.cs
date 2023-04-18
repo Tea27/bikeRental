@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using bikeRental.DataAccess.Identity;
+using bikeRental.Core.Identity;
 
 namespace bikeRental.DataAccess.Persistence;
 

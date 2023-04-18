@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using bikeRental.DataAccess.Identity;
+using bikeRental.Core.Identity;
 
 namespace bikeRental.Application.Helpers;
 

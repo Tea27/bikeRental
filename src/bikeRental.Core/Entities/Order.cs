@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace bikeRental.Core.Entities
 {
-    internal class Order : BaseEntity, IAuditedEntity
+    public class Order : BaseEntity, IAuditedEntity
     {
-        public Guid CustomerID { get; set; }
-
-        public Guid BikeID { get; set; }
 
         public DateTime RentalStartTime { get; set; }
 
@@ -19,12 +16,16 @@ namespace bikeRental.Core.Entities
 
         public string RentalPrice { get; set; }
 
+        public Customer Customer { get; set; }
+
+        public Bicycle Bicycle { get; set; }
+
         public string CreatedBy { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; } = DateTime.Now;
 
-        public string UpdatedBy { get; set; }
+        public string UpdatedBy { get; set; } 
 
-        public DateTime? UpdatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; } = DateTime.Now;
     }
 }

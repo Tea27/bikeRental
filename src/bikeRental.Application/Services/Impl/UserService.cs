@@ -8,7 +8,7 @@ using bikeRental.Application.Helpers;
 using bikeRental.Application.Models;
 using bikeRental.Application.Models.User;
 using bikeRental.Application.Templates;
-using bikeRental.DataAccess.Identity;
+using bikeRental.Core.Identity;
 
 namespace bikeRental.Application.Services.Impl;
 
@@ -51,7 +51,7 @@ public class UserService : IUserService
         var emailBody = _templateService.ReplaceInTemplate(emailTemplate,
             new Dictionary<string, string> { { "{UserId}", user.Id }, { "{Token}", token } });
 
-        await _emailService.SendEmailAsync(EmailMessage.Create(user.Email, emailBody, "[DSMS]Confirm your email"));
+        await _emailService.SendEmailAsync(EmailMessage.Create(user.Email, emailBody, "[bikeRental]Confirm your email"));
 
         return new CreateUserResponseModel
         {

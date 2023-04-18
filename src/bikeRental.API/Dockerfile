@@ -10,16 +10,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["DSMS.API/DSMS.API.csproj", "DSMS.API/"]
-RUN dotnet restore "DSMS.API/DSMS.API.csproj"
+COPY ["bikeRental.API/bikeRental.API.csproj", "bikeRental.API/"]
+RUN dotnet restore "bikeRental.API/bikeRental.API.csproj"
 COPY . .
-WORKDIR "/src/DSMS.API"
-RUN dotnet build "DSMS.API.csproj" -c Release -o /app/build
+WORKDIR "/src/bikerental.API"
+RUN dotnet build "bikeRental.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "DSMS.API.csproj" -c Release -o /app/publish
+RUN dotnet publish "bikeRental.API.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "DSMS.API.dll"]
+ENTRYPOINT ["dotnet", "bikeRental.API.dll"]

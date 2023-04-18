@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace bikeRental.Core.Entities
 {
-    internal class Bicycle : BaseEntity, IAuditedEntity
+    public class Bicycle : BaseEntity, IAuditedEntity
     {
         public string Type { get; set; }
 
@@ -17,16 +17,15 @@ namespace bikeRental.Core.Entities
 
         public bool IsAvailable { get; set; }
 
-        public List<Order> Orders { get; set; }
+        public ICollection<Order> Orders { get; set; }
 
-        public List<Station> Stations { get; set; }
-
+        public Station Station { get; set; }
         public string CreatedBy { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; } = DateTime.Now;
 
         public string UpdatedBy { get; set; }
 
-        public DateTime? UpdatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; } = DateTime.Now;
     }
 }

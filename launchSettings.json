@@ -1,10 +1,10 @@
-{
+﻿{
   "profiles": {
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "dsms.api": "StartDebugging"
+        "bikerental.api": "StartDebugging"
       }
     }
   }

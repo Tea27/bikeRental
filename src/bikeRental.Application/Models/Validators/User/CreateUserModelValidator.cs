@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using bikeRental.Application.Models.User;
-using bikeRental.DataAccess.Identity;
+using bikeRental.Core.Identity;
 
 namespace bikeRental.Application.Models.Validators.User;
 

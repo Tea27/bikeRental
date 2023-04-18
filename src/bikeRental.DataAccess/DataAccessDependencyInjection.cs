@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using bikeRental.DataAccess.Identity;
+using bikeRental.Core.Identity;
 using bikeRental.DataAccess.Persistence;
 using bikeRental.DataAccess.Repositories;
 using bikeRental.DataAccess.Repositories.Impl;
@@ -37,7 +37,7 @@ public static class DataAccessDependencyInjection
         if (databaseConfig.UseInMemoryDatabase)
             services.AddDbContext<DatabaseContext>(options =>
             {
-                options.UseInMemoryDatabase("NDSMSDatabase");
+                options.UseInMemoryDatabase("NbikeRentalDatabase");
                 options.ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
             });
         else

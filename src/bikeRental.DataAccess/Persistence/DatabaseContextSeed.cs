@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using bikeRental.DataAccess.Identity;
+using bikeRental.Core.Identity;
 
 namespace bikeRental.DataAccess.Persistence;
 

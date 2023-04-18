@@ -1,7 +1,9 @@
 ﻿version: '3.4'
-
+name: bike-rental
 services:
-  dsms.api:
+  
+  bikerental.api:
+    container_name: bikerentalAPI
     image: ${DOCKER_REGISTRY-}bikerentalapi
     build:
       context: .
@@ -10,6 +12,7 @@ services:
        CONNECTION_STRING: "Host=postgres;Port=5432;Database=postgres;Username=admin;Password=root;Integrated Security=true;Pooling=true;"
 
   postgres:
+    container_name: postgresDB
     image: postgres:alpine
     environment:
       POSTGRES_DB: postgres
@@ -22,6 +25,7 @@ services:
     restart: unless-stopped
 
   pgadmin4:
+    container_name: pgAdmin
     image: dcagatay/pwless-pgadmin4:latest
     depends_on:
       - postgres

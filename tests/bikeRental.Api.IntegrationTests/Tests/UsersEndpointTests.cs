@@ -11,7 +11,7 @@ using bikeRental.Api.IntegrationTests.Config.Constants;
 using bikeRental.Api.IntegrationTests.Helpers;
 using bikeRental.Application.Models;
 using bikeRental.Application.Models.User;
-using bikeRental.DataAccess.Identity;
+using bikeRental.Core.Identity;
 using bikeRental.DataAccess.Persistence;
 using NUnit.Framework;
 

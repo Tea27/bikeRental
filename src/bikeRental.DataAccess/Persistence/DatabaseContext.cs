@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using bikeRental.Core.Common;
 using bikeRental.Core.Entities;
-using bikeRental.DataAccess.Identity;
+using bikeRental.Core.Identity;
 using bikeRental.Shared.Services;
 
 namespace bikeRental.DataAccess.Persistence;
@@ -20,6 +20,17 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
     public DbSet<TodoItem> TodoItems { get; set; }
 
     public DbSet<TodoList> TodoLists { get; set; }
+
+    public DbSet<Customer> Customers { get; set; }
+
+    public DbSet<Bicycle> Bicycles { get; set; }
+
+    public DbSet<Order> Orders { get; set; }
+
+    //public DbSet<BikesOnStation> BikesOnStations { get; set; }
+
+    public DbSet<Station> Stations { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

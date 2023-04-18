@@ -5,8 +5,9 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>a5119961-95f9-4e8f-8fa4-c7ba35e58306</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
+    <DockerComposeProjectName>bike-rental</DockerComposeProjectName>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>dsms.api</DockerServiceName>
+    <DockerServiceName>bikerental.api</DockerServiceName>
     <DockerLaunchBrowser>true</DockerLaunchBrowser>
   </PropertyGroup>
   <ItemGroup>
