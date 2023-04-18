@@ -13,8 +13,7 @@
   - Management of users and bikes
 
 ### Database Model
-![dbms](https://user-images.githubusercontent.com/79653091/228393965-45586c8d-0bf9-47a4-941b-5310c2ed2995.png)
-
+![baza14 4](https://user-images.githubusercontent.com/79653091/232916808-1671fee8-fbc7-464f-ab8d-a6b153fbdbf6.png)
 
 
 ### Technologies & Languages
