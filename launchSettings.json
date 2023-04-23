@@ -3,8 +3,14 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "bikerental.frontend",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}",
       "serviceActions": {
-        "bikerental.api": "StartDebugging"
+        "bikerental.api": "StartDebugging",
+        "bikerental.frontend": "StartDebugging",
+        "pgadmin4": "StartWithoutDebugging",
+        "postgres": "StartWithoutDebugging"
       }
     }
   }

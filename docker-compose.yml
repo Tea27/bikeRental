@@ -11,6 +11,15 @@ services:
     environment:
        CONNECTION_STRING: "Host=postgres;Port=5432;Database=postgres;Username=admin;Password=root;Integrated Security=true;Pooling=true;"
 
+  bikerental.frontend:
+    container_name: bikerentalFRONTEND
+    image: ${DOCKER_REGISTRY-}bikerentalfrontend
+    build:
+        context: .
+        dockerfile: src/bikeRental.Frontend/Dockerfile
+    environment:
+        CONNECTION_STRING: "Host=postgres;Port=5432;Database=postgres;Username=admin;Password=root;Integrated Security=true;Pooling=true;"
+
   postgres:
     container_name: postgresDB
     image: postgres:alpine
