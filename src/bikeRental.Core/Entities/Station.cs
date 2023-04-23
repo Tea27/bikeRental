@@ -9,7 +9,7 @@ namespace bikeRental.Core.Entities
 {
     public class Station : BaseEntity, IAuditedEntity
     {
-        public string address { get; set; }
+        public string Address { get; set; }
 
         public int NumberOfBikes { get; set; }
 
@@ -17,10 +17,9 @@ namespace bikeRental.Core.Entities
 
         public ICollection<Bicycle> Bicycles { get; set; }
 
+        public string CreatedBy { get; set; }
 
-        public string CreatedBy { get; set; } 
-
-        public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public DateTime CreatedOn { get; set; }
 
         public string UpdatedBy { get; set; }
 

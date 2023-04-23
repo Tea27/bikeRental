@@ -10,20 +10,15 @@ namespace bikeRental.Core.Entities
 {
     public class Customer : ApplicationUser, IAuditedEntity
     {
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
-
-        //public string Password { get; set; }
 
         public ICollection<Order> Orders { get; set; }
 
         public string CreatedBy { get; set; }
 
-        public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public DateTime CreatedOn { get; set; }
 
         public string UpdatedBy { get; set; }
 
-        public DateTime? UpdatedOn { get; set; } = DateTime.Now;
+        public DateTime? UpdatedOn { get; set; }
     }
 }

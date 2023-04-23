@@ -1,0 +1,126 @@
+﻿[
+  {
+    "Address": "Kopilica ul., 21000 Split",
+    "NumberOfBikes": 2,
+    "NumberOfElectricBikes": 2,
+    "Bicycles": [
+      {
+        "Type": "Electric",
+        "Description": "VIVI 26 Inch Electric Mountain Bike, 250 W Electric Bicycle 36 V 8 Ah Removable Battery E-Bike, 21 Gear Shift",
+        "Price": 7.22,
+        "IsAvailable": true
+      },
+      {
+        "Type": "Electric",
+        "Description": "MYATU E-Bike 20 Inch Electric Bicycle, E-Folding Bike with 36 V 10.4 Ah and Shimano 7 Speed Gears",
+        "Price": 7.68,
+        "IsAvailable": true
+      },
+      {
+        "Type": "Acoustic",
+        "Description": "Hiland mountain bike MTB with 29 inch spoke wheels, aluminium frame, 21 speed gears, disc brake, suspension fork, black/blue/grey",
+        "Price": 5.53,
+        "IsAvailable": true
+      },
+      {
+        "Type": "Acoustic",
+        "Description": "Tretwerk - Mountain Bike - Smasher - MTB with 27 Speed - Shimano Gears, Zoom H-Bar Handlebars and Shimano Hydraulic Brakes",
+        "Price": 4.90,
+        "IsAvailable": true
+      }
+    ]
+  },
+  {
+    "Address": "Trg dr. Franje Tuđmana, 21000 Split",
+    "NumberOfBikes": 2,
+    "NumberOfElectricBikes": 2,
+    "Bicycles": [
+      {
+        "Type": "Electric",
+        "Description": "VIVI 26 Inch Electric Mountain Bike, 250 W Electric Bicycle 36 V 8 Ah Removable Battery E-Bike, 21 Gear Shift",
+        "Price": 7.22,
+        "IsAvailable": true
+      },
+      {
+        "Type": "Electric",
+        "Description": "YYG E-Bike Electric Bicycle 20 Inch Ebike 250 W 20 km/h, Removable Battery 48 V/20 Ah, Fat Tyre Commuter Electric Bicycle, Dual Suspension Motorcycles, Black",
+        "Price": 7.76,
+        "IsAvailable": true
+      },
+      {
+        "Type": "Acoustic",
+        "Description": "Tretwerk - Mountain Bike - Smasher - MTB with 27 Speed - Shimano Gears, Zoom H-Bar Handlebars and Shimano Hydraulic Brakes",
+        "Price": 4.90,
+        "IsAvailable": true
+      },
+      {
+        "Type": "Acoustic",
+        "Description": "RibasuBB 26 Inch 3 Wheels Tricycle Adult 26 Inch Seniors Tricycle 6 Speed Bike with Basket, Three-Wheel Cruiser Bike for Recreation, Shopping, Picnics",
+        "Price": 5.20,
+        "IsAvailable": true
+      }
+    ]
+  },
+  {
+    "Address": "Šetalište Petra Preradovića 9-7, 21000 Split",
+    "NumberOfBikes": 2,
+    "NumberOfElectricBikes": 2,
+    "Bicycles": [
+      {
+        "Type": "Electric",
+        "Description": "YYG E-Bike Electric Bicycle 20 Inch Ebike 250 W 20 km/h, Removable Battery 48 V/20 Ah, Fat Tyre Commuter Electric Bicycle, Dual Suspension Motorcycles, Black",
+        "Price": 7.76,
+        "IsAvailable": true
+      },
+      {
+        "Type": "Electric",
+        "Description": "VIVI 26 Inch Electric Mountain Bike, 250 W Electric Bicycle 36 V 8 Ah Removable Battery E-Bike, 21 Gear Shift",
+        "Price": 7.22,
+        "IsAvailable": true
+      },
+      {
+        "Type": "Acoustic",
+        "Description": "Tretwerk - Mountain Bike - Smasher - MTB with 27 Speed - Shimano Gears, Zoom H-Bar Handlebars and Shimano Hydraulic Brakes",
+        "Price": 4.90,
+        "IsAvailable": true
+      },
+      {
+        "Type": "Acoustic",
+        "Description": "RibasuBB 26 Inch 3 Wheels Tricycle Adult 26 Inch Seniors Tricycle 6 Speed Bike with Basket, Three-Wheel Cruiser Bike for Recreation, Shopping, Picnics",
+        "Price": 5.20,
+        "IsAvailable": true
+      }
+    ]
+  },
+  {
+    "Address": "Šetalište Ivana Meštrovića 1, 21000 Split",
+    "NumberOfBikes": 2,
+    "NumberOfElectricBikes": 2,
+    "Bicycles": [
+      {
+        "Type": "Electric",
+        "Description": "YYG E-Bike Electric Bicycle 20 Inch Ebike 250 W 20 km/h, Removable Battery 48 V/20 Ah, Fat Tyre Commuter Electric Bicycle, Dual Suspension Motorcycles, Black",
+        "Price": 7.76,
+        "IsAvailable": true
+      },
+      {
+        "Type": "Electric",
+        "Description": "VIVI 26 Inch Electric Mountain Bike, 250 W Electric Bicycle 36 V 8 Ah Removable Battery E-Bike, 21 Gear Shift",
+        "Price": 7.22,
+        "IsAvailable": true
+      },
+      {
+        "Type": "Acoustic",
+        "Description": "RibasuBB 26 Inch 3 Wheels Tricycle Adult 26 Inch Seniors Tricycle 6 Speed Bike with Basket, Three-Wheel Cruiser Bike for Recreation, Shopping, Picnics",
+        "Price": 5.20,
+        "IsAvailable": true
+      },
+      {
+        "Type": "Acoustic",
+        "Description": "Tretwerk - Mountain Bike - Smasher - MTB with 27 Speed - Shimano Gears, Zoom H-Bar Handlebars and Shimano Hydraulic Brakes",
+        "Price": 4.90,
+        "IsAvailable": true
+      }
+    ]
+  }
+]

@@ -74,7 +74,7 @@ public class TodoListEndpointTests : BaseOneTimeSetup
 
         var todoList = Builder<TodoList>.CreateNew()
             .With(tl => tl.Id = Guid.NewGuid())
-            .With(tl => tl.CreatedBy = user.Id)
+            .With(tl => tl.CreatedBy = user.Id.ToString())
             .Build();
 
         var todoListFromDatabase = (await context.TodoLists.AddAsync(todoList)).Entity;
@@ -162,7 +162,7 @@ public class TodoListEndpointTests : BaseOneTimeSetup
 
         var todoList = Builder<TodoList>.CreateNew()
             .With(tl => tl.Id = Guid.NewGuid())
-            .With(tl => tl.CreatedBy = user.Id)
+            .With(tl => tl.CreatedBy = user.Id.ToString())
             .Build();
 
         var todoListFromDatabase = (await context.TodoLists.AddAsync(todoList)).Entity;
@@ -208,7 +208,7 @@ public class TodoListEndpointTests : BaseOneTimeSetup
 
         var todoLists = Builder<TodoList>.CreateListOfSize(10).All()
             .With(tl => tl.Id = Guid.NewGuid())
-            .With(tl => tl.CreatedBy = user.Id)
+            .With(tl => tl.CreatedBy = user.Id.ToString())
             .Build();
 
         var todoListsNotBelongToTheUser = Builder<TodoList>.CreateListOfSize(10).All()

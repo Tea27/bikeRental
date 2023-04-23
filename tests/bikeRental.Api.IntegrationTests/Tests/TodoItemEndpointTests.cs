@@ -31,7 +31,7 @@ public class TodoItemEndpointTests : BaseOneTimeSetup
         var user = await context.Users.Where(u => u.Email == UserConstants.DefaultUserDb.Email).FirstOrDefaultAsync();
 
         var todoListFromDatabase = Builder<TodoList>.CreateNew().With(tl => tl.Id = Guid.NewGuid())
-            .With(tl => tl.CreatedBy = user.Id).Build();
+            .With(tl => tl.CreatedBy = user.Id.ToString()).Build();
 
         await context.TodoLists.AddAsync(todoListFromDatabase);
 
@@ -82,10 +82,10 @@ public class TodoItemEndpointTests : BaseOneTimeSetup
         var user = await context.Users.Where(u => u.Email == UserConstants.DefaultUserDb.Email).FirstOrDefaultAsync();
 
         var todoListFromDatabase = Builder<TodoList>.CreateNew().With(tl => tl.Id = Guid.NewGuid())
-            .With(tl => tl.CreatedBy = user.Id).Build();
+            .With(tl => tl.CreatedBy = user.Id.ToString()).Build();
 
         var todoItemFromDatabase = Builder<TodoItem>.CreateNew().With(ti => ti.Id = Guid.NewGuid())
-            .With(ti => ti.CreatedBy = user.Id).Build();
+            .With(ti => ti.CreatedBy = user.Id.ToString()).Build();
 
         todoListFromDatabase.Items.Add(todoItemFromDatabase);
 
@@ -140,7 +140,7 @@ public class TodoItemEndpointTests : BaseOneTimeSetup
         var user = await context.Users.Where(u => u.Email == UserConstants.DefaultUserDb.Email).FirstOrDefaultAsync();
 
         var todoListFromDatabase = Builder<TodoList>.CreateNew().With(tl => tl.Id = Guid.NewGuid())
-            .With(tl => tl.CreatedBy = user.Id).Build();
+            .With(tl => tl.CreatedBy = user.Id.ToString()).Build();
 
         await context.TodoLists.AddAsync(todoListFromDatabase);
 
@@ -168,10 +168,10 @@ public class TodoItemEndpointTests : BaseOneTimeSetup
         var user = await context.Users.Where(u => u.Email == UserConstants.DefaultUserDb.Email).FirstOrDefaultAsync();
 
         var todoItemFromDatabase = Builder<TodoItem>.CreateNew().With(ti => ti.Id = Guid.NewGuid())
-            .With(ti => ti.CreatedBy = user.Id).Build();
+            .With(ti => ti.CreatedBy = user.Id.ToString()).Build();
 
         var todoListFromDatabase = Builder<TodoList>.CreateNew().With(tl => tl.Id = Guid.NewGuid())
-            .With(tl => tl.CreatedBy = user.Id).Build();
+            .With(tl => tl.CreatedBy = user.Id.ToString()).Build();
 
         todoListFromDatabase.Items.Add(todoItemFromDatabase);
 
@@ -214,7 +214,7 @@ public class TodoItemEndpointTests : BaseOneTimeSetup
         var user = await context.Users.Where(u => u.Email == UserConstants.DefaultUserDb.Email).FirstOrDefaultAsync();
 
         var todoListFromDatabase = Builder<TodoList>.CreateNew().With(tl => tl.Id = Guid.NewGuid())
-            .With(tl => tl.CreatedBy = user.Id).Build();
+            .With(tl => tl.CreatedBy = user.Id.ToString()).Build();
 
         todoListFromDatabase.Items.AddRange(Builder<TodoItem>.CreateListOfSize(25).All()
             .With(ti => ti.Id = Guid.NewGuid()).Build());

@@ -39,7 +39,7 @@ public class UsersEndpointTests : BaseOneTimeSetup
         apiResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var response = await ResponseHelper.GetApiResultAsync<CreateUserResponseModel>(apiResponse);
         CheckResponse.Succeeded(response);
-        context.Users.Should().Contain(u => u.Id == response.Result.Id.ToString());
+        context.Users.Should().Contain(u => u.Id.ToString().Equals(response.Result.Id.ToString()));
     }
 
     [Test]
@@ -170,7 +170,7 @@ public class UsersEndpointTests : BaseOneTimeSetup
         var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
         var confirmEmailModel = Builder<ConfirmEmailModel>.CreateNew()
-            .With(ce => ce.UserId = user.Id)
+            .With(ce => ce.UserId = user.Id.ToString())
             .With(ce => ce.Token = token)
             .Build();
 
@@ -199,7 +199,7 @@ public class UsersEndpointTests : BaseOneTimeSetup
         await userManager.CreateAsync(user, "Password.1!");
 
         var confirmEmailModel = Builder<ConfirmEmailModel>.CreateNew()
-            .With(ce => ce.UserId = user.Id)
+            .With(ce => ce.UserId = user.Id.ToString())
             .With(ce => ce.Token = "InvalidToken")
             .Build();
 

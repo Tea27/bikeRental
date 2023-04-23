@@ -7,6 +7,7 @@ using bikeRental.Core.Identity;
 using bikeRental.DataAccess.Persistence;
 using bikeRental.DataAccess.Repositories;
 using bikeRental.DataAccess.Repositories.Impl;
+using System;
 
 namespace bikeRental.DataAccess;
 
@@ -16,7 +17,8 @@ public static class DataAccessDependencyInjection
     {
         services.AddDatabase(configuration);
 
-        services.AddIdentity();
+        services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<DatabaseContext>()
+                .AddDefaultTokenProviders();
 
         services.AddRepositories();
 

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using bikeRental.Core.Identity;
+using bikeRental.Core.Entities;
 
 namespace bikeRental.DataAccess.Persistence;
 
@@ -15,6 +16,8 @@ public static class AutomatedMigration
 
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
-        await DatabaseContextSeed.SeedDatabaseAsync(context, userManager);
+        var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
+
+        await DatabaseContextSeed.SeedDatabaseAsync(context, roleManager, userManager);
     }
 }

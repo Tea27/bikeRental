@@ -1,6 +1,11 @@
 ﻿using bikeRental.Core.Common;
+using bikeRental.Core.Enums;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +14,7 @@ namespace bikeRental.Core.Entities
 {
     public class Bicycle : BaseEntity, IAuditedEntity
     {
-        public string Type { get; set; }
+        public BikeType Type { get; set; }
 
         public string Description { get; set; }
 
@@ -22,10 +27,11 @@ namespace bikeRental.Core.Entities
         public Station Station { get; set; }
         public string CreatedBy { get; set; }
 
-        public DateTime CreatedOn { get; set; } = DateTime.Now;
+
+        public DateTime CreatedOn { get; set; }
 
         public string UpdatedBy { get; set; }
 
-        public DateTime? UpdatedOn { get; set; } = DateTime.Now;
+        public DateTime? UpdatedOn { get; set; }
     }
 }
