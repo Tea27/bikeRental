@@ -12,14 +12,6 @@ namespace bikeRental.Core.Common
 
         public DateTime? UpdatedOn { get; set; }
 
-        //public static TEntity UpdateCustom<TEntity>(TEntity dbEntity)
-        //where TEntity : class
-        //{
-
-        //    dbEntity.GetType().GetProperty("UpdatedAt")?.SetValue(dbEntity, DateTime.Now, null);
-
-        //    return dbEntity;
-        //}
     }
 
 }

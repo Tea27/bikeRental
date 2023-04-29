@@ -15,10 +15,6 @@ public class ApplicationRole : IdentityRole<Guid>
     public ApplicationRole(string roleName) : base(roleName)
     {
     }
-    //public ApplicationRole(string roleName)
-    //{
-    //    this.Name = roleName;
-    //    this.NormalizedName = roleName.ToUpper();
-    //}
+
 }
 

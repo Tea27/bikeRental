@@ -1,4 +1,4 @@
-﻿using bikeRental.Core.Identity;
+using bikeRental.Core.Identity;
 using bikeRental.DataAccess.Persistence;
 using bikeRental.Frontend.Data;
 using bikeRental.Shared.Services.Impl;
