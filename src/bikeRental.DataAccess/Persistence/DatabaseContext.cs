@@ -18,7 +18,7 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser, ApplicationRol
 {
     private readonly IClaimService _claimService;
 
-    public DatabaseContext(DbContextOptions options, IClaimService claimService) : base(options)
+    public DatabaseContext(DbContextOptions<DatabaseContext> options, IClaimService claimService) : base(options)
     {
         _claimService = claimService;
     }
@@ -60,6 +60,7 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser, ApplicationRol
         builder.Entity<Station>()
             .HasIndex(s => s.Address)
             .IsUnique();
+
 
     }
 
