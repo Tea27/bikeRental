@@ -12,7 +12,7 @@ using bikeRental.DataAccess.Persistence;
 namespace bikeRental.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230423152456_Initial")]
+    [Migration("20230503110915_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,12 +30,6 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -50,12 +44,6 @@ namespace bikeRental.DataAccess.Persistence.Migrations
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -73,12 +61,6 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                     b.Property<Guid?>("BicycleId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<Guid?>("CustomerId")
                         .HasColumnType("uuid");
 
@@ -89,12 +71,6 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("RentalStartTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -115,23 +91,11 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int>("NumberOfBikes")
                         .HasColumnType("integer");
 
                     b.Property<int>("NumberOfElectricBikes")
                         .HasColumnType("integer");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -274,10 +238,6 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -334,8 +294,6 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
                 });
 
             modelBuilder.Entity("bikeRental.Core.Identity.ApplicationUserClaim", b =>
@@ -417,25 +375,6 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("bikeRental.Core.Entities.Customer", b =>
-                {
-                    b.HasBaseType("bikeRental.Core.Identity.ApplicationUser");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasDiscriminator().HasValue("Customer");
-                });
-
             modelBuilder.Entity("bikeRental.Core.Entities.Bicycle", b =>
                 {
                     b.HasOne("bikeRental.Core.Entities.Station", "Station")
@@ -453,7 +392,7 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                         .HasForeignKey("BicycleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("bikeRental.Core.Entities.Customer", "Customer")
+                    b.HasOne("bikeRental.Core.Identity.ApplicationUser", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -539,7 +478,7 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("bikeRental.Core.Entities.Customer", b =>
+            modelBuilder.Entity("bikeRental.Core.Identity.ApplicationUser", b =>
                 {
                     b.Navigation("Orders");
                 });

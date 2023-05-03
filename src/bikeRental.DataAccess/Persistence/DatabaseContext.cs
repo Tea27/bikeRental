@@ -27,8 +27,6 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser, ApplicationRol
 
     public DbSet<TodoList> TodoLists { get; set; }
 
-    public DbSet<Customer> Customers { get; set; }
-
     public DbSet<Bicycle> Bicycles { get; set; }
 
     public DbSet<Order> Orders { get; set; }

@@ -1,4 +1,5 @@
 ﻿using bikeRental.Core.Common;
+using bikeRental.Core.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace bikeRental.Core.Entities
 {
-    public class Order : BaseEntity, IAuditedEntity
+    public class Order : BaseEntity
     {
 
         public DateTime RentalStartTime { get; set; }
@@ -16,16 +17,9 @@ namespace bikeRental.Core.Entities
 
         public string RentalPrice { get; set; }
 
-        public Customer Customer { get; set; }
+        public ApplicationUser Customer { get; set; }
 
         public Bicycle Bicycle { get; set; }
 
-        public string CreatedBy { get; set; }
-
-        public DateTime CreatedOn { get; set; }
-
-        public string UpdatedBy { get; set; }
-
-        public DateTime? UpdatedOn { get; set; }
     }
 }

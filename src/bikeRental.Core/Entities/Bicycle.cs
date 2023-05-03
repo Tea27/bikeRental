@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace bikeRental.Core.Entities
 {
-    public class Bicycle : BaseEntity, IAuditedEntity
+    public class Bicycle : BaseEntity
     {
         public BikeType Type { get; set; }
 
@@ -25,13 +25,6 @@ namespace bikeRental.Core.Entities
         public ICollection<Order> Orders { get; set; }
 
         public Station Station { get; set; }
-        public string CreatedBy { get; set; }
 
-
-        public DateTime CreatedOn { get; set; }
-
-        public string UpdatedBy { get; set; }
-
-        public DateTime? UpdatedOn { get; set; }
     }
 }

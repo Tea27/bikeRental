@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace bikeRental.Core.Entities
 {
-    public class Station : BaseEntity, IAuditedEntity
+    public class Station : BaseEntity
     {
         public string Address { get; set; }
 
@@ -17,12 +17,5 @@ namespace bikeRental.Core.Entities
 
         public ICollection<Bicycle> Bicycles { get; set; }
 
-        public string CreatedBy { get; set; }
-
-        public DateTime CreatedOn { get; set; }
-
-        public string UpdatedBy { get; set; }
-
-        public DateTime? UpdatedOn { get; set; } = DateTime.Now;
     }
 }

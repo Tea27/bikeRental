@@ -1,4 +1,4 @@
-using bikeRental.Core.Identity;
+﻿using bikeRental.Core.Identity;
 using bikeRental.DataAccess.Persistence;
 using bikeRental.Frontend.Data;
 using bikeRental.Shared.Services.Impl;
@@ -16,6 +16,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<ApplicationRole>()
     .AddEntityFrameworkStores<DatabaseContext>();
 builder.Services.AddRazorPages();
 

@@ -4,6 +4,6 @@
     public enum Role
     {
         Administrator,
-        User
+        Customer
     }
 }
