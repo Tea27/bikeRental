@@ -1,0 +1,74 @@
+﻿@using bikeRental.Application;
+@model PaginatedList<bikeRental.Application.Models.Station.StationResponse>
+
+@{
+    ViewData["Title"] = "Stations";
+}
+
+<h2>Stations</h2>
+
+@ViewData["CurrentCategory"]
+
+<form asp-controller="Stations" asp-action="GetAll" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Search: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="GetAll">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+{
+    <div>
+        Create new station
+        <a asp-controller="Stations" asp-action="Create">Create</a>
+    </div>
+}
+
+<table class="table table-hover">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfBikes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfElectricBikes)
+            </td>
+            @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+            {
+                    <td>
+                        <a asp-controller="Stations" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-controller="Stations" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td> 
+            }
+        </tr> 
+    }
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="GetAll"
+    asp-controller="Stations"
+   asp-route-currentCategory="@ViewData["CurrentCategory"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="GetAll"
+    asp-controller="Stations"
+   asp-route-currentCategory="@ViewData["CurrentCategory"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

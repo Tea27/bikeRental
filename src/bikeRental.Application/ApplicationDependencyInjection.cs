@@ -32,6 +32,7 @@ public static class ApplicationDependencyInjection
         services.AddScoped<IClaimService, ClaimService>();
         services.AddScoped<ITemplateService, TemplateService>();
 
+
         if (env.IsDevelopment())
             services.AddScoped<IEmailService, DevEmailService>();
         else

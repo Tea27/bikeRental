@@ -1,0 +1,43 @@
+﻿@model bikeRental.Application.Models.Station.StationModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Station</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.Id" />
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumberOfBikes" class="control-label"></label>
+                <input asp-for="NumberOfBikes" class="form-control" />
+                <span asp-validation-for="NumberOfBikes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumberOfElectricBikes" class="control-label"></label>
+                <input asp-for="NumberOfElectricBikes" class="form-control" />
+                <span asp-validation-for="NumberOfElectricBikes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="GetAll">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

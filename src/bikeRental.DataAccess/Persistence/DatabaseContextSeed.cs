@@ -10,7 +10,8 @@ namespace bikeRental.DataAccess.Persistence;
 
 public static class DatabaseContextSeed
 {
-    public static async Task SeedDatabaseAsync(DatabaseContext context, RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
+    public static async Task SeedDatabaseAsync(DatabaseContext context, RoleManager<ApplicationRole> roleManager,
+        UserManager<ApplicationUser> userManager, IUserStore<ApplicationUser> userStore)
     {
 
         string path = @"Seed";
@@ -26,9 +27,12 @@ public static class DatabaseContextSeed
 
         if (!userManager.Users.Any())
         {
-            var user = new ApplicationUser { UserName = "admin", Email = "admin@admin.com", EmailConfirmed = true, FirstName = "Admin", LastName = "Admin" };
+            var emailStore = (IUserEmailStore<ApplicationUser>)userStore;
+            var user = new ApplicationUser { UserName = "admin@admin.com", Email = "admin@admin.com", EmailConfirmed = true, FirstName = "Admin", LastName = "Admin" };
+            await userStore.SetUserNameAsync(user, user.Email, CancellationToken.None);
+            await emailStore.SetEmailAsync(user, user.Email, CancellationToken.None);
 
-            await userManager.CreateAsync(user, "Admin123.?");
+            await userManager.CreateAsync(user, "Admin123!");
 
             await userManager.AddToRoleAsync(user, "Administrator");
         }
@@ -45,4 +49,6 @@ public static class DatabaseContextSeed
 
         await context.SaveChangesAsync();
     }
+
+
 }

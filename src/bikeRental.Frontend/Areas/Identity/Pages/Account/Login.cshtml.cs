@@ -129,7 +129,9 @@ namespace bikeRental.Frontend.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    var errors = ModelState.Values.SelectMany(v => v.Errors);
+                    System.Diagnostics.Debug.WriteLine(errors);
+                    ModelState.AddModelError(string.Empty, errors.ToString());
                     return Page();
                 }
             }

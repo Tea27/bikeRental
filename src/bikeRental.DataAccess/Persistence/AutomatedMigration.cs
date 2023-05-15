@@ -18,6 +18,8 @@ public static class AutomatedMigration
 
         var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
 
-        await DatabaseContextSeed.SeedDatabaseAsync(context, roleManager, userManager);
+        var userStore = services.GetRequiredService<IUserStore<ApplicationUser>>();
+
+        await DatabaseContextSeed.SeedDatabaseAsync(context, roleManager, userManager, userStore);
     }
 }

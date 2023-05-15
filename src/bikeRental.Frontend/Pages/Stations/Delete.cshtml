@@ -1,0 +1,44 @@
+﻿
+@model bikeRental.Application.Models.Station.StationModel
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<p class="text-danger">@ViewData["ErrorMessage"]</p>
+
+
+<h3>Are you sure you want to delete station?</h3>
+<div>
+    <h4>Station</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NumberOfBikes)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NumberOfBikes)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NumberOfElectricBikes)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NumberOfElectricBikes)
+        </dd>
+    </dl>
+
+     <form asp-action="Delete">
+        <input type="hidden" asp-for="@Model.Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="GetAll">Back to List</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

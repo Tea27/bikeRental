@@ -1,18 +1,18 @@
-﻿using AutoMapper;
-using bikeRental.Application.Models.TodoItem;
-using bikeRental.Core.Entities;
+﻿//using AutoMapper;
+//using bikeRental.Application.Models.TodoItem;
+//using bikeRental.Core.Entities;
 
-namespace bikeRental.Application.MappingProfiles;
+//namespace bikeRental.Application.MappingProfiles;
 
-public class TodoItemProfile : Profile
-{
-    public TodoItemProfile()
-    {
-        CreateMap<CreateTodoItemModel, TodoItem>()
-            .ForMember(ti => ti.IsDone, ti => ti.MapFrom(cti => false));
+//public class TodoItemProfile : Profile
+//{
+//    public TodoItemProfile()
+//    {
+//        CreateMap<CreateTodoItemModel, TodoItem>()
+//            .ForMember(ti => ti.IsDone, ti => ti.MapFrom(cti => false));
 
-        CreateMap<UpdateTodoItemModel, TodoItem>();
+//        CreateMap<UpdateTodoItemModel, TodoItem>();
 
-        CreateMap<TodoItem, TodoItemResponseModel>();
-    }
-}
+//        CreateMap<TodoItem, TodoItemResponseModel>();
+//    }
+//}

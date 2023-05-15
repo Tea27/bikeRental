@@ -4,12 +4,13 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-bikeRental.Frontend-ce6a0a53-a516-47e2-a14d-1ff5f3a68a96</UserSecretsId>
+    <UserSecretsId>aspnet-bikeRental.Frontend-e7356445-768a-469c-b65b-95ddc69c0862</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.14" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.15" />
@@ -23,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\bikeRental.Core\bikeRental.Core.csproj" />
+    <ProjectReference Include="..\bikeRental.Application\bikeRental.Application.csproj" />
     <ProjectReference Include="..\bikeRental.DataAccess\bikeRental.DataAccess.csproj" />
   </ItemGroup>
 
