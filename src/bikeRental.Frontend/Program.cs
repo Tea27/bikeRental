@@ -12,6 +12,8 @@ using bikeRental.Application.Services.Impl;
 using Microsoft.AspNetCore.Mvc;
 using bikeRental.Core.Entities;
 using bikeRental.Application;
+using bikeRental.Application.Common.Email;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,16 +26,27 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<ApplicationRole>()
+    .AddDefaultTokenProviders()
+    .AddDefaultUI()
     .AddEntityFrameworkStores<DatabaseContext>();
 builder.Services.AddRazorPages();
 
-builder.Services.AddScoped<IClaimService, ClaimService>();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITemplateService, TemplateService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<SmtpSettings>();
+builder.Services.AddScoped<IClaimService, ClaimService>();
+
 builder.Services.AddTransient(typeof(IBicycleRepository<>), typeof(BicycleRepository<>));
 builder.Services.AddTransient(typeof(IStationRepository<>), typeof(StationRepository<>));
-builder.Services.AddTransient<IStationService, StationService>();
+builder.Services.AddTransient(typeof(IUserRepository<>), typeof(UserRepository<>));
 
-builder.Services.AddScoped<IStationService, StationService>();
+builder.Services.AddTransient<IStationService, StationService>();
+//builder.Services.AddTransient<UserManager<ApplicationUser>>();
+
+
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -45,7 +58,6 @@ using (var serviceScope = app.Services.CreateScope())
     var services = serviceScope.ServiceProvider;
 
     var myDependency = services.GetRequiredService<IStationRepository<Station>>();
-
 
 }
 
@@ -79,5 +91,6 @@ app.UseEndpoints(endpoints =>
 });
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}"
+    );
 app.Run();

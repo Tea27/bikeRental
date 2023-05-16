@@ -12,12 +12,12 @@
 <div class="container">
     <div class="row justify-content-between">
         <div class="col-6">
-        <form asp-controller="Stations" asp-action="GetAll" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
+        <form asp-controller="Stations" asp-action="Index" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
             <div class="input-group">
                      <input type="text" placeholder="Start typing address…" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control"/>
                      <div class="input-group-append">
                          <button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
-                         <a class="btn btn-light" asp-action="GetAll">Back to Full List</a>
+                         <a class="btn btn-light" asp-action="Index">Back to Full List</a>
                      </div>
             </div>
         </form>
@@ -45,9 +45,13 @@
             <th>
                  @Html.DisplayNameFor(modelItem => modelItem[0].NumberOfElectricBikes)
             </th>
-             <th>
-                 Edit/Delete
-            </th>
+            @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+            {   
+                  <th>
+                     Edit/Delete
+                  </th>       
+            }
+           
     </tr>
     @foreach (var item in Model)
     {
@@ -77,7 +81,7 @@
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
-<a asp-action="GetAll"
+<a asp-action="Index"
     asp-controller="Stations"
    asp-route-currentCategory="@ViewData["CurrentCategory"]"
    asp-route-pageNumber="@(Model.PageIndex - 1)"
@@ -85,7 +89,7 @@
    class="btn btn-default @prevDisabled">
     Previous
 </a>
-<a asp-action="GetAll"
+<a asp-action="Index"
     asp-controller="Stations"
    asp-route-currentCategory="@ViewData["CurrentCategory"]"
    asp-route-pageNumber="@(Model.PageIndex + 1)"

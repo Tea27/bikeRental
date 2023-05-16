@@ -28,7 +28,6 @@ public static class ApplicationDependencyInjection
         services.AddScoped<IWeatherForecastService, WeatherForecastService>();
         services.AddScoped<ITodoListService, TodoListService>();
         services.AddScoped<ITodoItemService, TodoItemService>();
-        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IClaimService, ClaimService>();
         services.AddScoped<ITemplateService, TemplateService>();
 

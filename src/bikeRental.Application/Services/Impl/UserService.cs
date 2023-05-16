@@ -9,6 +9,9 @@ using bikeRental.Application.Models;
 using bikeRental.Application.Models.User;
 using bikeRental.Application.Templates;
 using bikeRental.Core.Identity;
+using bikeRental.DataAccess.Repositories;
+using bikeRental.DataAccess.Repositories.Impl;
+using bikeRental.Application.Models.Station;
 
 namespace bikeRental.Application.Services.Impl;
 
@@ -20,13 +23,15 @@ public class UserService : IUserService
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ITemplateService _templateService;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUserRepository<ApplicationUser> _userRepository;
 
     public UserService(IMapper mapper,
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IConfiguration configuration,
         ITemplateService templateService,
-        IEmailService emailService)
+        IEmailService emailService,
+        IUserRepository<ApplicationUser> userRepository)
     {
         _mapper = mapper;
         _userManager = userManager;
@@ -34,6 +39,7 @@ public class UserService : IUserService
         _configuration = configuration;
         _templateService = templateService;
         _emailService = emailService;
+        _userRepository = userRepository;
     }
 
     public async Task<CreateUserResponseModel> CreateAsync(CreateUserModel createUserModel)
@@ -117,5 +123,26 @@ public class UserService : IUserService
         {
             Id = Guid.Parse(user.Id.ToString())
         };
+    }
+
+    public async Task<IEnumerable<UserModel>> GetAllUsers()
+    {
+        var response = await _userRepository.GetAllAsync();
+        var users = new List<UserModel>();
+        foreach (var user in response)
+        {
+            var userDto = _mapper.Map<UserModel>(user);
+            try
+            {
+                var role = _userManager.GetRolesAsync(user).Result.ToList().First();
+                userDto.UserRole = role;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            users.Add(userDto);
+        }
+        return users;
     }
 }

@@ -2,6 +2,7 @@
 using bikeRental.Application.Models.Station;
 using bikeRental.Application.Services;
 using bikeRental.Application.Services.Impl;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Entity;
@@ -17,7 +18,7 @@ public class StationsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(string currentCategory, string currentFilter, string searchString, int? pageNumber)
+    public async Task<IActionResult> Index(string currentCategory, string currentFilter, string searchString, int? pageNumber)
     {
         if (searchString != null)
         {
@@ -30,15 +31,16 @@ public class StationsController : Controller
 
         ViewData["CurrentCategory"] = currentCategory;
         ViewData["CurrentFilter"] = searchString;
-        int pageSize = 3;
+        int pageSize = 5;
 
         var stations = await _stationService.GetAllAsync();
 
         stations = _stationService.SearchSelection(stations, searchString);
 
-        return View("/Pages/Stations/GetAll.cshtml", PaginatedList<StationResponse>.Create(stations, pageNumber ?? 1, pageSize));
+        return View("/Pages/Stations/Index.cshtml", PaginatedList<StationResponse>.Create(stations, pageNumber ?? 1, pageSize));
     }
 
+    [Authorize(Roles = ("Administrator"))]
     public IActionResult Create()
     {
         return View("/Pages/Stations/Create.cshtml");
@@ -61,9 +63,10 @@ public class StationsController : Controller
             System.Diagnostics.Debug.WriteLine(ex);
             ModelState.AddModelError("", "Unable to save changes. " + ex);
         }
-        return RedirectToAction(nameof(GetAll));
+        return RedirectToAction(nameof(Index));
     }
 
+    [Authorize(Roles = ("Administrator"))]
     public async Task<IActionResult> Edit(Guid? id)
     {
         if (id == null)
@@ -82,6 +85,7 @@ public class StationsController : Controller
     }
 
     [HttpPost, ActionName("Edit")]
+    [Authorize(Roles = ("Administrator"))]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditPost([Bind("Address,NumberOfBikes,NumberOfElectricBikes")] StationModel stationModel)
     {
@@ -100,10 +104,11 @@ public class StationsController : Controller
             ModelState.AddModelError("", "Unable to save changes. " + ex);
         }
 
-        return RedirectToAction(nameof(GetAll));
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
+    [Authorize(Roles = ("Administrator"))]
     public async Task<IActionResult> Delete(Guid? id, bool? saveChangesError = false)
     {
         if (id == null)
@@ -129,6 +134,7 @@ public class StationsController : Controller
     }
 
     [HttpPost, ActionName("Delete")]
+    [Authorize(Roles = ("Administrator"))]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
@@ -142,7 +148,7 @@ public class StationsController : Controller
         try
         {
             await _stationService.Delete(id);
-            return RedirectToAction(nameof(GetAll));
+            return RedirectToAction(nameof(Index));
         }
         catch (DbUpdateException ex)
         {
