@@ -9,25 +9,46 @@
 
 @ViewData["CurrentCategory"]
 
-<form asp-controller="Stations" asp-action="GetAll" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Search: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="GetAll">Back to Full List</a>
-        </p>
-    </div>
-</form>
+<div class="container">
+    <div class="row justify-content-between">
+        <div class="col-6">
+        <form asp-controller="Stations" asp-action="GetAll" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
+            <div class="input-group">
+                     <input type="text" placeholder="Start typing address…" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control"/>
+                     <div class="input-group-append">
+                         <button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
+                         <a class="btn btn-light" asp-action="GetAll">Back to Full List</a>
+                     </div>
+            </div>
+        </form>
+        </div>
+        <div class="col-4">
+        @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+        {
+            <div>
 
-@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
-{
-    <div>
-        Create new station
-        <a asp-controller="Stations" asp-action="Create">Create</a>
+                <a class="btn btn-outline-success" asp-controller="Stations" asp-action="Create"><i class="bi bi-house-add"> Create new station</i></a>
+            </div>
+        }
+        </div>
     </div>
-}
+</div>
 
-<table class="table table-hover">
+<table class="table table-hover mt-5">
+    <tr>
+            <th>
+                 @Html.DisplayNameFor(modelItem => modelItem[0].Address)
+            </th>
+            <th>
+                 @Html.DisplayNameFor(modelItem => modelItem[0].NumberOfBikes)
+            </th>
+            <th>
+                 @Html.DisplayNameFor(modelItem => modelItem[0].NumberOfElectricBikes)
+            </th>
+             <th>
+                 Edit/Delete
+            </th>
+    </tr>
     @foreach (var item in Model)
     {
         <tr>
@@ -43,8 +64,8 @@
             @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
             {
                     <td>
-                        <a asp-controller="Stations" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-controller="Stations" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a class="btn btn-outline-primary" asp-controller="Stations" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a> 
+                        <a class="btn btn-outline-danger" asp-controller="Stations" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
                     </td> 
             }
         </tr> 

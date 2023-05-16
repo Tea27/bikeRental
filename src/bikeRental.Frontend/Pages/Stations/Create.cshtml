@@ -26,15 +26,12 @@
                 <input asp-for="NumberOfElectricBikes" class="form-control" />
                 <span asp-validation-for="NumberOfElectricBikes" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <a class="btn btn-light" asp-action="GetAll">Back to Full List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="GetAll">Back to List</a>
 </div>
 
 @section Scripts {

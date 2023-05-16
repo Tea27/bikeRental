@@ -46,3 +46,33 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+.navbar {
+    background: linear-gradient(135deg, darkorange 0%, darkorange 50%, black 50%, black 100%);
+    overflow: hidden;
+}
+
+.navbar-brand {
+    color: black;
+    background-color: darkorange;
+    padding: 0.5rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+.navbar-nav {
+    margin-left: -1rem;
+}
+
+.nav-link {
+    background-color: black;
+    color: white;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.container {
+    padding-left: 0;
+    padding-right: 0;
+}
