@@ -11,7 +11,7 @@
 <div class="container">
     <div class="row justify-content-between">
         <div class="col-6">
-        <form asp-controller="Customers" asp-action="GetAll" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
+        <form asp-controller="Users" asp-action="GetAll" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
             <div class="input-group">
                      <input type="text" placeholder="Start typing address…" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control"/>
                      <div class="input-group-append">
@@ -21,27 +21,42 @@
             </div>
         </form>
         </div>
-       @* <div class="col-4">
+        <div class="col-4">
         @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
         {
             <div>
 
-                <a class="btn btn-outline-success" asp-controller="Stations" asp-action="Create"><i class="bi bi-house-add"> Create new station</i></a>
+                <a class="btn btn-outline-success" asp-controller="Users" asp-action="Create"><i class="bi bi-house-add"> Create new user</i></a>
             </div>
         }
-        </div>*@
+        </div>
     </div>
 </div>
 
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th>UserName</th>
-            <th>FirstName</th>
-            <th>LastName</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Action</th>
+            <th>
+                 @Html.DisplayNameFor(modelItem => modelItem[0].UserName)
+            </th>
+            <th>
+                 @Html.DisplayNameFor(modelItem => modelItem[0].FirstName)
+            </th>
+            <th>
+                 @Html.DisplayNameFor(modelItem => modelItem[0].LastName)
+            </th>
+            <th>
+                 @Html.DisplayNameFor(modelItem => modelItem[0].Email)
+            </th>
+            <th>
+                 @Html.DisplayNameFor(modelItem => modelItem[0].Role)
+            </th>
+            @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+            {   
+                  <th>
+                     Edit/Delete
+                  </th>       
+            }
         </tr>        
     </thead>
     <tbody>
@@ -52,7 +67,14 @@
                 <td>@user.FirstName</td>
                 <td>@user.LastName</td>
                 <td>@user.Email</td>
-                <td>@user.UserRole</td>
+                <td>@user.Role</td>
+                @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+                {
+                    <td>
+                        <a class="btn btn-outline-primary" asp-controller="Users" asp-action="Edit" asp-route-id="@user.Id"><i class="bi bi-pen"></i></a> 
+                        <a class="btn btn-outline-danger" asp-controller="Users" asp-action="Delete" asp-route-id="@user.Id"><i class="bi bi-trash"></i></a>
+                    </td> 
+                }
             </tr>
         }
     </tbody>
@@ -64,7 +86,7 @@
 }
 
 <a asp-action="Index"
-    asp-controller="Customers"
+    asp-controller="Users"
    asp-route-currentCategory="@ViewData["CurrentCategory"]"
    asp-route-pageNumber="@(Model.PageIndex - 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
@@ -72,7 +94,7 @@
     Previous
 </a>
 <a asp-action="Index"
-    asp-controller="Customers"
+    asp-controller="Users"
    asp-route-currentCategory="@ViewData["CurrentCategory"]"
    asp-route-pageNumber="@(Model.PageIndex + 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"

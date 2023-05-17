@@ -1,4 +1,5 @@
-﻿using System;
+﻿using bikeRental.Core.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,5 @@ public class UserModel : BaseResponseModel
 
     public string Email { get; set; }
 
-    public string UserRole { get; set; }
+    public Role Role { get; set; }
 }

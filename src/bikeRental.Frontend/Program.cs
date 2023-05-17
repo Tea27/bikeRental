@@ -39,14 +39,11 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<SmtpSettings>();
 builder.Services.AddScoped<IClaimService, ClaimService>();
 
-builder.Services.AddTransient(typeof(IBicycleRepository<>), typeof(BicycleRepository<>));
-builder.Services.AddTransient(typeof(IStationRepository<>), typeof(StationRepository<>));
-builder.Services.AddTransient(typeof(IUserRepository<>), typeof(UserRepository<>));
+builder.Services.AddScoped(typeof(IBicycleRepository<>), typeof(BicycleRepository<>));
+builder.Services.AddScoped(typeof(IStationRepository<>), typeof(StationRepository<>));
+builder.Services.AddScoped(typeof(IUserRepository<>), typeof(UserRepository<>));
 
 builder.Services.AddTransient<IStationService, StationService>();
-//builder.Services.AddTransient<UserManager<ApplicationUser>>();
-
-
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

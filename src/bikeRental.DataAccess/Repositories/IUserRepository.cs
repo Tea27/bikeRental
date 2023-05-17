@@ -1,5 +1,6 @@
 ﻿using bikeRental.Core.Entities;
 using bikeRental.Core.Identity;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,10 @@ public interface IUserRepository<TEntity> where TEntity : ApplicationUser
 
     Task<TEntity> GetByIdAsync(Guid? id);
 
-    Task UpdateAsync(TEntity entity);
+    Task UpdateAsync(TEntity entity, string newRole);
 
     Task DeleteAsync(Guid id);
+
+    Task AddAsync(TEntity entity, string role, string password);
 }
 

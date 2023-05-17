@@ -48,7 +48,7 @@ button.accept-policy {
 }
 
 .navbar {
-    background: linear-gradient(135deg, darkorange 0%, darkorange 50%, black 50%, black 100%);
+    background: linear-gradient(135deg, darkorange 0%, darkorange 50%, #363636 50%, black 100%);
     overflow: hidden;
 }
 
@@ -76,4 +76,3 @@ button.accept-policy {
     padding-left: 0;
     padding-right: 0;
 }
-

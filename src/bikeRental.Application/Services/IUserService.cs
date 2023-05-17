@@ -11,4 +11,8 @@ public interface IUserService
     Task<CreateUserResponseModel> CreateAsync(CreateUserModel createUserModel);
     Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel);
     Task<IEnumerable<UserModel>> GetAllUsers();
+    Task<UserModel> GetByIdAsync(Guid? id);
+    Task DeleteAsync(Guid Id);
+    Task UpdateAsync(EditUserModel userModel);
+    Task AddAsync(RegisterUserModel userModel);
 }

@@ -9,19 +9,26 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Security.Principal;
+using Microsoft.AspNet.Identity.EntityFramework;
+
+//using Microsoft.AspNet.Identity;
 
 namespace bikeRental.DataAccess.Repositories.Impl;
 
 public class UserRepository<TEntity> : IUserRepository<TEntity> where TEntity : ApplicationUser
 {
     private readonly DatabaseContext _context;
-    //private readonly UserManager<TEntity> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly DbSet<TEntity> DbSet;
-    public UserRepository(DatabaseContext context)
+    private readonly IUserStore<ApplicationUser> _userStore;
+    public UserRepository(DatabaseContext context, UserManager<ApplicationUser> userManager, IUserStore<ApplicationUser> userStore)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
-        // _userManager = userManager;
+        _userManager = userManager;
         DbSet = context.Set<TEntity>();
+        _userStore = userStore;
     }
 
     public async Task<IEnumerable<TEntity>> GetAllAsync()
@@ -34,28 +41,64 @@ public class UserRepository<TEntity> : IUserRepository<TEntity> where TEntity : 
     {
         return await FindByCondition(user => user.Id.Equals(id)).FirstOrDefaultAsync();
     }
+
+    public async Task<IdentityUser<Guid>> GetIdentityUser(Guid? id)
+    {
+        return await FindByCondition(user => user.Id.Equals(id))
+        .Cast<IdentityUser<Guid>>()
+        .FirstOrDefaultAsync();
+    }
     public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
     {
         return DbSet.Where(expression).AsNoTracking();
     }
-    public async Task UpdateAsync(TEntity entity)
+    public async Task UpdateAsync(TEntity entity, string newRole)
     {
         try
         {
-            _context.Attach(entity).State = EntityState.Modified;
+            var editItem = await _userManager.FindByIdAsync(entity.Id.ToString());
+
+            editItem.FirstName = entity.FirstName;
+            editItem.LastName = entity.LastName;
+            editItem.Email = entity.Email;
+
+            await _userManager.UpdateAsync(editItem);
+
+            var oldRole = _userManager.GetRolesAsync(editItem).Result.ToList().First();
+
+            await _userManager.RemoveFromRoleAsync(editItem, oldRole);
+            await _userManager.AddToRoleAsync(editItem, newRole);
         }
         catch (DbUpdateException ex)
         {
             System.Diagnostics.Debug.WriteLine(ex);
         }
-
-        await _context.SaveChangesAsync();
     }
     public async Task DeleteAsync(Guid id)
     {
-        var station = new Station() { Id = id };
-        _context.Stations.Remove(station);
+        var user = await GetByIdAsync(id);
+        _context.Users.Remove(user);
         await _context.SaveChangesAsync();
     }
+
+    public async Task AddAsync(TEntity entity, string role, string password)
+    {
+        var user = new ApplicationUser { UserName = entity.Email, FirstName = entity.FirstName, LastName = entity.LastName, EmailConfirmed = true, Email = entity.Email };
+        try
+        {
+            var emailStore = (IUserEmailStore<ApplicationUser>)_userStore;
+
+            await _userStore.SetUserNameAsync(user, user.Email, CancellationToken.None);
+            await emailStore.SetEmailAsync(user, user.Email, CancellationToken.None);
+
+            await _userManager.CreateAsync(user, password);
+            await _userManager.AddToRoleAsync(user, role);
+        }
+        catch (DbUpdateException ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex);
+        }
+    }
+
 }
 

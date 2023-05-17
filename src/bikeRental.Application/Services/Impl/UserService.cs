@@ -12,6 +12,9 @@ using bikeRental.Core.Identity;
 using bikeRental.DataAccess.Repositories;
 using bikeRental.DataAccess.Repositories.Impl;
 using bikeRental.Application.Models.Station;
+using bikeRental.Core.Enums;
+using System.Data.Entity;
+using bikeRental.Core.Entities;
 
 namespace bikeRental.Application.Services.Impl;
 
@@ -134,8 +137,8 @@ public class UserService : IUserService
             var userDto = _mapper.Map<UserModel>(user);
             try
             {
-                var role = _userManager.GetRolesAsync(user).Result.ToList().First();
-                userDto.UserRole = role;
+                var role = _userManager.GetRolesAsync(user).Result.First();   
+                userDto.Role = (Role)Enum.Parse(typeof(Role), role);
             }
             catch (Exception ex)
             {
@@ -144,5 +147,37 @@ public class UserService : IUserService
             users.Add(userDto);
         }
         return users;
+    }
+    public async Task AddAsync(RegisterUserModel userModel)
+    {
+        var user = _mapper.Map<ApplicationUser>(userModel);
+        await _userRepository.AddAsync(user, userModel.Role.ToString(), userModel.Password);
+        //return _mapper.Map<UserModel>(user);
+    }
+
+    public async Task<UserModel> GetByIdAsync(Guid? id)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        var userModel = _mapper.Map<UserModel>(user);
+
+        var role = _userManager.GetRolesAsync(user).Result.First();
+        userModel.Role = (Role)Enum.Parse(typeof(Role), role);
+        
+        return userModel;
+    }
+
+    public async Task DeleteAsync(Guid Id)
+    {
+        await _userRepository.DeleteAsync(Id);
+    }
+
+    public async Task UpdateAsync(EditUserModel userModel)
+    {
+        
+        var newRole = userModel.Role.ToString();
+
+        var user = _mapper.Map<ApplicationUser>(userModel);
+
+        await _userRepository.UpdateAsync(user, newRole);
     }
 }
