@@ -1,5 +1,4 @@
-﻿using bikeRental.Application.Models.Station;
-using bikeRental.Application;
+﻿using bikeRental.Application;
 using bikeRental.Application.Models.User;
 using bikeRental.Application.Services;
 using bikeRental.Application.Services.Impl;
@@ -11,6 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using System.Web;
+using System;
+using System.Security.Cryptography;
 
 namespace bikeRental.Frontend.Controllers;
 public class UsersController : Controller
@@ -28,7 +30,7 @@ public class UsersController : Controller
 
     [HttpGet]
     [Authorize(Roles = ("Administrator"))]
-    public async Task<IActionResult> Index(string currentCategory, string currentFilter, string searchString, int? pageNumber)
+    public async Task<IActionResult> Index(string currentCategory, string currentFilter, string searchString, string sortOrder, int? pageNumber)
     {
         if (searchString != null)
         {
@@ -44,6 +46,9 @@ public class UsersController : Controller
         int pageSize = 5;
         var users = await _userService.GetAllUsers();
 
+        users = _userService.SortingSelection(users, sortOrder);
+
+        users = _userService.SearchSelection(users, searchString);
 
         return View("/Pages/Users/Index.cshtml", PaginatedList<UserModel>.Create(users, pageNumber ?? 1, pageSize));
     }
@@ -55,10 +60,10 @@ public class UsersController : Controller
         return View("/Pages/Users/Create.cshtml");
     }
 
+
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(
-    [Bind("FirstName,LastName,Email,Password,ConfirmPassword,Role")] RegisterUserModel userModel)
+    public async Task<IActionResult> Create(RegisterUserModel userModel)
     {
         try
         {
@@ -75,10 +80,12 @@ public class UsersController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-        [HttpGet]
+    [HttpGet]
     [Authorize(Roles = ("Administrator"))]
-    public async Task<IActionResult> Delete(Guid? id, bool? saveChangesError = false)
+    [ActionName("Delete")]
+    public async Task<IActionResult> Delete(bool? saveChangesError = false)
     {
+        Guid? id = TempData["UserId"] as Guid?;
         if (id == null)
         {
             return NotFound();
@@ -117,20 +124,27 @@ public class UsersController : Controller
         {
 
             await _userService.DeleteAsync(id);
-            //return RedirectToAction(nameof(Index));
         }
         catch (DbUpdateException ex)
         {
             System.Diagnostics.Debug.WriteLine(ex);
-            //Log the error (uncomment ex variable name and write a log.)
             return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
         }
         return RedirectToAction(nameof(Index));
     }
+    public ActionResult Redirect(Guid? id, string name)
+    {
+        TempData["UserId"] = id;
+        System.Diagnostics.Debug.WriteLine("ime aksije "+name);
+
+        return RedirectToAction(name);
+    }
 
     [Authorize(Roles = ("Administrator"))]
-    public async Task<IActionResult> Edit([Bind("Id,FirstName,LastName,Email,Role")] Guid? id)
+    public async Task<IActionResult> Edit()
     {
+        Guid? id = TempData["UserId"] as Guid?;
+
         if (id == null)
         {
             return NotFound();
@@ -151,7 +165,7 @@ public class UsersController : Controller
     [HttpPost, ActionName("Edit")]
     [Authorize(Roles = ("Administrator"))]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditPost([Bind("Id,FirstName,LastName,Email,Role")] EditUserModel userModel)
+    public async Task<IActionResult> EditPost(EditUserModel userModel)
     {
         if (userModel == null)
         {

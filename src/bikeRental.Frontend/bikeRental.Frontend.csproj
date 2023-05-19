@@ -28,4 +28,8 @@
     <ProjectReference Include="..\bikeRental.DataAccess\bikeRental.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Styles\" />
+  </ItemGroup>
+
 </Project>

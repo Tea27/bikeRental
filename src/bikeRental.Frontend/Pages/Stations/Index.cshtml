@@ -1,14 +1,16 @@
 ﻿@using bikeRental.Application;
+@using bikeRental.Application.Models.Station;
 @model PaginatedList<bikeRental.Application.Models.Station.StationResponse>
 
 @{
     ViewData["Title"] = "Stations";
 }
 
-<h2>Stations</h2>
+
 
 @ViewData["CurrentCategory"]
-
+<div class="container px-4 pt-2">
+<h2>Stations</h2>
 <div class="container">
     <div class="row justify-content-between">
         <div class="col-6">
@@ -36,15 +38,17 @@
 
 <table class="table table-hover mt-5 ">
     <tr>
-            <th>
-                 @Html.DisplayNameFor(modelItem => modelItem[0].Address)
-            </th>
-            <th>
-                 @Html.DisplayNameFor(modelItem => modelItem[0].NumberOfBikes)
-            </th>
-            <th>
-                 @Html.DisplayNameFor(modelItem => modelItem[0].NumberOfElectricBikes)
-            </th>
+            @foreach (var prop in typeof(StationResponse).GetProperties())
+            {
+                    @if (prop.Name != "Id")
+                    {
+                        <th>
+                            @prop.Name
+                            <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}Desc")><i class="bi bi-caret-up-fill"></i></a>
+                            <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
+                        </th>
+                    }
+            }
             @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
             {   
                   <th>
@@ -97,3 +101,5 @@
    class="btn btn-default @nextDisabled">
     Next
 </a>
+</div>
+

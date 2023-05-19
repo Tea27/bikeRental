@@ -2,6 +2,7 @@
 using bikeRental.Application.Models.Station;
 using bikeRental.Application.Services;
 using bikeRental.Application.Services.Impl;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ public class StationsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(string currentCategory, string currentFilter, string searchString, int? pageNumber)
+    public async Task<IActionResult> Index(string currentCategory, string sortOrder, string currentFilter, string searchString, int? pageNumber)
     {
         if (searchString != null)
         {
@@ -35,6 +36,8 @@ public class StationsController : Controller
 
         var stations = await _stationService.GetAllAsync();
 
+        stations = _stationService.SortingSelection(stations, sortOrder);
+
         stations = _stationService.SearchSelection(stations, searchString);
 
         return View("/Pages/Stations/Index.cshtml", PaginatedList<StationResponse>.Create(stations, pageNumber ?? 1, pageSize));
@@ -48,8 +51,7 @@ public class StationsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(
-    [Bind("Address,NumberOfBikes,NumberOfElectricBikes")] StationModel stationModel)
+    public async Task<IActionResult> Create( StationModel stationModel)
     {
         try
         {
@@ -87,7 +89,7 @@ public class StationsController : Controller
     [HttpPost, ActionName("Edit")]
     [Authorize(Roles = ("Administrator"))]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditPost([Bind("Address,NumberOfBikes,NumberOfElectricBikes")] StationModel stationModel)
+    public async Task<IActionResult> EditPost( StationModel stationModel)
     {
         if (stationModel == null)
         {
@@ -100,7 +102,6 @@ public class StationsController : Controller
         }
         catch (DbUpdateException ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex);
             ModelState.AddModelError("", "Unable to save changes. " + ex);
         }
 

@@ -21,6 +21,11 @@ public class EditUserModel : BaseResponseModel
     public string LastName { get; set; }
 
     [Required]
+    [DataType(DataType.Text)]
+    [Display(Name = "Username")]
+    public string UserName { get; set; }
+
+    [Required]
     [EmailAddress]
     [Display(Name = "Email")]
     public string Email { get; set; }

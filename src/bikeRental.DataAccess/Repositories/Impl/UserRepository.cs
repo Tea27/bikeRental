@@ -54,6 +54,7 @@ public class UserRepository<TEntity> : IUserRepository<TEntity> where TEntity : 
     }
     public async Task UpdateAsync(TEntity entity, string newRole)
     {
+        
         try
         {
             var editItem = await _userManager.FindByIdAsync(entity.Id.ToString());
@@ -61,11 +62,14 @@ public class UserRepository<TEntity> : IUserRepository<TEntity> where TEntity : 
             editItem.FirstName = entity.FirstName;
             editItem.LastName = entity.LastName;
             editItem.Email = entity.Email;
+            editItem.UserName = entity.UserName;
+            System.Diagnostics.Debug.WriteLine("ovo je username " + editItem.UserName);
 
             await _userManager.UpdateAsync(editItem);
 
             var oldRole = _userManager.GetRolesAsync(editItem).Result.ToList().First();
 
+            await _userStore.UpdateAsync(editItem, CancellationToken.None);
             await _userManager.RemoveFromRoleAsync(editItem, oldRole);
             await _userManager.AddToRoleAsync(editItem, newRole);
         }

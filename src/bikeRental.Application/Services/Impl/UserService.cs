@@ -137,7 +137,7 @@ public class UserService : IUserService
             var userDto = _mapper.Map<UserModel>(user);
             try
             {
-                var role = _userManager.GetRolesAsync(user).Result.First();   
+                var role = _userManager.GetRolesAsync(user).Result.First();
                 userDto.Role = (Role)Enum.Parse(typeof(Role), role);
             }
             catch (Exception ex)
@@ -162,7 +162,7 @@ public class UserService : IUserService
 
         var role = _userManager.GetRolesAsync(user).Result.First();
         userModel.Role = (Role)Enum.Parse(typeof(Role), role);
-        
+
         return userModel;
     }
 
@@ -173,11 +173,51 @@ public class UserService : IUserService
 
     public async Task UpdateAsync(EditUserModel userModel)
     {
-        
+
         var newRole = userModel.Role.ToString();
 
         var user = _mapper.Map<ApplicationUser>(userModel);
 
         await _userRepository.UpdateAsync(user, newRole);
+    }
+
+    public IEnumerable<UserModel> SearchSelection(IEnumerable<UserModel> users, string searchString)
+    {
+        IEnumerable<UserModel> usersSearched = users.ToList();
+
+        if (!String.IsNullOrEmpty(searchString))
+        {
+            var searchStrTrim = searchString.Trim();
+            usersSearched = users.Where(t => t.FirstName.Contains(searchStrTrim)
+                                          || t.LastName.Contains(searchStrTrim)
+                                          || t.UserName.Contains(searchStrTrim)
+                                          || t.Email.Contains(searchStrTrim)
+                                          );
+        }
+        return usersSearched;
+    }
+    public IEnumerable<UserModel> SortingSelection(IEnumerable<UserModel> users, string sortOrder)
+    {
+        switch (sortOrder)
+        {
+            case "FirstName":
+                return users.OrderBy(s => s.FirstName);
+            case "FirstNameDesc":
+                return users = users.OrderByDescending(s => s.FirstName);
+            case "LastName":
+                return users.OrderBy(s => s.LastName);
+            case "LastNameDesc":
+                return users.OrderByDescending(s => s.LastName);
+            case "UserName":
+                return users.OrderBy(s => s.UserName);
+            case "UserNameDesc":
+                return users.OrderByDescending(s => s.UserName);
+            case "Email":
+                return users.OrderBy(s => s.Email);
+            case "EmailDesc":
+                return users.OrderByDescending(s => s.Email);
+            default:
+                return users.OrderBy(s => s.LastName);
+        }
     }
 }

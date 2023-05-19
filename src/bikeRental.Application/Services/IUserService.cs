@@ -15,4 +15,6 @@ public interface IUserService
     Task DeleteAsync(Guid Id);
     Task UpdateAsync(EditUserModel userModel);
     Task AddAsync(RegisterUserModel userModel);
+    IEnumerable<UserModel> SearchSelection(IEnumerable<UserModel> users, string searchString);
+    IEnumerable<UserModel> SortingSelection(IEnumerable<UserModel> users, string sortOrder);
 }

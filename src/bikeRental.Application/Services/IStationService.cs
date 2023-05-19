@@ -13,9 +13,9 @@ public interface IStationService
     Task<StationModel> AddAsync(StationModel entity);
     Task<StationModel> GetByIdAsync(Guid? id);
     Task<IEnumerable<StationResponse>> GetAllAsync();
-    List<string> getFieldNames();
     IEnumerable<StationResponse> SearchSelection(IEnumerable<StationResponse> stations, string searchString);
     Task UpdateAsync(StationModel stationModel);
+    IEnumerable<StationResponse> SortingSelection(IEnumerable<StationResponse> stations, string sortOrder);
     Task Delete(Guid Id);
 }
 

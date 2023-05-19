@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using bikeRental.Application.Models.Station;
+using bikeRental.Application.Models.User;
 using bikeRental.Core.Entities;
 using bikeRental.DataAccess.Repositories;
 using bikeRental.DataAccess.Repositories.Impl;
@@ -39,12 +40,17 @@ public class StationService : IStationService
         return _mapper.Map<IEnumerable<StationResponse>>(response);
     }
 
-    public List<string> getFieldNames()
+    
+    public async Task UpdateAsync(StationModel stationModel)
     {
-        Station Station = new Station();
-        return Station.GetType().GetProperties().Where(x => x.Name != "Id").Select(x => x.Name).ToList();
+        var station = _mapper.Map<Station>(stationModel);
+        await _stationRepository.UpdateAsync(station);
     }
+    public async Task Delete(Guid Id)
+    {
+        await _stationRepository.DeleteAsync(Id);
 
+    }
     public IEnumerable<StationResponse> SearchSelection(IEnumerable<StationResponse> stations, string searchString)
     {
         IEnumerable<StationResponse> stationsSearched = stations.ToList();
@@ -56,15 +62,25 @@ public class StationService : IStationService
         }
         return stationsSearched;
     }
-    public async Task UpdateAsync(StationModel stationModel)
+    public IEnumerable<StationResponse> SortingSelection(IEnumerable<StationResponse> stations, string sortOrder)
     {
-        var station = _mapper.Map<Station>(stationModel);
-        await _stationRepository.UpdateAsync(station);
-    }
-    public async Task Delete(Guid Id)
-    {
-        await _stationRepository.DeleteAsync(Id);
-
+        switch (sortOrder)
+        {
+            case "Address":
+                return stations.OrderBy(s => s.Address);
+            case "AddressDesc":
+                return stations.OrderByDescending(s => s.Address);
+            case "NumberOfBikes":
+                return stations.OrderBy(s => s.NumberOfBikes);
+            case "NumberOfBikesDesc":
+                return stations.OrderByDescending(s => s.NumberOfBikes);
+            case "NumberOfElectricBikes":
+                return stations.OrderBy(s => s.NumberOfElectricBikes);
+            case "NumberOfElectricBikesDesc":
+                return stations.OrderByDescending(s => s.NumberOfElectricBikes);
+            default:
+                return stations.OrderBy(s => s.Address);
+        }
     }
 }
 

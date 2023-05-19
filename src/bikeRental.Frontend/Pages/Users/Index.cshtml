@@ -1,22 +1,22 @@
 ﻿@using bikeRental.Application;
+@using bikeRental.Application.Models.User;
 @model PaginatedList<bikeRental.Application.Models.User.UserModel>
 @{
     ViewData["Title"] = "Customers";
 }
 
-<h2>Stations</h2>
-
 @ViewData["CurrentCategory"]
-
-<div class="container">
+<div class="container px-4 pt-2">
+<h2>Users</h2>
+<div class="container mt-4">
     <div class="row justify-content-between">
         <div class="col-6">
-        <form asp-controller="Users" asp-action="GetAll" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
+        <form asp-controller="Users" asp-action="Index" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
             <div class="input-group">
                      <input type="text" placeholder="Start typing address…" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control"/>
                      <div class="input-group-append">
                          <button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
-                         <a class="btn btn-light" asp-action="GetAll">Back to Full List</a>
+                         <a class="btn btn-light" asp-action="Index">Back to Full List</a>
                      </div>
             </div>
         </form>
@@ -26,31 +26,27 @@
         {
             <div>
 
-                <a class="btn btn-outline-success" asp-controller="Users" asp-action="Create"><i class="bi bi-house-add"> Create new user</i></a>
+                <a class="btn btn-outline-success" asp-controller="Users" asp-action="Create"><i class="bi bi-person-add">  Create new user</i></a>
             </div>
         }
         </div>
     </div>
 </div>
 
-<table class="table table-striped table-bordered">
+<table class="table table-hover mt-5 mx-auto">
     <thead>
-        <tr>
-            <th>
-                 @Html.DisplayNameFor(modelItem => modelItem[0].UserName)
-            </th>
-            <th>
-                 @Html.DisplayNameFor(modelItem => modelItem[0].FirstName)
-            </th>
-            <th>
-                 @Html.DisplayNameFor(modelItem => modelItem[0].LastName)
-            </th>
-            <th>
-                 @Html.DisplayNameFor(modelItem => modelItem[0].Email)
-            </th>
-            <th>
-                 @Html.DisplayNameFor(modelItem => modelItem[0].Role)
-            </th>
+        <tr>           
+            @foreach (var prop in typeof(UserModel).GetProperties())
+            {
+                @if (prop.Name != "Id" && prop.Name != "Role")
+                {
+                    <th>
+                        @prop.Name
+                        <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}Desc")><i class="bi bi-caret-up-fill"></i></a>
+                        <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
+                    </th>
+                }
+            }
             @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
             {   
                   <th>
@@ -71,8 +67,8 @@
                 @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
                 {
                     <td>
-                        <a class="btn btn-outline-primary" asp-controller="Users" asp-action="Edit" asp-route-id="@user.Id"><i class="bi bi-pen"></i></a> 
-                        <a class="btn btn-outline-danger" asp-controller="Users" asp-action="Delete" asp-route-id="@user.Id"><i class="bi bi-trash"></i></a>
+                        <a class="btn btn-outline-primary url" asp-controller="Users" asp-action="Redirect" asp-route-name="Edit" asp-route-id="@user.Id"><i class="bi bi-pen"></i></a> 
+                        <a class="btn btn-outline-danger url" asp-controller="Users" asp-action="Redirect" asp-route-name="Delete"  asp-route-id="@user.Id"><i class="bi bi-trash"></i></a>
                     </td> 
                 }
             </tr>
@@ -101,3 +97,5 @@
    class="btn btn-default @nextDisabled">
     Next
 </a>
+
+</div>
