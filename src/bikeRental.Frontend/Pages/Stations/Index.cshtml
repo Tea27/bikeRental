@@ -40,16 +40,19 @@
     <tr>
             @foreach (var prop in typeof(StationResponse).GetProperties())
             {
-                    @if (prop.Name != "Id")
+				@if (prop.Name != "Id" && prop.Name != "Bicycles")
                     {
                         <th>
                             @prop.Name
                             <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}Desc")><i class="bi bi-caret-up-fill"></i></a>
                             <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
-                        </th>
+						</th>
                     }
             }
-            @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+			<th>
+				Bicycles
+			</th>
+			@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
             {   
                   <th>
                      Edit/Delete
@@ -69,7 +72,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.NumberOfElectricBikes)
             </td>
-            @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+			<td>
+					<a class="btn btn-outline-secondary" asp-controller="Bicycles" asp-action="GetByStation" asp-route-id="@item.Id">
+						<i class="bi bi-bicycle"></i></a>
+			</td>
+				@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
             {
                     <td>
                         <a class="btn btn-outline-primary" asp-controller="Stations" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a> 

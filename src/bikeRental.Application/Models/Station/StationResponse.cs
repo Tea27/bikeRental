@@ -18,6 +18,5 @@ public class StationResponse : BaseResponseModel
     [DisplayName("Number of electric bikes")]
     public int NumberOfElectricBikes { get; set; }
 
-    public ICollection<Bicycle> Bicycles { get; set; }
 
 }

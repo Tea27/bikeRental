@@ -1,0 +1,111 @@
+﻿@using bikeRental.Application;
+@using bikeRental.Application.Models.Bicycle;
+@model PaginatedList<bikeRental.Application.Models.Bicycle.BicycleModel>
+
+@{
+	ViewData["Title"] = "Bicylces";
+}
+
+
+
+<div class="container px-4 pt-2">
+	<h2>Bicycles on @Model[0].Station.Address </h2>
+	<div class="container">
+		<div class="row justify-content-between">
+			<div class="row justify-content-between">
+				<div class="col-6">
+					<form asp-controller="Bicycles" asp-action="GetByStation" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
+						<div class="input-group">
+							<input type="text" placeholder="Start typing description…" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control" />
+							<div class="input-group-append">
+								<button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
+								<a class="btn btn-light" asp-action="GetByStation">Back to Full List</a>
+							</div>
+						</div>
+					</form>
+				</div>
+@*			<div class="col-4">
+				@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+				{
+					<div>
+
+						<a class="btn btn-outline-success" asp-controller="Stations" asp-action="Create"><i class="bi bi-house-add"> Create new station</i></a>
+					</div>
+				}
+			</div>*@
+		</div>
+	</div>
+
+	<table class="table table-hover mt-5 ">
+		<tr>
+			@foreach (var prop in typeof(BicycleModel).GetProperties())
+			{
+				@if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "Station")
+				{
+					<th>
+						@prop.Name
+					</th>
+				}
+			}
+			@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+			{
+				<th>
+					Edit/Delete
+				</th>
+			}
+
+		</tr>
+		@foreach (var item in Model)
+		{
+
+			<tr>
+				<td>
+					@item.Type
+					
+				</td>
+				<td>
+					@item.Description
+				</td>
+				<td>
+					@item.Price
+				</td>
+				<td>
+					@item.IsAvailable
+				</td>
+@*				<td>
+					<a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="GetByStation" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
+				</td>*@
+				@*@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+				{
+					<td>
+						<a class="btn btn-outline-primary" asp-controller="Bicycles" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>
+						<a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
+					</td>
+				}*@
+			</tr>
+		}
+	</table>
+
+	@{
+		var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+		var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+	}
+
+		<a asp-action="GetByStation"
+	   asp-controller="Bicycles"
+	   asp-route-currentCategory="@ViewData["CurrentCategory"]"
+	   asp-route-pageNumber="@(Model.PageIndex - 1)"
+	   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+	class="btn btn-default @prevDisabled">
+		Previous
+	</a>
+		<a asp-action="GetByStation"
+	   asp-controller="Bicycles"
+	   asp-route-currentCategory="@ViewData["CurrentCategory"]"
+	   asp-route-pageNumber="@(Model.PageIndex + 1)"
+	   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+	class="btn btn-default @nextDisabled">
+		Next
+	</a>
+</div>
+

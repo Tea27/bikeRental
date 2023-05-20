@@ -1,4 +1,5 @@
-﻿using bikeRental.Core.Entities;
+﻿using bikeRental.Application.Models.Bicycle;
+using bikeRental.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,9 @@ namespace bikeRental.Application.Services;
 public interface IBicycleService
 {
     Task<IEnumerable<Bicycle>> GetAllAsync();
-    List<string> getFieldNames();
+    Task<IEnumerable<BicycleModel>> GetByStation(Guid? StationId);
 
+    List<string> getFieldNames();
+    IEnumerable<BicycleModel> SearchSelection(IEnumerable<BicycleModel> bicycles, string searchString);
 }
 

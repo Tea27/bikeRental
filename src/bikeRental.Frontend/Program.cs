@@ -44,6 +44,8 @@ builder.Services.AddScoped(typeof(IStationRepository<>), typeof(StationRepositor
 builder.Services.AddScoped(typeof(IUserRepository<>), typeof(UserRepository<>));
 
 builder.Services.AddTransient<IStationService, StationService>();
+builder.Services.AddTransient<IBicycleService, BicycleService>();
+
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
