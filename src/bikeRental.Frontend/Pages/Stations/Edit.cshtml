@@ -28,6 +28,16 @@
                 <input asp-for="NumberOfElectricBikes" class="form-control" />
                 <span asp-validation-for="NumberOfElectricBikes" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="lattitude" class="control-label"></label>
+                <input asp-for="lattitude" class="form-control" />
+                <span asp-validation-for="lattitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="longitude" class="control-label"></label>
+                <input asp-for="longitude" class="form-control" />
+                <span asp-validation-for="longitude" class="text-danger"></span>
+            </div>
             <div class="form-group mt-3">
                 <input type="submit" value="Save" class="btn btn-primary" />
                 <a class="btn btn-light" asp-action="Index">Back to Full List</a>

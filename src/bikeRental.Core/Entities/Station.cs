@@ -15,6 +15,8 @@ namespace bikeRental.Core.Entities
 
         public int NumberOfElectricBikes { get; set; }
 
+        public double lattitude { get; set; }
+        public double longitude { get; set; }
         public ICollection<Bicycle> Bicycles { get; set; }
 
     }

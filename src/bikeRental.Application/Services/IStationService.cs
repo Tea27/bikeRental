@@ -17,5 +17,6 @@ public interface IStationService
     Task UpdateAsync(StationModel stationModel);
     IEnumerable<StationResponse> SortingSelection(IEnumerable<StationResponse> stations, string sortOrder);
     Task Delete(Guid Id);
+    Task<string> GetAddressesAsync();
 }
 

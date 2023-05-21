@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace bikeRental.DataAccess.Persistence.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialBikeRental : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -58,7 +58,9 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Address = table.Column<string>(type: "text", nullable: true),
                     NumberOfBikes = table.Column<int>(type: "integer", nullable: false),
-                    NumberOfElectricBikes = table.Column<int>(type: "integer", nullable: false)
+                    NumberOfElectricBikes = table.Column<int>(type: "integer", nullable: false),
+                    lattitude = table.Column<double>(type: "double precision", nullable: false),
+                    longitude = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {

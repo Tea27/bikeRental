@@ -95,6 +95,12 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                     b.Property<int>("NumberOfElectricBikes")
                         .HasColumnType("integer");
 
+                    b.Property<double>("lattitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("longitude")
+                        .HasColumnType("double precision");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Address")

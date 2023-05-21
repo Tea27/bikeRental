@@ -12,8 +12,8 @@ using bikeRental.DataAccess.Persistence;
 namespace bikeRental.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230503110915_Initial")]
-    partial class Initial
+    [Migration("20230521002626_InitialBikeRental")]
+    partial class InitialBikeRental
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -96,6 +96,12 @@ namespace bikeRental.DataAccess.Persistence.Migrations
 
                     b.Property<int>("NumberOfElectricBikes")
                         .HasColumnType("integer");
+
+                    b.Property<double>("lattitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("longitude")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 

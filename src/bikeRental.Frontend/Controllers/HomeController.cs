@@ -1,7 +1,10 @@
 ﻿using bikeRental.Application.Models;
+using bikeRental.Application.Services;
 using bikeRental.Frontend.Filters;
+using GoogleMaps.LocationServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace bikeRental.Frontend.Controllers
@@ -9,15 +12,19 @@ namespace bikeRental.Frontend.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IStationService _stationService;
+        public HomeController(ILogger<HomeController> logger, IStationService stationService)
         {
             _logger = logger;
+            _stationService = stationService;
         }
-
-        public IActionResult Index()
+        
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var stations = await _stationService.GetAllAsync();
+            ViewBag.Markers = await _stationService.GetAddressesAsync();
+            return View("/Pages/Home/Index.cshtml", stations);
         }
 
         [CustomAuthorize]
