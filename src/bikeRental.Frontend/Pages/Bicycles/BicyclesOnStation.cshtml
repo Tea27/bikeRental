@@ -12,27 +12,27 @@
 	<h2>Bicycles on @Model[0].Station.Address </h2>
 	<div class="container">
 		<div class="row justify-content-between">
-			<div class="row justify-content-between">
 				<div class="col-6">
 					<form asp-controller="Bicycles" asp-action="GetByStation" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
 						<div class="input-group">
 							<input type="text" placeholder="Start typing description…" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control" />
 							<div class="input-group-append">
 								<button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
-								<a class="btn btn-light" asp-action="GetByStation">Back to Full List</a>
+								<a class="btn btn-light" asp-controller="Stations" asp-action="Index">Back to stations</a>
 							</div>
 						</div>
 					</form>
 				</div>
-@*			<div class="col-4">
-				@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
-				{
-					<div>
+				<div class="col-4">
+					@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+					{
+						<div>
 
-						<a class="btn btn-outline-success" asp-controller="Stations" asp-action="Create"><i class="bi bi-house-add"> Create new station</i></a>
-					</div>
-				}
-			</div>*@
+@*							<a class="btn btn-outline-success" asp-controller="Stations" asp-action="Create"><i class="bi bi-house-add"> Create new station</i></a>
+*@						</div>
+					}
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -71,17 +71,14 @@
 				</td>
 				<td>
 					@item.IsAvailable
-				</td>
-@*				<td>
-					<a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="GetByStation" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
-				</td>*@
-				@*@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+				</td>				
+				@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
 				{
 					<td>
 						<a class="btn btn-outline-primary" asp-controller="Bicycles" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>
-						<a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
+							<a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="Delete" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id"><i class="bi bi-trash"></i></a>
 					</td>
-				}*@
+				}
 			</tr>
 		}
 	</table>

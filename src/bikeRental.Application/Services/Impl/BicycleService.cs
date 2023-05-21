@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using bikeRental.Application.Models.Station;
+using bikeRental.DataAccess.Repositories.Impl;
 
 namespace bikeRental.Application.Services.Impl;
 public class BicycleService : IBicycleService
@@ -33,6 +34,23 @@ public class BicycleService : IBicycleService
         return Bicycle.GetType().GetProperties().Where(x => x.Name != "Id").Select(x => x.Name).ToList();
     }
 
+    public async Task Delete(Guid Id, Guid stationId)
+    {
+        var bicycle = await _bicycleRepository.GetByIdAsync(Id);
+        var station = await _stationService.GetByIdAsync(stationId);
+        if(bicycle.Type.ToString() == "Acoustic")
+        {
+            station.NumberOfBikes--;
+        }
+        else
+        {
+            station.NumberOfElectricBikes--;
+        }
+        await _stationService.UpdateAsync(station);
+        await _bicycleRepository.DeleteAsync(Id);
+
+    }
+
     public async Task<IEnumerable<BicycleModel>> GetByStation(Guid? StationId)
     {
         var bicycles = await _bicycleRepository.GetByStation(StationId);
@@ -42,6 +60,14 @@ public class BicycleService : IBicycleService
             bicycle.Station = await _stationService.GetByIdAsync(StationId);
         }
         return bicyclesModel;
+    }
+
+    public async Task<BicycleModel> GetByIdAsync(Guid? id, Guid? stationId)
+    {
+        var response = await _bicycleRepository.GetByIdAsync(id);
+        var bicycleModel = _mapper.Map<BicycleModel>(response);
+        bicycleModel.Station = await _stationService.GetByIdAsync(stationId);
+        return bicycleModel;
     }
 
     public IEnumerable<BicycleModel> SearchSelection(IEnumerable<BicycleModel> bicycles, string searchString)

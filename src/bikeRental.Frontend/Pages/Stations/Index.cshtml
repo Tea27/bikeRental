@@ -73,8 +73,20 @@
                 @Html.DisplayFor(modelItem => item.NumberOfElectricBikes)
             </td>
 			<td>
+					@if(item.NumberOfElectricBikes == 0 && item.NumberOfBikes==0)
+					{
+						<div class="d-inline-block" data-toggle="tooltip" data-placement="top" title="No bikes on this station">
+							<a class="btn btn-outline-secondary disabled" style="pointer-events:none;" asp-controller="Bicycles" asp-action="GetByStation" asp-route-id="@item.Id ">
+							<i class="bi bi-bicycle"></i>
+						</a>
+						</div>
+					}
+					else{
 					<a class="btn btn-outline-secondary" asp-controller="Bicycles" asp-action="GetByStation" asp-route-id="@item.Id">
-						<i class="bi bi-bicycle"></i></a>
+						<i class="bi bi-bicycle"></i>
+					</a>
+					}
+				
 			</td>
 				@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
             {

@@ -24,7 +24,7 @@ namespace bikeRental.Core.Entities
 
         public ICollection<Order> Orders { get; set; }
 
-        public Station Station { get; set; }
+        public Station Station { get; set; } 
 
     }
 }
