@@ -1,4 +1,5 @@
-﻿using bikeRental.Application.Models.Station;
+﻿using bikeRental.Application.Models.Order;
+using bikeRental.Application.Models.Station;
 using bikeRental.Core.Entities;
 using bikeRental.Core.Enums;
 using System;
@@ -27,7 +28,7 @@ namespace bikeRental.Application.Models.Bicycle
         [DisplayName("Status")]
         public bool IsAvailable { get; set; }
 
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<OrderModel> Orders { get; set; }
 
         public StationModel Station { get; set; }
     }
