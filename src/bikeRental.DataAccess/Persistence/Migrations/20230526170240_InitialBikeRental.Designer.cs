@@ -12,7 +12,7 @@ using bikeRental.DataAccess.Persistence;
 namespace bikeRental.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230521002626_InitialBikeRental")]
+    [Migration("20230526170240_InitialBikeRental")]
     partial class InitialBikeRental
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,8 +67,8 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                     b.Property<DateTime>("RentalEndTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("RentalPrice")
-                        .HasColumnType("text");
+                    b.Property<decimal>("RentalPrice")
+                        .HasColumnType("numeric");
 
                     b.Property<DateTime>("RentalStartTime")
                         .HasColumnType("timestamp with time zone");

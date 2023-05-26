@@ -65,8 +65,8 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                     b.Property<DateTime>("RentalEndTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("RentalPrice")
-                        .HasColumnType("text");
+                    b.Property<decimal>("RentalPrice")
+                        .HasColumnType("numeric");
 
                     b.Property<DateTime>("RentalStartTime")
                         .HasColumnType("timestamp with time zone");

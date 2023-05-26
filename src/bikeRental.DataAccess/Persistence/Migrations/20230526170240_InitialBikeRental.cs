@@ -243,7 +243,7 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     RentalStartTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     RentalEndTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    RentalPrice = table.Column<string>(type: "text", nullable: true),
+                    RentalPrice = table.Column<decimal>(type: "numeric", nullable: false),
                     CustomerId = table.Column<Guid>(type: "uuid", nullable: true),
                     BicycleId = table.Column<Guid>(type: "uuid", nullable: true)
                 },

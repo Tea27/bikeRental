@@ -15,7 +15,7 @@ namespace bikeRental.Core.Entities
 
         public DateTime RentalEndTime { get; set; }
 
-        public string RentalPrice { get; set; }
+        public decimal RentalPrice { get; set; }
 
         public ApplicationUser Customer { get; set; }
 
