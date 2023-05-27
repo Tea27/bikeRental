@@ -8,6 +8,7 @@ using bikeRental.DataAccess.Repositories;
 using bikeRental.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using static System.Collections.Specialized.BitVector32;
 
 namespace bikeRental.DataAccess.Repositories.Impl;
 
@@ -31,16 +32,38 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
         return await FindByCondition(TEntity => TEntity.Station.Id.Equals(stationId)).ToListAsync();
     }
 
-    public async Task<TEntity> AddAsync(TEntity entity)
+    public async Task<TEntity> AddAsync(TEntity entity, Guid stationId)
     {
         if (entity == null)
             throw new ArgumentNullException(nameof(entity));
+
         entity.Id = Guid.NewGuid();
+
+        // Retrieve the associated Station entity from the database using its StationId
+        var associatedStation = await _context.Stations.FindAsync(stationId);
+        if (associatedStation == null)
+        {
+            // Handle the situation when the associated Station does not exist
+            throw new InvalidOperationException("The associated Station does not exist.");
+        }
+
+        // Associate the Bicycle entity with the existing Station entity
+        entity.Station = associatedStation;
+        if (entity.Type.ToString() == "Acoustic")
+        {
+            entity.Station.NumberOfBikes++;
+        }
+        else
+        {
+            entity.Station.NumberOfElectricBikes++;
+        }
 
         var addedEntity = (await DbSet.AddAsync(entity)).Entity;
         await _context.SaveChangesAsync();
         return addedEntity;
     }
+
+
     public async Task<TEntity> GetByIdAsync(Guid? id)
     {
         return await FindByCondition(bicycle => bicycle.Id.Equals(id)).FirstOrDefaultAsync();
@@ -50,8 +73,9 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
     {
         return DbSet.Where(expression).AsNoTracking();
     }
-    public async Task UpdateAsync(TEntity entity)
+    public async Task UpdateAsync(TEntity entity, Guid stationId)
     {
+        entity.Station = await _context.Stations.FindAsync(stationId);
         try
         {
             _context.Attach(entity).State = EntityState.Modified;

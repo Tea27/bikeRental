@@ -43,13 +43,13 @@ button.accept-policy {
   line-height: inherit;
 }
 
-.footer {
+/*.footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 40px;
-}
+}*/
 
 .navbar {
     background: linear-gradient(135deg, darkorange 0%, darkorange 50%, #363636 50%, black 100%);

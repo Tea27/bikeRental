@@ -28,7 +28,7 @@ namespace bikeRental.Frontend.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetByStation(Guid? Id, string currentCategory, string currentFilter, string searchString, int? pageNumber)
+        public async Task<IActionResult> GetByStation(Guid Id, string currentCategory, string currentFilter, string searchString, int? pageNumber)
         {
 
             if (searchString != null)
@@ -40,9 +40,12 @@ namespace bikeRental.Frontend.Controllers
                 searchString = currentFilter;
             }
 
+
+            var station = await _stationService.GetByIdAsync(Id);
+            ViewData["StationAddress"] = station.Address.ToString();
             ViewData["CurrentCategory"] = currentCategory;
             ViewData["CurrentFilter"] = searchString;
-            int pageSize = 5;
+            int pageSize = 4;
             
             var bicycles = await _bicycleService.GetByStation(Id);
 
@@ -54,7 +57,7 @@ namespace bikeRental.Frontend.Controllers
 
         [HttpGet]
         [Authorize(Roles = ("Administrator"))]
-        public async Task<IActionResult> Delete(Guid? id, Guid? stationId, bool? saveChangesError = false)
+        public async Task<IActionResult> Delete(Guid? id, Guid stationId, bool? saveChangesError = false)
         {
             if (id == null)
             {
@@ -116,6 +119,86 @@ namespace bikeRental.Frontend.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [Authorize(Roles = ("Administrator"))]
+        public async Task<IActionResult>  Create(Guid? stationId)
+        {
+            if (stationId == null)
+            {
+                return NotFound();
+            }
+            //var station = await _stationService.GetByIdAsync(stationId);
+
+            //var bicycle = new BicycleModel { Station = station};
+            ViewData["StationId"] = stationId;
+            return View("/Pages/Bicycles/Create.cshtml");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(BicycleModel bicycleModel)
+        {
+            System.Diagnostics.Debug.WriteLine(bicycleModel.StationId + "Kurcina ");
+            //bicycleModel.Station = await _stationService.GetByIdAsync(bicycleModel.StationId);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    await _bicycleService.AddAsync(bicycleModel, bicycleModel.StationId);
+                }
+                else
+                {
+                    var errorMessages = ModelState.Select(x => x.Value.Errors).Where(y=>y.Count>0).ToList();
+                    foreach (var errorMessage in errorMessages)
+                    {
+                        System.Diagnostics.Debug.WriteLine("jebem ti isusa"+ errorMessage);
+                    }
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+                ModelState.AddModelError("", "Unable to save changes. " + ex);
+            }
+            return RedirectToAction(nameof(GetByStation), new { id = bicycleModel.StationId });
+        }
+
+        [Authorize(Roles = ("Administrator"))]
+        public async Task<IActionResult> Edit(Guid? id, Guid stationId)
+        {
+            
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var bicycle = await _bicycleService.GetByIdAsync(id, stationId);
+            //var station = await _stationService.GetByIdAsync(stationId);
+
+            return View("/Pages/Bicycles/Edit.cshtml", bicycle);
+        }
+
+        [HttpPost, ActionName("Edit")]
+        [Authorize(Roles = ("Administrator"))]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPost(BicycleModel bicycleModel)
+        {
+            if (bicycleModel == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await _bicycleService.UpdateAsync(bicycleModel);
+            }
+            catch (DbUpdateException ex)
+            {
+                ModelState.AddModelError("", "Unable to save changes. " + ex);
+            }
+
+            return RedirectToAction(nameof(GetByStation), new { id = bicycleModel.StationId });
         }
 
     }

@@ -9,7 +9,7 @@
 
 
 <div class="container px-4 pt-2">
-	<h2>Bicycles on @Model[0].Station.Address </h2>
+	<h2>Bicycles on @ViewData["StationAddress"] </h2>
 	<div class="container">
 		<div class="row justify-content-between">
 				<div class="col-6">
@@ -28,19 +28,18 @@
 					{
 						<div>
 
-@*							<a class="btn btn-outline-success" asp-controller="Stations" asp-action="Create"><i class="bi bi-house-add"> Create new station</i></a>
-*@						</div>
+						<a class="btn btn-outline-success" asp-controller="Bicycles" asp-action="Create" asp-route-stationId="@Model[0].StationId"><i class="bi bi-house-add"> Create new bicycle</i></a>
+						</div>
 					}
 				</div>
-			</div>
 		</div>
 	</div>
 
-	<table class="table table-hover mt-5 ">
+	<table class="table table-hover mt-5">
 		<tr>
 			@foreach (var prop in typeof(BicycleModel).GetProperties())
 			{
-				@if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "Station")
+				@if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "StationId")
 				{
 					<th>
 						@prop.Name
@@ -61,7 +60,6 @@
 			<tr>
 				<td>
 					@item.Type
-					
 				</td>
 				<td>
 					@item.Description
@@ -75,8 +73,8 @@
 				@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
 				{
 					<td>
-						<a class="btn btn-outline-primary" asp-controller="Bicycles" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>
-							<a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="Delete" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id"><i class="bi bi-trash"></i></a>
+						<a class="btn btn-outline-primary" asp-controller="Bicycles" asp-action="Edit" asp-route-id="@item.Id" asp-route-stationId="@item.StationId"><i class="bi bi-pen"></i></a>
+						<a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="Delete" asp-route-id="@item.Id" asp-route-stationId="@item.StationId"><i class="bi bi-trash"></i></a>
 					</td>
 				}
 			</tr>

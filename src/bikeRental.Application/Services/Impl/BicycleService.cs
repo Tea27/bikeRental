@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using bikeRental.Application.Models.Station;
 using bikeRental.DataAccess.Repositories.Impl;
+using static System.Collections.Specialized.BitVector32;
 
 namespace bikeRental.Application.Services.Impl;
 public class BicycleService : IBicycleService
@@ -51,22 +52,22 @@ public class BicycleService : IBicycleService
 
     }
 
-    public async Task<IEnumerable<BicycleModel>> GetByStation(Guid? StationId)
+    public async Task<IEnumerable<BicycleModel>> GetByStation(Guid StationId)
     {
         var bicycles = await _bicycleRepository.GetByStation(StationId);
         var bicyclesModel = _mapper.Map<IEnumerable<BicycleModel>>(bicycles);
         foreach (var bicycle in bicyclesModel)
         {
-            bicycle.Station = await _stationService.GetByIdAsync(StationId);
+            bicycle.StationId = StationId;
         }
         return bicyclesModel;
     }
 
-    public async Task<BicycleModel> GetByIdAsync(Guid? id, Guid? stationId)
+    public async Task<BicycleModel> GetByIdAsync(Guid? id, Guid stationId)
     {
         var response = await _bicycleRepository.GetByIdAsync(id);
         var bicycleModel = _mapper.Map<BicycleModel>(response);
-        bicycleModel.Station = await _stationService.GetByIdAsync(stationId);
+        bicycleModel.StationId = stationId;
         return bicycleModel;
     }
 
@@ -80,6 +81,24 @@ public class BicycleService : IBicycleService
             stationsSearched = bicycles.Where(t => t.Description.Contains(searchStrTrim));
         }
         return stationsSearched;
+    }
+
+    public async Task<BicycleModel> AddAsync(BicycleModel bicycleModel, Guid stationId)
+    {
+        var bicycle = _mapper.Map<Bicycle>(bicycleModel);
+        //var station = await _stationService.GetByIdAsync(stationId);
+        //bicycle.Station = _mapper.Map<Station>(station);
+        //System.Diagnostics.Debug.WriteLine(bicycle.Station.Id + "Kurcina na kv");
+
+        bicycle = await _bicycleRepository.AddAsync(bicycle, stationId);
+        
+        return _mapper.Map<BicycleModel>(bicycle);
+    }
+
+    public async Task UpdateAsync(BicycleModel bicycleModel)
+    {
+        var bicycle = _mapper.Map<Bicycle>(bicycleModel);
+        await _bicycleRepository.UpdateAsync(bicycle, bicycleModel.StationId);
     }
 
 

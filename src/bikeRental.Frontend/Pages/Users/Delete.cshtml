@@ -7,42 +7,43 @@
 <p class="text-danger">@ViewData["ErrorMessage"]</p>
 
 
-<div class="container mx-4 pt-2 d-flex align-items-center">
-    <h3>Are you sure you want to delete user?</h3>
-    <h4>User</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-    </dl>
+<div class="container mx-4 pt-2">
+	<div class="row justify-content-center">
+		<h3>Are you sure you want to delete user?</h3>
+			<hr />
+			<dl class="row">
+				<dt class="col-sm-2">
+					@Html.DisplayNameFor(model => model.UserName)
+				</dt>
+				<dd class="col-sm-10">
+					@Html.DisplayFor(model => model.UserName)
+				</dd>
+				<dt class="col-sm-2">
+					@Html.DisplayNameFor(model => model.FirstName)
+				</dt>
+				<dd class="col-sm-10">
+					@Html.DisplayFor(model => model.FirstName)
+				</dd>
+				<dt class="col-sm-2">
+					@Html.DisplayNameFor(model => model.LastName)
+				</dt>
+				<dd class="col-sm-10">
+					@Html.DisplayFor(model => model.LastName)
+				</dd>
+				<dt class="col-sm-2">
+					@Html.DisplayNameFor(model => model.Email)
+				</dt>
+				<dd class="col-sm-10">
+					@Html.DisplayFor(model => model.Email)
+				</dd>
+			</dl>
 
-     <form asp-action="Delete" class="mt-4">
-        <input type="hidden" asp-for="@Model.Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" />
-        <a class="btn btn-light" asp-action="Index">Back to Full List</a>
-    </form>
+			 <form asp-action="Delete" class="mt-4">
+				<input type="hidden" asp-for="@Model.Id" />
+				<input type="submit" value="Delete" class="btn btn-danger" />
+				<a class="btn btn-light" asp-action="Index">Back to Full List</a>
+			</form>
+	</div>
 </div>
 
 @section Scripts {

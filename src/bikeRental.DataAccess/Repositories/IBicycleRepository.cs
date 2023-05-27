@@ -10,9 +10,9 @@ public interface IBicycleRepository<TEntity> where TEntity : Bicycle
 {
     Task<IEnumerable<TEntity>> GetAllAsync();
     Task<IEnumerable<TEntity>> GetByStation(Guid? StationId);
-    Task<TEntity> AddAsync(TEntity entity);
+    Task<TEntity> AddAsync(TEntity entity, Guid stationId);
     Task<TEntity> GetByIdAsync(Guid? id);
-    Task UpdateAsync(TEntity entity);
+    Task UpdateAsync(TEntity entity, Guid stationId);
     Task DeleteAsync(Guid id);
 }
 

@@ -11,11 +11,15 @@ namespace bikeRental.Application.Services;
 public interface IBicycleService
 {
     Task<IEnumerable<Bicycle>> GetAllAsync();
-    Task<IEnumerable<BicycleModel>> GetByStation(Guid? StationId);
+    Task<IEnumerable<BicycleModel>> GetByStation(Guid StationId);
 
-    Task<BicycleModel> GetByIdAsync(Guid? id, Guid? stationId);
+    Task<BicycleModel> GetByIdAsync(Guid? id, Guid stationId);
 
     Task Delete(Guid Id, Guid stationId);
+
+    Task<BicycleModel> AddAsync(BicycleModel entity, Guid stationId);
+
+    Task UpdateAsync(BicycleModel bicycleModel);
 
     List<string> getFieldNames();
     IEnumerable<BicycleModel> SearchSelection(IEnumerable<BicycleModel> bicycles, string searchString);
