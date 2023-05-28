@@ -8,7 +8,6 @@ using bikeRental.DataAccess.Repositories;
 using bikeRental.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using static System.Collections.Specialized.BitVector32;
 
 namespace bikeRental.DataAccess.Repositories.Impl;
 
@@ -24,7 +23,8 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
     }
     public async Task<IEnumerable<TEntity>> GetAllAsync()
     {
-        return await DbSet.ToListAsync();
+        var bicycles = await DbSet.Include(b => b.Station).ToListAsync();
+        return bicycles;
 
     }
     public async Task<IEnumerable<TEntity>> GetByStation(Guid? stationId)
@@ -39,16 +39,13 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
 
         entity.Id = Guid.NewGuid();
 
-        // Retrieve the associated Station entity from the database using its StationId
-        var associatedStation = await _context.Stations.FindAsync(stationId);
-        if (associatedStation == null)
+        var station = await _context.Stations.FindAsync(stationId);
+        if (station == null)
         {
-            // Handle the situation when the associated Station does not exist
             throw new InvalidOperationException("The associated Station does not exist.");
         }
 
-        // Associate the Bicycle entity with the existing Station entity
-        entity.Station = associatedStation;
+        entity.Station = station;
         if (entity.Type.ToString() == "Acoustic")
         {
             entity.Station.NumberOfBikes++;

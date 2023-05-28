@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace bikeRental.Application.Services;
 public interface IBicycleService
 {
-    Task<IEnumerable<Bicycle>> GetAllAsync();
+    Task<IEnumerable<BicycleModel>> GetAllAsync();
     Task<IEnumerable<BicycleModel>> GetByStation(Guid StationId);
 
     Task<BicycleModel> GetByIdAsync(Guid? id, Guid stationId);

@@ -1,4 +1,5 @@
 ﻿using bikeRental.Application.Models.Order;
+using bikeRental.Application.Models.Station;
 using bikeRental.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,6 @@ namespace bikeRental.Application.Models.Bicycle
         public ICollection<OrderModel> Orders { get; set; }
 
         [Required]
-        public Guid StationId { get; set; }
+        public StationModel Station { get; set; }
     }
 }

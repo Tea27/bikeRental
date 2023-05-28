@@ -9,7 +9,7 @@
 
 
 <div class="container px-4 pt-2">
-	<h2>Bicycles on @ViewData["StationAddress"] </h2>
+	<h2>Bicycles on @Model[0].Station.Address </h2>
 	<div class="container">
 		<div class="row justify-content-between">
 				<div class="col-6">
@@ -17,8 +17,11 @@
 						<div class="input-group">
 							<input type="text" placeholder="Start typing description…" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control" />
 							<div class="input-group-append">
+							<a class="btn btn-light" asp-controller="Bicycles" asp-action="GetByStation" asp-route-id="@Model[0].Station.Id">
+								<i class="bi bi-x-lg"></i>
+							</a>
 								<button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
-								<a class="btn btn-light" asp-controller="Stations" asp-action="Index">Back to stations</a>
+							<a class="btn btn-light" asp-controller="Stations" asp-action="Index">Back to stations</a>
 							</div>
 						</div>
 					</form>
@@ -28,7 +31,7 @@
 					{
 						<div>
 
-						<a class="btn btn-outline-success" asp-controller="Bicycles" asp-action="Create" asp-route-stationId="@Model[0].StationId"><i class="bi bi-house-add"> Create new bicycle</i></a>
+						<a class="btn btn-outline-success" asp-controller="Bicycles" asp-action="Create" asp-route-stationId="@Model[0].Station.Id" asp-route-cname="GetByStation"><i class="bi bi-house-add"> Create new bicycle</i></a>
 						</div>
 					}
 				</div>
@@ -39,7 +42,7 @@
 		<tr>
 			@foreach (var prop in typeof(BicycleModel).GetProperties())
 			{
-				@if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "StationId")
+				@if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "Station")
 				{
 					<th>
 						@prop.Name
@@ -79,14 +82,14 @@
 				@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
 				{
 					<td>
-						<a class="btn btn-outline-primary" asp-controller="Bicycles" asp-action="Edit" asp-route-id="@item.Id" asp-route-stationId="@item.StationId"><i class="bi bi-pen"></i></a>
-						<a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="Delete" asp-route-id="@item.Id" asp-route-stationId="@item.StationId"><i class="bi bi-trash"></i></a>
+						<a class="btn btn-outline-primary" asp-controller="Bicycles" asp-action="Edit" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id" asp-route-cname="GetByStation"><i class="bi bi-pen"></i></a>
+						<a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="Delete" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id" asp-route-cname="GetByStation"><i class="bi bi-trash"></i></a>
 					</td>
 				}
                 @if (User.Identity!.IsAuthenticated && item.IsAvailable)
                 {
                     <td>
-                        <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Rent" asp-route-id="@item.Id" asp-route-stationId="@item.StationId"><i class="bi bi-plus-lg"></i></a>
+                        <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Rent" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id"><i class="bi bi-plus-lg"></i></a>
                     </td>
                 }
 			</tr>

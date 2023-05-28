@@ -23,9 +23,18 @@ public class BicycleService : IBicycleService
         _mapper = mapper;
         _stationService = stationService;
     }
-    public async Task<IEnumerable<Bicycle>> GetAllAsync()
+    public async Task<IEnumerable<BicycleModel>> GetAllAsync()
     {
-        return await _bicycleRepository.GetAllAsync();
+        var bicycles = await _bicycleRepository.GetAllAsync();
+
+        foreach (var bicycle in bicycles)
+        {
+            var station = await _stationService.GetByIdAsync(bicycle.Station.Id);
+
+            bicycle.Station = _mapper.Map<Station>(station);
+        }
+        var bicyclesModels = _mapper.Map<IEnumerable<BicycleModel>>(bicycles);
+        return bicyclesModels;
 
     }
 
@@ -58,7 +67,7 @@ public class BicycleService : IBicycleService
         var bicyclesModel = _mapper.Map<IEnumerable<BicycleModel>>(bicycles);
         foreach (var bicycle in bicyclesModel)
         {
-            bicycle.StationId = StationId;
+            bicycle.Station = await _stationService.GetByIdAsync(StationId);
         }
         return bicyclesModel;
     }
@@ -67,7 +76,7 @@ public class BicycleService : IBicycleService
     {
         var response = await _bicycleRepository.GetByIdAsync(id);
         var bicycleModel = _mapper.Map<BicycleModel>(response);
-        bicycleModel.StationId = stationId;
+        bicycleModel.Station = await _stationService.GetByIdAsync(stationId);
         return bicycleModel;
     }
 
@@ -97,8 +106,24 @@ public class BicycleService : IBicycleService
 
     public async Task UpdateAsync(BicycleModel bicycleModel)
     {
-        var bicycle = _mapper.Map<Bicycle>(bicycleModel);
-        await _bicycleRepository.UpdateAsync(bicycle, bicycleModel.StationId);
+        var bicycleNew = _mapper.Map<Bicycle>(bicycleModel);
+        var bicycleOld = await _bicycleRepository.GetByIdAsync(bicycleModel.Id);
+
+        bicycleModel.Station = await _stationService.GetByIdAsync(bicycleModel.Station.Id);
+
+        if (bicycleModel.Type.ToString() == "Electric" && bicycleOld.Type.ToString() != "Electric")
+        {
+            bicycleModel.Station.NumberOfBikes--;
+            bicycleModel.Station.NumberOfElectricBikes++;
+        }
+        else if (bicycleModel.Type.ToString() == "Acoustic" && bicycleOld.Type.ToString() != "Acoustic")
+        {
+            bicycleModel.Station.NumberOfElectricBikes--;
+            bicycleModel.Station.NumberOfBikes++;
+        }
+
+        await _stationService.UpdateAsync(bicycleModel.Station);
+        await _bicycleRepository.UpdateAsync(bicycleNew, bicycleModel.Station.Id);
     }
 
 
