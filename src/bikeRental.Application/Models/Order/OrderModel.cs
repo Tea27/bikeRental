@@ -26,7 +26,7 @@ namespace bikeRental.Application.Models.Order
         [Required]
         [DisplayName("Rental price")]
         [Range(0, double.MaxValue, ErrorMessage = "The {0} field must be greater than or equal to {1}.")]
-        public string RentalPrice { get; set; }
+        public decimal RentalPrice { get; set; }
 
         public UserModel Customer { get; set; }
 

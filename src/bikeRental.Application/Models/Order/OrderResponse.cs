@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace bikeRental.Application.Models.Order
 {
-    internal class OrderResponse : BaseResponseModel
+    public class OrderResponse : BaseResponseModel
     {
         [DisplayName("Rental start time")]
         public DateTime RentalStartTime { get; set; }
@@ -19,7 +19,7 @@ namespace bikeRental.Application.Models.Order
         public DateTime RentalEndTime { get; set; }
 
         [DisplayName("Rental price")]
-        public string RentalPrice { get; set; }
+        public decimal RentalPrice { get; set; }
 
         public UserModel Customer { get; set; }
 

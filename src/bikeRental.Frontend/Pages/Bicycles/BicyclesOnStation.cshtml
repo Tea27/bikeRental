@@ -52,6 +52,12 @@
 					Edit/Delete
 				</th>
 			}
+            @if (User.Identity!.IsAuthenticated)
+            {
+                <th>
+                    Rent
+                </th>
+            }
 
 		</tr>
 		@foreach (var item in Model)
@@ -77,6 +83,12 @@
 						<a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="Delete" asp-route-id="@item.Id" asp-route-stationId="@item.StationId"><i class="bi bi-trash"></i></a>
 					</td>
 				}
+                @if (User.Identity!.IsAuthenticated && item.IsAvailable)
+                {
+                    <td>
+                        <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Rent" asp-route-id="@item.Id" asp-route-stationId="@item.StationId"><i class="bi bi-plus-lg"></i></a>
+                    </td>
+                }
 			</tr>
 		}
 	</table>
