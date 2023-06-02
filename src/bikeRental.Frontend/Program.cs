@@ -42,9 +42,11 @@ builder.Services.AddScoped<IClaimService, ClaimService>();
 builder.Services.AddScoped(typeof(IBicycleRepository<>), typeof(BicycleRepository<>));
 builder.Services.AddScoped(typeof(IStationRepository<>), typeof(StationRepository<>));
 builder.Services.AddScoped(typeof(IUserRepository<>), typeof(UserRepository<>));
+builder.Services.AddScoped(typeof(IOrderRepository<>), typeof(OrderRepository<>));
 
 builder.Services.AddTransient<IStationService, StationService>();
 builder.Services.AddTransient<IBicycleService, BicycleService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
 
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
