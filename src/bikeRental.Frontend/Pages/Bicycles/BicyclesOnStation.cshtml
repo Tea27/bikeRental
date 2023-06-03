@@ -89,7 +89,7 @@
                 @if (User.Identity!.IsAuthenticated && item.IsAvailable)
                 {
                     <td>
-                        <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Rent" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id"><i class="bi bi-plus-lg"></i></a>
+                        <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Create" asp-route-bicycleId="@item.Id" asp-route-stationId="@item.Station.Id"><i class="bi bi-plus-lg"></i></a>
                     </td>
                 }
 			</tr>

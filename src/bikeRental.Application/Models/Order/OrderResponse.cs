@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using bikeRental.Core.Identity;
 
 namespace bikeRental.Application.Models.Order
 {
@@ -21,9 +22,9 @@ namespace bikeRental.Application.Models.Order
         [DisplayName("Rental price")]
         public decimal RentalPrice { get; set; }
 
-        public UserModel Customer { get; set; }
+        public UserModel Customer{ get; set; }
 
-        public BicycleModel Bicycle { get; set; }
+        public BicycleModel Bicycle{ get; set; }
     }
 }
 

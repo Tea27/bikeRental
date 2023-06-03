@@ -61,9 +61,8 @@ namespace bikeRental.Application.Services.Impl
          * */
         public IEnumerable<OrderResponse> SearchSelectionAsync(IEnumerable<OrderResponse> orders, DateTime dateSearch)
         {
-            IEnumerable<OrderResponse> ordersSearched = orders.ToList();
-
-            if (dateSearch < DateTime.Now)
+            IEnumerable<OrderResponse> ordersSearched = orders.ToList();           
+            if (!dateSearch.Equals(new DateTime(0001, 01, 01, 00, 00, 00)) && dateSearch < DateTime.Now)
             {
                 ordersSearched = orders.Where(o =>
                     (o.RentalStartTime.Ticks <= dateSearch.Ticks && o.RentalEndTime.Ticks >=dateSearch.Ticks));
@@ -74,6 +73,14 @@ namespace bikeRental.Application.Services.Impl
         {
             switch (sortOrder)
             {
+                case "RentalStartTime":
+                    return orders.OrderBy(o => o.RentalStartTime);
+                case "RentalStartTimeDesc":
+                    return orders.OrderByDescending(o => o.RentalStartTime);
+                case "RentalEndTime":
+                    return orders.OrderBy(o => o.RentalEndTime);
+                case "RentalEndTimeDesc":
+                    return orders.OrderByDescending(o => o.RentalEndTime);
                 case "RentalPrice":
                     return orders.OrderBy(o => o.RentalPrice);
                 case "RentalPriceDesc":

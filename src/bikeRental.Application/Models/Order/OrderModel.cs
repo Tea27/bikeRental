@@ -1,5 +1,6 @@
 ﻿using bikeRental.Application.Models.Bicycle;
 using bikeRental.Application.Models.User;
+using bikeRental.Core.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

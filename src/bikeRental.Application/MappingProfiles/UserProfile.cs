@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using bikeRental.Application.Models.Order;
 using bikeRental.Application.Models.User;
+using bikeRental.Core.Entities;
 using bikeRental.Core.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -18,6 +20,5 @@ public class UserProfile : Profile
             .ForMember(dst => dst.UserName, opt => opt.MapFrom(model => model.UserName));
         CreateMap<EditUserModel, ApplicationUser>();
         CreateMap<RegisterUserModel, ApplicationUser>();
-
     }
 }
