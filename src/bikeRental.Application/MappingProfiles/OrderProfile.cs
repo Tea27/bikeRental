@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace bikeRental.Application.MappingProfiles
 {
-    internal class OrderProfile : Profile
+    public class OrderProfile : Profile
     {
         public OrderProfile()
         {

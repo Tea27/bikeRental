@@ -24,7 +24,7 @@ namespace bikeRental.Application.Models.Order
 
         public UserModel Customer{ get; set; }
 
-        public BicycleModel Bicycle{ get; set; }
+        public BicycleModel Bicycle { get; set; }
     }
 }
 

@@ -80,6 +80,13 @@ public class BicycleService : IBicycleService
         return bicycleModel;
     }
 
+    public async Task<BicycleModel> GetByIdAsync(Guid? id)
+    {
+        var response = await _bicycleRepository.GetByIdAsync(id);
+        var bicycleModel = _mapper.Map<BicycleModel>(response);
+        return bicycleModel;
+    }
+
     public IEnumerable<BicycleModel> SearchSelection(IEnumerable<BicycleModel> bicycles, string searchString)
     {
         IEnumerable<BicycleModel> stationsSearched = bicycles.ToList();

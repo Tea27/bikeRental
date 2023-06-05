@@ -20,33 +20,68 @@ namespace bikeRental.DataAccess.Repositories.Impl
             _context = context;
             DbSet = context.Set<TEntity>();
         }
-        public async Task<TEntity> AddAsync(TEntity entity)
+        public async Task<TEntity> AddAsync(TEntity entity, Guid customerId, Guid bicycleId)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
+
             entity.Id = Guid.NewGuid();
+
+            var customer = await _context.Users.FindAsync(customerId);
+            if (customer == null)
+            {
+                throw new InvalidOperationException("The associated Customer does not exist.");
+            }
+            entity.Customer = customer;
+
+            var bicycle = await _context.Bicycles.FindAsync(bicycleId);
+            if (bicycle == null)
+            {
+                throw new InvalidOperationException("The associated Bicycle does not exist.");
+            }
+            entity.Bicycle = bicycle;
+
 
             var addedEntity = (await DbSet.AddAsync(entity)).Entity;
             await _context.SaveChangesAsync();
             return addedEntity;
         }
+
+
+
         public async Task<TEntity> GetByIdAsync(Guid? id)
         {
             return await FindByCondition(order => order.Id.Equals(id)).FirstOrDefaultAsync();
+
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            var orders = await DbSet.Include(o => o.Customer).ToListAsync();
+            orders = await DbSet.Include(o => o.Bicycle).ToListAsync();
+            return orders;
         }
 
         public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
         {
             return DbSet.Where(expression).AsNoTracking();
         }
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
-        {
-            return await DbSet.ToListAsync();
 
+       
+        public async Task<IEnumerable<TEntity>> GetByCustomer(Guid? customerId)
+        {
+            return await FindByCondition(TEntity => TEntity.Customer.Id.Equals(customerId)).ToListAsync();
+        }
+    
+        public async Task<IEnumerable<TEntity>> GetByBicycle(Guid? bicycleId)
+        {
+            return await FindByCondition(TEntity => TEntity.Bicycle.Id.Equals(bicycleId)).ToListAsync();
         }
 
-        public async Task UpdateAsync(TEntity entity)
+        public async Task UpdateAsync(TEntity entity, Guid customerId, Guid bicycleId)
         {
+            entity.Customer = await _context.Users.FindAsync(customerId);
+            entity.Bicycle = await _context.Bicycles.FindAsync(bicycleId);
             try
             {
                 _context.Attach(entity).State = EntityState.Modified;
@@ -59,11 +94,14 @@ namespace bikeRental.DataAccess.Repositories.Impl
             await _context.SaveChangesAsync();
         }
 
+       
         public async Task DeleteAsync(Guid id)
         {
             var order = new Order() { Id = id };
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
         }
+
+       
     }
 }

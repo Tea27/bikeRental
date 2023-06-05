@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using bikeRental.Application.Models.Bicycle;
 using bikeRental.Application.Models.Order;
 using bikeRental.Application.Models.Station;
 using bikeRental.Core.Entities;
@@ -19,18 +20,31 @@ namespace bikeRental.Application.Services.Impl
     {
         private readonly IMapper _mapper;
         private readonly IOrderRepository<Order> _orderRepository;
+        private readonly IBicycleService _bicycleService;
+        private readonly IUserService _userService;
 
-        public OrderService(IOrderRepository<Order> orderRepository, IMapper mapper)
+
+        public OrderService(IOrderRepository<Order> orderRepository, IMapper mapper, IBicycleService bicycleService, IUserService userService)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
+            _bicycleService = bicycleService;
+            _userService = userService;
         }
-        public async Task<OrderModel> AddAsync(OrderModel orderModel)
+
+        public async Task<OrderModel> AddAsync(OrderModel orderModel, Guid customerId, Guid bicycleId)
+        {
+            var order = _mapper.Map<Order>(orderModel);           
+            order = await _orderRepository.AddAsync(order, customerId, bicycleId);
+            return _mapper.Map<OrderModel>(order);
+        }
+
+        /*public async Task<OrderModel> AddAsync(OrderModel orderModel)
         {
             var order = _mapper.Map<Order>(orderModel);
             order = await _orderRepository.AddAsync(order);
             return _mapper.Map<OrderModel>(order);
-        }
+        }*/
 
         public async Task<OrderModel> GetByIdAsync(Guid? id)
         {
@@ -38,23 +52,64 @@ namespace bikeRental.Application.Services.Impl
             return _mapper.Map<OrderModel>(response);
         }
 
+        public async Task<OrderModel> GetByIdAsync(Guid? id, Guid customerId, Guid bicycleId)
+        {
+            var response = await _orderRepository.GetByIdAsync(id);
+            var orderModel = _mapper.Map<OrderModel>(response);
+            orderModel.Customer = await _userService.GetByIdAsync(customerId);
+            orderModel.Bicycle = await _bicycleService.GetByIdAsync(bicycleId);
+            return orderModel;
+        }
+
         public async Task<IEnumerable<OrderResponse>> GetAllAsync()
         {
-            var response = await _orderRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<OrderResponse>>(response);
+            var orders = await _orderRepository.GetAllAsync();
+
+            foreach (var order in orders)
+            {
+                var customer = await _userService.GetByIdAsync(order.Customer.Id);
+                order.Customer = _mapper.Map<ApplicationUser>(customer);
+                var bicycle = await _bicycleService.GetByIdAsync(order.Bicycle.Id);
+                order.Bicycle = _mapper.Map<Bicycle>(bicycle);
+            }
+            var orderModels = _mapper.Map<IEnumerable<OrderResponse>>(orders);
+            return orderModels;
+        }
+
+        public async Task<IEnumerable<OrderModel>> GetByCustomer(Guid CustomerId)
+        {
+            var orders = await _orderRepository.GetByCustomer(CustomerId);
+            var orderModels = _mapper.Map<IEnumerable<OrderModel>>(orders);
+            foreach (var order in orderModels)
+            {
+                order.Customer = await _userService.GetByIdAsync(CustomerId);
+            }
+            return orderModels;
+        }
+
+        public async Task<IEnumerable<OrderModel>> GetByBicycle(Guid BicycleId)
+        {
+            var orders = await _orderRepository.GetByBicycle(BicycleId);
+            var orderModels = _mapper.Map<IEnumerable<OrderModel>>(orders);
+            foreach (var order in orderModels)
+            {
+                order.Bicycle = await _bicycleService.GetByIdAsync(BicycleId);
+            }
+            return orderModels;
         }
 
 
         public async Task UpdateAsync(OrderModel orderModel)
         {
             var order = _mapper.Map<Order>(orderModel);
-            await _orderRepository.UpdateAsync(order);
+            await _orderRepository.UpdateAsync(order, orderModel.Customer.Id, orderModel.Bicycle.Id);
         }
         public async Task Delete(Guid Id)
         {
+            var order = await _orderRepository.GetByIdAsync(Id);        
             await _orderRepository.DeleteAsync(Id);
-
         }
+
 
         /** 
          * Search orders for specific date

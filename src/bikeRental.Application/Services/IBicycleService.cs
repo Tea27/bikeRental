@@ -15,6 +15,8 @@ public interface IBicycleService
 
     Task<BicycleModel> GetByIdAsync(Guid? id, Guid stationId);
 
+    Task<BicycleModel> GetByIdAsync(Guid? id);
+
     Task Delete(Guid Id, Guid stationId);
 
     Task<BicycleModel> AddAsync(BicycleModel entity, Guid stationId);

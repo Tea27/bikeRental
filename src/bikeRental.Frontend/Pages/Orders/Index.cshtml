@@ -46,7 +46,7 @@
                 {
                     <th>
                         @prop.Name
-                        @if (prop.Name != "Customer" && prop.Name != "Bicycle")
+                        @if (prop.Name != "CustomerId" && prop.Name != "BicycleId")
                         {
                             <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}Desc")><i class="bi bi-caret-up-fill"></i></a>
                             <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
@@ -79,7 +79,7 @@
                     @Html.DisplayFor(modelItem => item.Customer.Email)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Bicycle.Type)
+                    @Html.DisplayFor(modelItem => item.Bicycle.Description)
                 </td>
                 
                 @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
