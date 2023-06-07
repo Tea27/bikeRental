@@ -17,7 +17,7 @@
             <div class="col-6">
                 <form asp-controller="Orders" asp-action="Index" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
                     <div class="input-group">
-                     
+
                         <input type="datetime-local" name="SearchDate" value="@ViewData["CurrentFilter"]" class="form-control" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
@@ -42,7 +42,7 @@
         <tr>
             @foreach (var prop in typeof(OrderResponse).GetProperties())
             {
-                @if (prop.Name != "Id" )
+                @if (prop.Name != "Id")
                 {
                     <th>
                         @prop.Name
@@ -54,13 +54,18 @@
                     </th>
                 }
             }
-            
+
             @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
             {
                 <th>
                     Edit/Delete
                 </th>
             }
+           
+            <th>
+               Status
+            </th>
+            
 
         </tr>
         @foreach (var item in Model)
@@ -78,7 +83,37 @@
                         @Html.DisplayFor(modelItem => item.RentalPrice)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Customer.Email)
+                        @Html.DisplayFor(modelItem => item.Customer.UserName)
+                    </td>
+                  
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bicycle.Description)
+                    </td>
+
+                    @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+                    {
+                        <td>
+                            <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>
+                            <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
+                        </td>
+                    }
+                    <td>
+                        <i class="bi bi-check2-circle"></i>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RentalStartTime)
+                    </td>
+                    <td>
+                        <i class="bi bi-clock"></i>
+                    </td>
+                    <td>
+                        <i class="bi bi-dash"></i>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Customer.UserName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Bicycle.Description)
@@ -91,9 +126,13 @@
                             <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
                         </td>
                     }
-                    
+                    <td>
+                        <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Finish" asp-route-orderId="@item.Id" asp-route-bicycleId="@item.Bicycle.Id" asp-route-stationId="@item.Bicycle.Station.Id><i class="bi bi-stop"></i>
+
+                    </a>
+                    </td>
                 }
-                
+
             </tr>
         }
     </table>

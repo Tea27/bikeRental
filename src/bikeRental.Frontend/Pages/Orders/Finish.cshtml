@@ -1,16 +1,15 @@
-﻿
-@model bikeRental.Application.Models.Order.OrderModel
+﻿@model bikeRental.Application.Models.Order.OrderModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Finish";
 }
 
 <div class="container mx-4 pt-2">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <h2>Start with your order</h2>
-            <form asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>   
+            <h2>End your ride</h2>
+            <form asp-action="Finish">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Customer.Id" />
                 <input type="hidden" asp-for="Customer.UserName" />
                 <input type="hidden" asp-for="Customer.Email" />
@@ -30,12 +29,12 @@
                 <input type="hidden" asp-for="RentalStartTime" />
                 <input type="hidden" asp-for="RentalEndTime" />
                 <input type="hidden" asp-for="RentalPrice" />
-               
-                <h4>Your renting time starts now! </h4>
-               
-                
+
+                <h4>Your renting time ends now! </h4>
+
+
                 <div class="form-group mt-3">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <input type="submit" value="Finish" class="btn btn-primary" />
                     <a class="btn btn-light" asp-controller="Orders" asp-action="Index">Back to Full List</a>
                 </div>
             </form>

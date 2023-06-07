@@ -52,12 +52,12 @@ namespace bikeRental.Application.Services.Impl
             return _mapper.Map<OrderModel>(response);
         }
 
-        public async Task<OrderModel> GetByIdAsync(Guid? id, Guid customerId, Guid bicycleId)
+        public async Task<OrderModel> GetByIdAsync(Guid? id, Guid customerId, Guid bicycleId, Guid stationId)
         {
             var response = await _orderRepository.GetByIdAsync(id);
             var orderModel = _mapper.Map<OrderModel>(response);
             orderModel.Customer = await _userService.GetByIdAsync(customerId);
-            orderModel.Bicycle = await _bicycleService.GetByIdAsync(bicycleId);
+            orderModel.Bicycle = await _bicycleService.GetByIdAsync(bicycleId,stationId);
             return orderModel;
         }
 
@@ -76,26 +76,26 @@ namespace bikeRental.Application.Services.Impl
             return orderModels;
         }
 
-        public async Task<IEnumerable<OrderModel>> GetByCustomer(Guid CustomerId)
+        public async Task<IEnumerable<OrderResponse>> GetByCustomer(Guid CustomerId)
         {
             var orders = await _orderRepository.GetByCustomer(CustomerId);
-            var orderModels = _mapper.Map<IEnumerable<OrderModel>>(orders);
-            foreach (var order in orderModels)
+            var response = _mapper.Map<IEnumerable<OrderResponse>>(orders);
+            foreach (var order in response)
             {
                 order.Customer = await _userService.GetByIdAsync(CustomerId);
             }
-            return orderModels;
+            return response;
         }
 
-        public async Task<IEnumerable<OrderModel>> GetByBicycle(Guid BicycleId)
+        public async Task<IEnumerable<OrderResponse>> GetByBicycle(Guid BicycleId)
         {
             var orders = await _orderRepository.GetByBicycle(BicycleId);
-            var orderModels = _mapper.Map<IEnumerable<OrderModel>>(orders);
-            foreach (var order in orderModels)
+            var response = _mapper.Map<IEnumerable<OrderResponse>>(orders);
+            foreach (var order in response)
             {
                 order.Bicycle = await _bicycleService.GetByIdAsync(BicycleId);
             }
-            return orderModels;
+            return response;
         }
 
 

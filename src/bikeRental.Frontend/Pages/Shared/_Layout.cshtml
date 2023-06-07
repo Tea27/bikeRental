@@ -37,10 +37,13 @@
                             <a class="nav-link" asp-area="" asp-controller="Stations" asp-action="Index">Stations</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
+                            <a class="nav-link" asp-area="" asp-controller="Orders" asp-action="UserIndex">My Orders</a>
                         </li>
                         @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
                         {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Orders" asp-action="Index">All Orders</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
                             </li>

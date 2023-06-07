@@ -61,7 +61,7 @@ using (var serviceScope = app.Services.CreateScope())
     var services = serviceScope.ServiceProvider;
 
     var myDependency = services.GetRequiredService<IStationRepository<Station>>();
-
+   
 }
 
 // Configure the HTTP request pipeline.
