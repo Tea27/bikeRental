@@ -12,7 +12,7 @@ namespace bikeRental.Application.Services
         //Task<OrderModel> AddAsync(OrderModel entity);
         Task<OrderModel> AddAsync(OrderModel orderModel, Guid customerId, Guid bicycleId);
         Task<OrderModel> GetByIdAsync(Guid? id);
-        Task<OrderModel> GetByIdAsync(Guid? id, Guid customerId, Guid bicycleId, Guid stationId);
+        Task<OrderModel> GetByIdAsync(Guid? id, Guid customerId, Guid bicycleId);
         Task<IEnumerable<OrderResponse>> GetAllAsync();
         IEnumerable<OrderResponse> SearchSelectionAsync(IEnumerable<OrderResponse> orders, DateTime dateSearch);
         Task UpdateAsync(OrderModel orderModel);

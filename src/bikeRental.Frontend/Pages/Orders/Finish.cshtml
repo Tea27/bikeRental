@@ -10,6 +10,7 @@
             <h2>End your ride</h2>
             <form asp-action="Finish">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="Customer.Id" />
                 <input type="hidden" asp-for="Customer.UserName" />
                 <input type="hidden" asp-for="Customer.Email" />
@@ -17,6 +18,7 @@
                 <input type="hidden" asp-for="Customer.LastName" />
                 <input type="hidden" asp-for="Customer.Role" />
                 <input type="hidden" asp-for="Bicycle.Id" />
+                <input type="hidden" asp-for="Bicycle.Price" />
                 <input type="hidden" asp-for="Bicycle.Type" />
                 <input type="hidden" asp-for="Bicycle.Description" />
                 <input type="hidden" asp-for="Bicycle.IsAvailable" />

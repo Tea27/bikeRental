@@ -1,4 +1,6 @@
-﻿using System;
+﻿using bikeRental.Application.Models.Bicycle;
+using bikeRental.Application.Models.Order;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -35,5 +37,7 @@ public class StationModel : BaseResponseModel
     [DisplayName("Number of Electric")]
     [Range(0, int.MaxValue, ErrorMessage = "The {0} field must be greater than or equal to {1}.")]
     public int NumberOfElectricBikes { get; set; }
+
+    public ICollection<BicycleModel> Bicycles { get; set; }
 }
 

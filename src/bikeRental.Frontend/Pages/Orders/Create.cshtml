@@ -17,7 +17,8 @@
                 <input type="hidden" asp-for="Customer.FirstName" />
                 <input type="hidden" asp-for="Customer.LastName" />
                 <input type="hidden" asp-for="Customer.Role" />
-                <input type="hidden" asp-for="Bicycle.Id" />
+                <input type="hidden" asp-for="Bicycle.Id"/>
+                <input type="hidden" asp-for="Bicycle.Price" />
                 <input type="hidden" asp-for="Bicycle.Type" />
                 <input type="hidden" asp-for="Bicycle.Description" />
                 <input type="hidden" asp-for="Bicycle.IsAvailable" />
@@ -36,7 +37,7 @@
                 
                 <div class="form-group mt-3">
                     <input type="submit" value="Create" class="btn btn-primary" />
-                    <a class="btn btn-light" asp-controller="Orders" asp-action="Index">Back to Full List</a>
+                    <a class="btn btn-light" asp-controller="Orders" asp-action="UserIndex">Back to Full List</a>
                 </div>
             </form>
         </div>

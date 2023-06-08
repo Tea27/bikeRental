@@ -25,5 +25,6 @@ public interface IBicycleService
 
     List<string> getFieldNames();
     IEnumerable<BicycleModel> SearchSelection(IEnumerable<BicycleModel> bicycles, string searchString);
+
 }
 

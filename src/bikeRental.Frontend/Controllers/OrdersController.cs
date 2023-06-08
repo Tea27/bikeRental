@@ -21,14 +21,16 @@ namespace bikeRental.Frontend.Controllers
         private readonly IOrderService _orderService;
         private readonly IUserService _userService;
         private readonly IBicycleService _bicycleService;
+        private readonly IStationService _stationService;
         private readonly IMapper _mapper;
 
 
-        public OrdersController(IOrderService orderService, IUserService userService, IBicycleService bicycleService, IMapper mapper)
+        public OrdersController(IOrderService orderService, IUserService userService, IBicycleService bicycleService, IStationService stationService, IMapper mapper)
         {
             _orderService = orderService;
             _userService = userService;
             _bicycleService = bicycleService;
+            _stationService = stationService;
             _mapper = mapper;
         }
 
@@ -48,7 +50,7 @@ namespace bikeRental.Frontend.Controllers
             ViewData["CurrentCategory"] = currentCategory;
             ViewData["CurrentFilter"] = searchDate;
 
-            int pageSize = 5;
+            int pageSize = 4;
 
             var orders = await _orderService.GetAllAsync();
             
@@ -75,18 +77,33 @@ namespace bikeRental.Frontend.Controllers
             ViewData["CurrentCategory"] = currentCategory;
             ViewData["CurrentFilter"] = searchDate;
 
-            int pageSize = 5;
+            int pageSize = 4;
 
             var orders = await _orderService.GetAllAsync();
             List<OrderResponse> userOrders = new List<OrderResponse>();
-            foreach(OrderResponse order in orders)
+
+            var stations = await _stationService.GetAllAsync();
+
+            foreach (OrderResponse order in orders)
             {
                 if( order.Customer.Id == userID)
                 {
-                    userOrders.Add(order);
-                    Console.WriteLine("----CUSTOMER OD ORDERA---" + order.Customer.UserName);
+                    foreach (StationResponse s in stations)
+                    {
+                        var bicycles = s.Bicycles;
+                        foreach (BicycleModel b in bicycles)
+                        {
+                            if(order.Bicycle.Id == b.Id)
+                            {
+                                var station = await _stationService.GetByIdAsync(s.Id);
+                                order.Bicycle.Station = station;
+                                userOrders.Add(order);                                
+                            }                               
+                        }
+                    }                  
                 }
             }
+
             IEnumerable<OrderResponse> response = userOrders.AsEnumerable();
             
             //orders = _orderService.SortingSelection(orders, sortOrder);
@@ -105,15 +122,10 @@ namespace bikeRental.Frontend.Controllers
             }
     
             var order = new OrderModel { RentalStartTime = DateTime.Now,
+                                         RentalEndTime = DateTime.Now,
                                          RentalPrice = 0,
                                          Customer = await _userService.GetByIdAsync(userID),
                                          Bicycle = await _bicycleService.GetByIdAsync(bicycleId, stationId)};
-            Console.WriteLine("-.....rentalstart.." + order.RentalStartTime);
-            Console.WriteLine("-.....rentalprice.." + order.RentalPrice);
-            Console.WriteLine("-.....userId.." + userID);
-            Console.WriteLine("-.....bicycle.stationid." + order.Bicycle.Station.Id);
-            Console.WriteLine("-.....customer.." + order.Customer.UserName);
-            
             return View("/Pages/Orders/Create.cshtml", order);
         }
 
@@ -124,27 +136,18 @@ namespace bikeRental.Frontend.Controllers
         public async Task<IActionResult> Create(OrderModel orderModel)
         {
             var errors = ModelState.Values.SelectMany(v => v.Errors);
-            Console.WriteLine("---errori----" + errors);
-            Console.WriteLine("---customerId----" + orderModel.Customer.Id);
-            Console.WriteLine("---customerId----" + orderModel.Bicycle.Id);
             try
             {
                 if (ModelState.IsValid)
                 {
-                    /*TimeSpan ts = orderModel.RentalEndTime - orderModel.RentalStartTime;
-                    decimal hours = Convert.ToDecimal(ts.Ticks);
-                    var price = orderModel.Bicycle.Price * hours;
-                    orderModel.RentalPrice = price;
-                    Console.WriteLine("-.....ts.." + orderModel.RentalStartTime);
-                    Console.WriteLine("-.....hours.." + hours);
-                    Console.WriteLine("-.....price.." + price);
-                    Console.WriteLine("-.....bicycle.." + orderModel.Bicycle.Id);
-                    Console.WriteLine("-.....customer.." + orderModel.Customer.UserName);*/
+                    var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id, orderModel.Bicycle.Station.Id);
+                    bicycle.IsAvailable = false;
+                    await _bicycleService.UpdateAsync(bicycle);
                     await _orderService.AddAsync(orderModel, orderModel.Customer.Id, orderModel.Bicycle.Id);
                 }
                 else
                 {
-                    Console.WriteLine("-.....nije valid..");
+                    Console.WriteLine("-.....not valid....");
                 }
                 
             }
@@ -153,27 +156,22 @@ namespace bikeRental.Frontend.Controllers
                 Console.WriteLine("-.....error..");
                 System.Diagnostics.Debug.WriteLine(ex);
                 ModelState.AddModelError("", "Unable to save changes. " + ex);
+            }           
+            return RedirectToAction(nameof(UserIndex));
             }
-            return RedirectToAction(nameof(Index));
-        }
 
         [Authorize]
         public async Task<IActionResult> Finish(Guid? orderId, Guid bicycleId, Guid stationId)
         {
             var userID = Guid.Parse(User.Identity.GetUserId());
-            if (orderId == null || bicycleId == null)
+            if (orderId == null || bicycleId == null || stationId == null)
             {
                 return NotFound();
             }
-            var order = await _orderService.GetByIdAsync(orderId, userID, bicycleId, stationId);
+            var order = await _orderService.GetByIdAsync(orderId, userID, bicycleId);
+            var station = await _stationService.GetByIdAsync(stationId);
+            order.Bicycle.Station = station;
             order.RentalEndTime = DateTime.Now;
-            order.RentalPrice = 20;  //popraviti sutra
-            Console.WriteLine("-.....rentalstart.." + order.RentalStartTime);
-            Console.WriteLine("-.....rentalprice.." + order.RentalPrice);
-            Console.WriteLine("-.....userId.." + userID);
-            //Console.WriteLine("-.....bicycle.stationid." + order.Bicycle.Station.Id);
-            Console.WriteLine("-.....customer.." + order.Customer.UserName);
-
             return View("/Pages/Orders/Finish.cshtml", order);
         }
 
@@ -183,28 +181,29 @@ namespace bikeRental.Frontend.Controllers
         [Authorize]
         public async Task<IActionResult> Finish(OrderModel orderModel)
         {
-            var errors = ModelState.Values.SelectMany(v => v.Errors);
-            Console.WriteLine("---errori----" + errors);
-            Console.WriteLine("---customerId----" + orderModel.Customer.Id);
-            Console.WriteLine("---customerId----" + orderModel.Bicycle.Id);
+            var errors = ModelState.Values.SelectMany(v => v.Errors);          
             try
             {
                 if (ModelState.IsValid)
                 {
-                    /*TimeSpan ts = orderModel.RentalEndTime - orderModel.RentalStartTime;
-                    decimal hours = Convert.ToDecimal(ts.Ticks);
-                    var price = orderModel.Bicycle.Price * hours;
-                    orderModel.RentalPrice = price;
-                    Console.WriteLine("-.....ts.." + orderModel.RentalStartTime);
-                    Console.WriteLine("-.....hours.." + hours);
-                    Console.WriteLine("-.....price.." + price);
-                    Console.WriteLine("-.....bicycle.." + orderModel.Bicycle.Id);
-                    Console.WriteLine("-.....customer.." + orderModel.Customer.UserName);*/
-                    await _orderService.AddAsync(orderModel, orderModel.Customer.Id, orderModel.Bicycle.Id);
+                    var diffOfDates = (orderModel.RentalEndTime).Subtract(orderModel.RentalStartTime);
+                    var days = diffOfDates.Days;
+                    var hours = diffOfDates.Hours;                  
+                    var minutes = diffOfDates.Minutes;
+                    var total = minutes + (hours * 60) + (days * 24 * 60);
+                    orderModel.RentalPrice = Math.Ceiling(Decimal.Divide(total, 30)) * orderModel.Bicycle.Price;
+
+                    if (orderModel.RentalPrice != 0)
+                    {
+                        var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id, orderModel.Bicycle.Station.Id);
+                        bicycle.IsAvailable = true;
+                        await _bicycleService.UpdateAsync(bicycle);
+                        await _orderService.UpdateAsync(orderModel);                       
+                    }                  
                 }
                 else
                 {
-                    Console.WriteLine("-.....nije valid..");
+                    Console.WriteLine(".....not valid.....");
                 }
 
             }

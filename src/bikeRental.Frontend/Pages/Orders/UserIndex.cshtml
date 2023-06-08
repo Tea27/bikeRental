@@ -7,26 +7,24 @@
     ViewData["Title"] = "Orders";
 }
 
-
-
 @ViewData["CurrentCategory"]
 <div class="container px-4 pt-2">
-    <h2>Stations</h2>
+    <h2>Orders</h2>
     <div class="container">
         <div class="row justify-content-between">
             <div class="col-6">
-                <form asp-controller="Orders" asp-action="Index" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
+                <form asp-controller="Orders" asp-action="UserIndex" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
                     <div class="input-group">
 
                         <input type="datetime-local" name="SearchDate" value="@ViewData["CurrentFilter"]" class="form-control" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
-                            <a class="btn btn-light" asp-action="Index">Back to Full List</a>
+                            <a class="btn btn-light" asp-action="UserIndex">Back to Full List</a>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="col-4">
+           @* <div class="col-4">
                 @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
                 {
                     <div>
@@ -34,7 +32,7 @@
                         <a class="btn btn-outline-success" asp-controller="Orders" asp-action="Create"><i class="bi bi-house-add"> Create new Order</i></a>
                     </div>
                 }
-            </div>
+            </div>*@
         </div>
     </div>
 
@@ -42,15 +40,12 @@
         <tr>
             @foreach (var prop in typeof(OrderResponse).GetProperties())
             {
-                @if (prop.Name != "Id")
+                @if (prop.Name != "Id" && prop.Name != "BicycleId" && prop.Name != "CustomerId")
                 {
                     <th>
                         @prop.Name
-                        @if (prop.Name != "CustomerId" && prop.Name != "BicycleId")
-                        {
-                            <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}Desc")><i class="bi bi-caret-up-fill"></i></a>
-                            <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
-                        }
+                        <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}Desc")><i class="bi bi-caret-up-fill"></i></a>
+                        <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
                     </th>
                 }
             }
@@ -127,8 +122,7 @@
                         </td>
                     }
                     <td>
-                        <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Finish" asp-route-orderId="@item.Id" asp-route-bicycleId="@item.Bicycle.Id" asp-route-stationId="@item.Bicycle.Station.Id><i class="bi bi-stop"></i>
-
+                        <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Finish" asp-route-orderId="@item.Id" asp-route-bicycleId="@item.Bicycle.Id" asp-route-stationId="@item.Bicycle.Station.Id"><i class="bi bi-stop"></i>
                     </a>
                     </td>
                 }
@@ -142,7 +136,7 @@
         var nextDisabled = !Model.HasNextPage ? "disabled" : "";
     }
 
-    <a asp-action="Index"
+    <a asp-action="UserIndex"
        asp-controller="Orders"
        asp-route-currentCategory="@ViewData["CurrentCategory"]"
        asp-route-pageNumber="@(Model.PageIndex - 1)"
@@ -150,7 +144,7 @@
        class="btn btn-default @prevDisabled">
         Previous
     </a>
-    <a asp-action="Index"
+    <a asp-action="UserIndex"
        asp-controller="Orders"
        asp-route-currentCategory="@ViewData["CurrentCategory"]"
        asp-route-pageNumber="@(Model.PageIndex + 1)"

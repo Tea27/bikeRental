@@ -1,4 +1,5 @@
-﻿using bikeRental.Core.Common;
+﻿using bikeRental.Application.Models.Bicycle;
+using bikeRental.Core.Common;
 using bikeRental.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,8 @@ public class StationResponse : BaseResponseModel
     [DisplayName("Number of electric bikes")]
     public int NumberOfElectricBikes { get; set; }
 
-
+    public ICollection<BicycleModel> Bicycles { get; set; }
 }
+
+
+

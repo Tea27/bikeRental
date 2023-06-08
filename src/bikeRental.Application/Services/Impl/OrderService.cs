@@ -20,13 +20,15 @@ namespace bikeRental.Application.Services.Impl
     {
         private readonly IMapper _mapper;
         private readonly IOrderRepository<Order> _orderRepository;
+        private readonly IBicycleRepository<Bicycle> _bicycleRepository;
         private readonly IBicycleService _bicycleService;
         private readonly IUserService _userService;
 
 
-        public OrderService(IOrderRepository<Order> orderRepository, IMapper mapper, IBicycleService bicycleService, IUserService userService)
+        public OrderService(IOrderRepository<Order> orderRepository, IBicycleRepository<Bicycle> bicycleRepository, IMapper mapper, IBicycleService bicycleService, IUserService userService)
         {
             _orderRepository = orderRepository;
+            _bicycleRepository = bicycleRepository;
             _mapper = mapper;
             _bicycleService = bicycleService;
             _userService = userService;
@@ -36,6 +38,8 @@ namespace bikeRental.Application.Services.Impl
         {
             var order = _mapper.Map<Order>(orderModel);           
             order = await _orderRepository.AddAsync(order, customerId, bicycleId);
+            
+            
             return _mapper.Map<OrderModel>(order);
         }
 
@@ -52,12 +56,12 @@ namespace bikeRental.Application.Services.Impl
             return _mapper.Map<OrderModel>(response);
         }
 
-        public async Task<OrderModel> GetByIdAsync(Guid? id, Guid customerId, Guid bicycleId, Guid stationId)
+        public async Task<OrderModel> GetByIdAsync(Guid? id, Guid customerId, Guid bicycleId)
         {
             var response = await _orderRepository.GetByIdAsync(id);
             var orderModel = _mapper.Map<OrderModel>(response);
             orderModel.Customer = await _userService.GetByIdAsync(customerId);
-            orderModel.Bicycle = await _bicycleService.GetByIdAsync(bicycleId,stationId);
+            orderModel.Bicycle = await _bicycleService.GetByIdAsync(bicycleId);
             return orderModel;
         }
 
