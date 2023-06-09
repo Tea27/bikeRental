@@ -15,12 +15,12 @@
             <div class="col-6">
                 <form asp-controller="Orders" asp-action="UserIndex" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
                     <div class="input-group">
-
+@*
                         <input type="datetime-local" name="SearchDate" value="@ViewData["CurrentFilter"]" class="form-control" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
                             <a class="btn btn-light" asp-action="UserIndex">Back to Full List</a>
-                        </div>
+                        </div>*@
                     </div>
                 </form>
             </div>
@@ -40,20 +40,23 @@
         <tr>
             @foreach (var prop in typeof(OrderResponse).GetProperties())
             {
-                @if (prop.Name != "Id" && prop.Name != "BicycleId" && prop.Name != "CustomerId")
+                @if (prop.Name != "Id")
                 {
                     <th>
                         @prop.Name
-                        <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}Desc")><i class="bi bi-caret-up-fill"></i></a>
-                        <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
+                        @if (prop.Name == "RentalPrice")
+                        {
+                            <a style="color:black" asp-action="UserIndex" asp-route-sortOrder=@($"{prop.Name}Desc")><i class="bi bi-caret-up-fill"></i></a>
+                            <a style="color:black" asp-action="UserIndex" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
+                        }                    
                     </th>
                 }
             }
 
-            @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+            @if (User.Identity!.IsAuthenticated)
             {
                 <th>
-                    Edit/Delete
+                    Delete
                 </th>
             }
            
@@ -85,11 +88,11 @@
                         @Html.DisplayFor(modelItem => item.Bicycle.Description)
                     </td>
 
-                    @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+                    @if (User.Identity!.IsAuthenticated)
                     {
                         <td>
-                            <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>
-                            <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
+                           @* <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>*@
+                            <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.Id" asp-route-bicycleId="@item.Bicycle.Id" asp-route-customerId="@item.Customer.Id"><i class="bi bi-trash"></i></a>
                         </td>
                     }
                     <td>
@@ -114,11 +117,10 @@
                         @Html.DisplayFor(modelItem => item.Bicycle.Description)
                     </td>
 
-                    @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+                    if (User.Identity!.IsAuthenticated)
                     {
                         <td>
-                            <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>
-                            <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
+                            <i class="bi bi-dash"></i>
                         </td>
                     }
                     <td>
@@ -140,7 +142,7 @@
        asp-controller="Orders"
        asp-route-currentCategory="@ViewData["CurrentCategory"]"
        asp-route-pageNumber="@(Model.PageIndex - 1)"
-       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       asp-route-sortOrder="@ViewData["SortOrder"]"
        class="btn btn-default @prevDisabled">
         Previous
     </a>
@@ -148,7 +150,7 @@
        asp-controller="Orders"
        asp-route-currentCategory="@ViewData["CurrentCategory"]"
        asp-route-pageNumber="@(Model.PageIndex + 1)"
-       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       asp-route-sortOrder="@ViewData["SortOrder"]"
        class="btn btn-default @nextDisabled">
         Next
     </a>

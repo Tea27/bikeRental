@@ -8,10 +8,9 @@
 }
 
 
-
 @ViewData["CurrentCategory"]
 <div class="container px-4 pt-2">
-    <h2>Orders</h2>
+    <h2>All Orders</h2>
     <div class="container">
         <div class="row justify-content-between">
             <div class="col-6">
@@ -33,12 +32,15 @@
         <tr>
             @foreach (var prop in typeof(OrderResponse).GetProperties())
             {
-                @if (prop.Name != "Id" && prop.Name != "BicycleId" && prop.Name != "CustomerId")
+                @if (prop.Name != "Id")
                 {
                     <th>
                         @prop.Name
-                        <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}Desc")><i class="bi bi-caret-up-fill"></i></a>
-                        <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
+                        @if (prop.Name != "Customer" && prop.Name!= "Bicycle")
+                        {   
+                            <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}Desc")><i class="bi bi-caret-up-fill"></i></a>
+                            <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
+                        }
                     </th>
                 }
             }
@@ -46,7 +48,7 @@
             @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
             {
                 <th>
-                    Edit/Delete
+                    Delete
                 </th>
             }
 
@@ -75,8 +77,8 @@
                     @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
                     {
                         <td>
-                            <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>
-                            <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
+                           @* <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>*@
+                            <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.Id" asp-route-bicycleId="@item.Bicycle.Id" asp-route-customerId="@item.Customer.Id"><i class="bi bi-trash"></i></a>
                         </td>
                     }
                     
@@ -96,6 +98,7 @@
        asp-route-currentCategory="@ViewData["CurrentCategory"]"
        asp-route-pageNumber="@(Model.PageIndex - 1)"
        asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       asp-route-sortOrder="@ViewData["SortOrder"]"
        class="btn btn-default @prevDisabled">
         Previous
     </a>
@@ -104,6 +107,7 @@
        asp-route-currentCategory="@ViewData["CurrentCategory"]"
        asp-route-pageNumber="@(Model.PageIndex + 1)"
        asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       asp-route-sortOrder="@ViewData["SortOrder"]"
        class="btn btn-default @nextDisabled">
         Next
     </a>

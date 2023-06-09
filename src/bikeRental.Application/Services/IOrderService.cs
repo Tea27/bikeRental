@@ -9,7 +9,6 @@ namespace bikeRental.Application.Services
 {
     public interface IOrderService
     {
-        //Task<OrderModel> AddAsync(OrderModel entity);
         Task<OrderModel> AddAsync(OrderModel orderModel, Guid customerId, Guid bicycleId);
         Task<OrderModel> GetByIdAsync(Guid? id);
         Task<OrderModel> GetByIdAsync(Guid? id, Guid customerId, Guid bicycleId);

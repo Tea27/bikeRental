@@ -1,0 +1,74 @@
+﻿@model bikeRental.Application.Models.Order.OrderModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<p class="text-danger">@ViewData["ErrorMessage"]</p>
+
+<div class="container mx-4 pt-2">
+    <div class="row justify-content-center">
+
+        <h3>Are you sure you want to delete order?</h3>
+        <div>
+            <h4>Order</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.RentalStartTime)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.RentalStartTime)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.RentalEndTime)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.RentalEndTime)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.RentalPrice)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.RentalPrice)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Bicycle)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Bicycle.Description)
+                </dd>
+                 <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Customer)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Customer.UserName)
+                </dd>
+            </dl>
+
+            <form asp-controller="Orders" asp-action="Delete" asp-route-id="@Model.Id" asp-route-bicycleId="@Model.Bicycle.Id" asp-route-customerId="@Model.Customer.Id" class="mt-4">
+                <input type="hidden" asp-for="@Model.Id" />
+                <input type="hidden" asp-for="@Model.Bicycle.Id" />
+                <input type="hidden" asp-for="@Model.Customer.Id" />
+                <input type="submit" value="Delete" class="btn btn-danger" />
+                @if(User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+                {                  
+                    <a class="btn btn-light" asp-controller="Orders" asp-action="Index">Back to Full List</a>
+                    
+                }
+                else
+                {
+                    <a class="btn btn-light" asp-controller="Orders" asp-action="UserIndex">Back to Full List</a>
+                }
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

@@ -43,13 +43,6 @@ namespace bikeRental.Application.Services.Impl
             return _mapper.Map<OrderModel>(order);
         }
 
-        /*public async Task<OrderModel> AddAsync(OrderModel orderModel)
-        {
-            var order = _mapper.Map<Order>(orderModel);
-            order = await _orderRepository.AddAsync(order);
-            return _mapper.Map<OrderModel>(order);
-        }*/
-
         public async Task<OrderModel> GetByIdAsync(Guid? id)
         {
             var response = await _orderRepository.GetByIdAsync(id);
@@ -145,7 +138,7 @@ namespace bikeRental.Application.Services.Impl
                 case "RentalPriceDesc":
                     return orders.OrderByDescending(o => o.RentalPrice);
                 default:
-                    return orders.OrderBy(o => o.RentalStartTime);
+                    return orders.OrderByDescending(o => o.RentalStartTime);
             }
         }
 

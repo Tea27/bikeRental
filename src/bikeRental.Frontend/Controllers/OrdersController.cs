@@ -49,7 +49,7 @@ namespace bikeRental.Frontend.Controllers
             
             ViewData["CurrentCategory"] = currentCategory;
             ViewData["CurrentFilter"] = searchDate;
-
+            ViewData["SortOrder"] = sortOrder;
             int pageSize = 4;
 
             var orders = await _orderService.GetAllAsync();
@@ -62,21 +62,13 @@ namespace bikeRental.Frontend.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> UserIndex(string currentCategory, string sortOrder, DateTime currentFilter, DateTime searchDate, int? pageNumber)
+        public async Task<IActionResult> UserIndex(string currentCategory, string sortOrder,int? pageNumber)
         {
             var userID = Guid.Parse(User.Identity.GetUserId());
-            if (!searchDate.Equals(new DateTime(0001, 01, 01, 00, 00, 00)))
-            {
-                pageNumber = 1;
-            }
-            else
-            {
-                searchDate = currentFilter;
-            }
 
             ViewData["CurrentCategory"] = currentCategory;
-            ViewData["CurrentFilter"] = searchDate;
-
+            ViewData["SortOrder"] = sortOrder;
+          
             int pageSize = 4;
 
             var orders = await _orderService.GetAllAsync();
@@ -105,10 +97,8 @@ namespace bikeRental.Frontend.Controllers
             }
 
             IEnumerable<OrderResponse> response = userOrders.AsEnumerable();
-            
-            //orders = _orderService.SortingSelection(orders, sortOrder);
-            //orders = _orderService.SearchSelectionAsync(orders, searchDate);
-
+            response = _orderService.SortingSelection(response, sortOrder);
+        
             return View("/Pages/Orders/UserIndex.cshtml", PaginatedList<OrderResponse>.Create(response, pageNumber ?? 1, pageSize));
         }
 
@@ -144,12 +134,7 @@ namespace bikeRental.Frontend.Controllers
                     bicycle.IsAvailable = false;
                     await _bicycleService.UpdateAsync(bicycle);
                     await _orderService.AddAsync(orderModel, orderModel.Customer.Id, orderModel.Bicycle.Id);
-                }
-                else
-                {
-                    Console.WriteLine("-.....not valid....");
-                }
-                
+                }                             
             }
             catch (DbUpdateException ex)
             {
@@ -199,13 +184,16 @@ namespace bikeRental.Frontend.Controllers
                         bicycle.IsAvailable = true;
                         await _bicycleService.UpdateAsync(bicycle);
                         await _orderService.UpdateAsync(orderModel);                       
-                    }                  
-                }
-                else
-                {
-                    Console.WriteLine(".....not valid.....");
-                }
-
+                    }
+                    else
+                    {
+                        orderModel.RentalPrice = orderModel.Bicycle.Price;
+                        var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id, orderModel.Bicycle.Station.Id);
+                        bicycle.IsAvailable = true;
+                        await _bicycleService.UpdateAsync(bicycle);
+                        await _orderService.UpdateAsync(orderModel);
+                    }
+                }               
             }
             catch (DbUpdateException ex)
             {
@@ -214,6 +202,63 @@ namespace bikeRental.Frontend.Controllers
                 ModelState.AddModelError("", "Unable to save changes. " + ex);
             }
             return RedirectToAction(nameof(UserIndex));
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Delete(Guid? id, Guid bicycleId, Guid customerId, bool? saveChangesError = false)
+        {
+            if (id == null )
+            {
+                return NotFound();
+            }
+
+            var order = await _orderService.GetByIdAsync(id, customerId, bicycleId);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewData["ErrorMessage"] =
+                    "Delete failed. Try again, and if the problem persists " +
+                    "see your system administrator.";
+            }
+
+            return View("/Pages/Orders/Delete.cshtml", order);
+        }
+      
+
+        [HttpPost, ActionName("Delete")]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id, Guid bicycleId, Guid customerId)
+        {
+            var order = await _orderService.GetByIdAsync(id, customerId, bicycleId);
+            var loggedUserId = Guid.Parse(User.Identity.GetUserId());
+            var user = await _userService.GetByIdAsync(loggedUserId);
+            if (order == null)
+            {
+                return RedirectToAction(nameof(Delete));
+            }
+
+            try
+            {
+                await _orderService.Delete(id);
+                if(user.Role == Core.Enums.Role.Administrator)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                return RedirectToAction(nameof(UserIndex));
+               
+
+            }
+            catch (DbUpdateException ex)
+            {
+                return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
+            }
         }
 
 
