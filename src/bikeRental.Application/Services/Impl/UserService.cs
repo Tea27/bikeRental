@@ -15,6 +15,7 @@ using bikeRental.Application.Models.Station;
 using bikeRental.Core.Enums;
 using System.Data.Entity;
 using bikeRental.Core.Entities;
+using Microsoft.AspNetCore.Routing.Template;
 
 namespace bikeRental.Application.Services.Impl;
 
@@ -68,27 +69,6 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel)
-    {
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == loginUserModel.Username);
-
-        if (user == null)
-            throw new NotFoundException("Username or password is incorrect");
-
-        var signInResult = await _signInManager.PasswordSignInAsync(user, loginUserModel.Password, false, false);
-
-        if (!signInResult.Succeeded)
-            throw new BadRequestException("Username or password is incorrect");
-
-        var token = JwtHelper.GenerateToken(user, _configuration);
-
-        return new LoginResponseModel
-        {
-            Username = user.UserName,
-            Email = user.Email,
-            Token = token
-        };
-    }
 
     public async Task<ConfirmEmailResponseModel> ConfirmEmailAsync(ConfirmEmailModel confirmEmailModel)
     {
@@ -166,6 +146,15 @@ public class UserService : IUserService
         return userModel;
     }
 
+    public async Task<SignInResult> LoginAsync(LoginUserModel userModel)
+    {
+        return await _signInManager.PasswordSignInAsync(userModel.Email, userModel.Password, userModel.RememberMe, lockoutOnFailure: false);
+    }
+
+    public async Task LogoutAsync()
+    {
+        await _signInManager.SignOutAsync();
+    }
     public async Task DeleteAsync(Guid Id)
     {
         await _userRepository.DeleteAsync(Id);

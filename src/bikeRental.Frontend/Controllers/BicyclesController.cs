@@ -192,7 +192,6 @@ namespace bikeRental.Frontend.Controllers
             {
                 return NotFound();
             }
-            System.Diagnostics.Debug.WriteLine("Ovo je stanuca " + bicycleModel.Station.Id + bicycleModel.Station.Address);
 
             try
             {

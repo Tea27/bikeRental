@@ -19,5 +19,6 @@ public interface IUserRepository<TEntity> where TEntity : ApplicationUser
     Task DeleteAsync(Guid id);
 
     Task AddAsync(TEntity entity, string role, string password);
+
 }
 

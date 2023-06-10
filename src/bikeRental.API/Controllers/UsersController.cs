@@ -22,12 +22,6 @@ public class UsersController : ApiController
         return Ok(ApiResult<CreateUserResponseModel>.Success(await _userService.CreateAsync(createUserModel)));
     }
 
-    [HttpPost("authenticate")]
-    [AllowAnonymous]
-    public async Task<IActionResult> LoginAsync(LoginUserModel loginUserModel)
-    {
-        return Ok(ApiResult<LoginResponseModel>.Success(await _userService.LoginAsync(loginUserModel)));
-    }
 
     [HttpPost("confirmEmail")]
     public async Task<IActionResult> ConfirmEmailAsync(ConfirmEmailModel confirmEmailModel)

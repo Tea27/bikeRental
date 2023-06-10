@@ -37,6 +37,8 @@
                 <label asp-for="ConfirmPassword"></label>
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
+            @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+            {
             <div class="form-group">
                 <select asp-for="Role" class="form-control" 
                     asp-items="@(Html.GetEnumSelectList<Role>())">
@@ -44,7 +46,11 @@
                 <label asp-for="Role"></label>
 
                 </div>
-            <button id="registerSubmit" type="submit" class="w-100 mt-2 btn btn-lg btn-primary">Register</button>
+            }
+            else{
+                 <input type="hidden" asp-for="Role" value="@Role.Customer" />
+            }
+            <button type="submit" class="w-100 mt-2 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
 </div>

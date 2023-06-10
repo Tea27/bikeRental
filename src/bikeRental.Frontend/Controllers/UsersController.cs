@@ -13,6 +13,8 @@ using AutoMapper;
 using System.Web;
 using System;
 using System.Security.Cryptography;
+using System.Data.Entity.Validation;
+using Microsoft.AspNetCore.Authentication;
 
 namespace bikeRental.Frontend.Controllers;
 public class UsersController : Controller
@@ -54,9 +56,8 @@ public class UsersController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = ("Administrator"))]
     public IActionResult Create()
-    { 
+    {
         return View("/Pages/Users/Create.cshtml");
     }
 
@@ -70,6 +71,7 @@ public class UsersController : Controller
             if (ModelState.IsValid)
             {
                 await _userService.AddAsync(userModel);
+                return User.Identity.IsAuthenticated && User.IsInRole("Administrator") ? RedirectToAction(nameof(Index)) : RedirectToAction(nameof(Login));
             }
         }
         catch (DbUpdateException ex)
@@ -77,7 +79,7 @@ public class UsersController : Controller
             System.Diagnostics.Debug.WriteLine(ex);
             ModelState.AddModelError("", "Unable to save changes. " + ex);
         }
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Create));
     }
 
     [HttpGet]
@@ -135,8 +137,6 @@ public class UsersController : Controller
     public ActionResult Redirect(Guid? id, string name)
     {
         TempData["UserId"] = id;
-        System.Diagnostics.Debug.WriteLine("ime aksije "+name);
-
         return RedirectToAction(name);
     }
 
@@ -151,7 +151,7 @@ public class UsersController : Controller
         }
 
         var userModel = await _userService.GetByIdAsync(id);
-        
+
         if (userModel == null)
         {
             return NotFound();
@@ -183,5 +183,47 @@ public class UsersController : Controller
         }
 
         return RedirectToAction(nameof(Index));
+    }
+
+    [HttpGet]
+    [ActionName("Login")]
+    public IActionResult Login()
+    {
+        return View("/Pages/Users/Login.cshtml");
+    }
+
+    [HttpPost, ActionName("Login")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> LoginPost(LoginUserModel user)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _userService.LoginAsync(user);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            //if (result.IsLockedOut)
+            //{
+            //   // _logger.LogWarning("User account locked out.");
+            //    return RedirectToPage("./Lockout");
+            //}
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View("/Pages/Users/Login.cshtml");
+            }
+        }
+
+        return View("/Pages/Users/Login.cshtml");
+    }
+
+    [HttpPost, ActionName("Logout")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> LogoutPost()
+    {
+        await _userService.LogoutAsync();
+        return RedirectToAction("Index", "Home");
     }
 }
