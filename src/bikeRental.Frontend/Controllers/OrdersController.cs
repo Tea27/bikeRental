@@ -247,10 +247,11 @@ namespace bikeRental.Frontend.Controllers
             try
             {
                 await _orderService.Delete(id);
-                if(user.Role == Core.Enums.Role.Administrator)
+                if(user.Role == Core.Enums.Role.Administrator && loggedUserId != order.Customer.Id)
                 {
                     return RedirectToAction(nameof(Index));
                 }
+             
                 return RedirectToAction(nameof(UserIndex));
                
 
