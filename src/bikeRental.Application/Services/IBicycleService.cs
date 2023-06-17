@@ -13,8 +13,6 @@ public interface IBicycleService
     Task<IEnumerable<BicycleModel>> GetAllAsync();
     Task<IEnumerable<BicycleModel>> GetByStation(Guid StationId);
 
-    Task<BicycleModel> GetByIdAsync(Guid? id, Guid stationId);
-
     Task<BicycleModel> GetByIdAsync(Guid? id);
 
     Task Delete(Guid Id, Guid stationId);

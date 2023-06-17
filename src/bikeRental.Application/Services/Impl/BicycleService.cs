@@ -56,20 +56,12 @@ public class BicycleService : IBicycleService
         return bicyclesModel;
     }
 
-    public async Task<BicycleModel> GetByIdAsync(Guid? id, Guid stationId)
-    {
-        var response = await _bicycleRepository.GetByIdAsync(id);
-        var bicycleModel = _mapper.Map<BicycleModel>(response);
-        bicycleModel.Station = await _stationService.GetByIdAsync(stationId);
-        return bicycleModel;
-    }
-
     public async Task<BicycleModel> GetByIdAsync(Guid? id)
     {
         var response = await _bicycleRepository.GetByIdAsync(id);
-        var bicycleModel = _mapper.Map<BicycleModel>(response);
-        return bicycleModel;
+        return _mapper.Map<BicycleModel>(response);
     }
+
     public IEnumerable<BicycleModel> SearchSelection(Guid Id, string searchString)
     {
         var bicycles = _bicycleRepository.FindByCondition(bicycle => bicycle.Description.ToLower().Contains(searchString.Trim().ToLower()) && bicycle.Station.Id == Id);

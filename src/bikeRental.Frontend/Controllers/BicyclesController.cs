@@ -63,7 +63,7 @@ namespace bikeRental.Frontend.Controllers
             }
 
             ViewData["cname"] = cname;
-            var bicycle = await _bicycleService.GetByIdAsync(id, stationId);
+            var bicycle = await _bicycleService.GetByIdAsync(id);
 
             if (bicycle == null)
             {
@@ -85,7 +85,7 @@ namespace bikeRental.Frontend.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id, Guid stationId, string cname)
         {
-            var bicycle = await _bicycleService.GetByIdAsync(id, stationId);
+            var bicycle = await _bicycleService.GetByIdAsync(id);
 
             if (bicycle == null)
             {
@@ -168,7 +168,7 @@ namespace bikeRental.Frontend.Controllers
 
             ViewData["cname"] = cname;
 
-            var bicycle = await _bicycleService.GetByIdAsync(id, stationId);
+            var bicycle = await _bicycleService.GetByIdAsync(id);
 
             return View("/Pages/Bicycles/Edit.cshtml", bicycle);
         }

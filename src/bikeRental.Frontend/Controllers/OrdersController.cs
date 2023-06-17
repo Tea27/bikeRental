@@ -117,7 +117,7 @@ namespace bikeRental.Frontend.Controllers
                 RentalEndTime = DateTime.Now,
                 RentalPrice = 0,
                 Customer = await _userService.GetByIdAsync(userID),
-                Bicycle = await _bicycleService.GetByIdAsync(bicycleId, stationId)
+                Bicycle = await _bicycleService.GetByIdAsync(bicycleId)
             };
             return View("/Pages/Orders/Create.cshtml", order);
         }
@@ -133,7 +133,7 @@ namespace bikeRental.Frontend.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id, orderModel.Bicycle.Station.Id);
+                    var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id);
                     bicycle.IsAvailable = false;
                     await _bicycleService.UpdateAsync(bicycle);
                     await _orderService.AddAsync(orderModel, orderModel.Customer.Id, orderModel.Bicycle.Id);
@@ -183,7 +183,7 @@ namespace bikeRental.Frontend.Controllers
 
                     if (orderModel.RentalPrice != 0)
                     {
-                        var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id, orderModel.Bicycle.Station.Id);
+                        var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id);
                         bicycle.IsAvailable = true;
                         await _bicycleService.UpdateAsync(bicycle);
                         await _orderService.UpdateAsync(orderModel);
@@ -191,7 +191,7 @@ namespace bikeRental.Frontend.Controllers
                     else
                     {
                         orderModel.RentalPrice = orderModel.Bicycle.Price;
-                        var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id, orderModel.Bicycle.Station.Id);
+                        var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id);
                         bicycle.IsAvailable = true;
                         await _bicycleService.UpdateAsync(bicycle);
                         await _orderService.UpdateAsync(orderModel);
