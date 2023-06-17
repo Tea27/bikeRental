@@ -48,7 +48,7 @@ public class BicycleService : IBicycleService
     {
         var bicycle = await _bicycleRepository.GetByIdAsync(Id);
         var station = await _stationService.GetByIdAsync(stationId);
-        if(bicycle.Type.ToString() == "Acoustic")
+        if(bicycle.Type == BikeType.Acoustic)
         {
             station.NumberOfBikes--;
         }
