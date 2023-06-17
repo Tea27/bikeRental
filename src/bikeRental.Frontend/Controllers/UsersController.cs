@@ -226,4 +226,11 @@ public class UsersController : Controller
         await _userService.LogoutAsync();
         return RedirectToAction("Index", "Home");
     }
+
+    [HttpGet]
+    [ActionName("Manage")]
+    public IActionResult Manage()
+    {
+        return View("/Pages/Users/Manage/Index.cshtml");
+    }
 }

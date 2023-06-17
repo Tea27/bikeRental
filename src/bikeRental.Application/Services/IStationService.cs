@@ -12,11 +12,11 @@ public interface IStationService
 {
     Task<StationModel> AddAsync(StationModel entity);
     Task<StationModel> GetByIdAsync(Guid? id);
-    Task<IEnumerable<StationResponse>> GetAllAsync();
-    IEnumerable<StationResponse> SearchSelection(IEnumerable<StationResponse> stations, string searchString);
+    IEnumerable<StationResponse> GetAll();
     Task UpdateAsync(StationModel stationModel);
-    IEnumerable<StationResponse> SortingSelection(IEnumerable<StationResponse> stations, string sortOrder);
     Task Delete(Guid Id);
-    Task<string> GetAddressesAsync();
+    string GetAddressess();
+    IEnumerable<StationResponse> SearchSelection(string searchString);
+    IEnumerable<StationResponse> SortingSelection(string sortOrder);
 }
 

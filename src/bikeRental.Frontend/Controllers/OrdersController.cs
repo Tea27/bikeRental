@@ -46,59 +46,59 @@ namespace bikeRental.Frontend.Controllers
             {
                 searchDate = currentFilter;
             }
-            
+
             ViewData["CurrentCategory"] = currentCategory;
             ViewData["CurrentFilter"] = searchDate;
             ViewData["SortOrder"] = sortOrder;
             int pageSize = 4;
 
             var orders = await _orderService.GetAllAsync();
-            
+
             orders = _orderService.SortingSelection(orders, sortOrder);
             orders = _orderService.SearchSelectionAsync(orders, searchDate);
-                      
+
             return View("/Pages/Orders/Index.cshtml", PaginatedList<OrderResponse>.Create(orders, pageNumber ?? 1, pageSize));
         }
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> UserIndex(string currentCategory, string sortOrder,int? pageNumber)
+        public async Task<IActionResult> UserIndex(string currentCategory, string sortOrder, int? pageNumber)
         {
             var userID = Guid.Parse(User.Identity.GetUserId());
 
             ViewData["CurrentCategory"] = currentCategory;
             ViewData["SortOrder"] = sortOrder;
-          
+
             int pageSize = 4;
 
             var orders = await _orderService.GetAllAsync();
             List<OrderResponse> userOrders = new List<OrderResponse>();
 
-            var stations = await _stationService.GetAllAsync();
+            var stations = _stationService.GetAll();
 
             foreach (OrderResponse order in orders)
             {
-                if( order.Customer.Id == userID)
+                if (order.Customer.Id == userID)
                 {
                     foreach (StationResponse s in stations)
                     {
                         var bicycles = s.Bicycles;
                         foreach (BicycleModel b in bicycles)
                         {
-                            if(order.Bicycle.Id == b.Id)
+                            if (order.Bicycle.Id == b.Id)
                             {
                                 var station = await _stationService.GetByIdAsync(s.Id);
                                 order.Bicycle.Station = station;
-                                userOrders.Add(order);                                
-                            }                               
+                                userOrders.Add(order);
+                            }
                         }
-                    }                  
+                    }
                 }
             }
 
             IEnumerable<OrderResponse> response = userOrders.AsEnumerable();
             response = _orderService.SortingSelection(response, sortOrder);
-        
+
             return View("/Pages/Orders/UserIndex.cshtml", PaginatedList<OrderResponse>.Create(response, pageNumber ?? 1, pageSize));
         }
 
@@ -110,16 +110,19 @@ namespace bikeRental.Frontend.Controllers
             {
                 return NotFound();
             }
-    
-            var order = new OrderModel { RentalStartTime = DateTime.Now,
-                                         RentalEndTime = DateTime.Now,
-                                         RentalPrice = 0,
-                                         Customer = await _userService.GetByIdAsync(userID),
-                                         Bicycle = await _bicycleService.GetByIdAsync(bicycleId, stationId)};
+
+            var order = new OrderModel
+            {
+                RentalStartTime = DateTime.Now,
+                RentalEndTime = DateTime.Now,
+                RentalPrice = 0,
+                Customer = await _userService.GetByIdAsync(userID),
+                Bicycle = await _bicycleService.GetByIdAsync(bicycleId, stationId)
+            };
             return View("/Pages/Orders/Create.cshtml", order);
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -134,16 +137,16 @@ namespace bikeRental.Frontend.Controllers
                     bicycle.IsAvailable = false;
                     await _bicycleService.UpdateAsync(bicycle);
                     await _orderService.AddAsync(orderModel, orderModel.Customer.Id, orderModel.Bicycle.Id);
-                }                             
+                }
             }
             catch (DbUpdateException ex)
             {
                 Console.WriteLine("-.....error..");
                 System.Diagnostics.Debug.WriteLine(ex);
                 ModelState.AddModelError("", "Unable to save changes. " + ex);
-            }           
-            return RedirectToAction(nameof(UserIndex));
             }
+            return RedirectToAction(nameof(UserIndex));
+        }
 
         [Authorize]
         public async Task<IActionResult> Finish(Guid? orderId, Guid bicycleId, Guid stationId)
@@ -166,14 +169,14 @@ namespace bikeRental.Frontend.Controllers
         [Authorize]
         public async Task<IActionResult> Finish(OrderModel orderModel)
         {
-            var errors = ModelState.Values.SelectMany(v => v.Errors);          
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
             try
             {
                 if (ModelState.IsValid)
                 {
                     var diffOfDates = (orderModel.RentalEndTime).Subtract(orderModel.RentalStartTime);
                     var days = diffOfDates.Days;
-                    var hours = diffOfDates.Hours;                  
+                    var hours = diffOfDates.Hours;
                     var minutes = diffOfDates.Minutes;
                     var total = minutes + (hours * 60) + (days * 24 * 60);
                     orderModel.RentalPrice = Math.Ceiling(Decimal.Divide(total, 30)) * orderModel.Bicycle.Price;
@@ -183,7 +186,7 @@ namespace bikeRental.Frontend.Controllers
                         var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id, orderModel.Bicycle.Station.Id);
                         bicycle.IsAvailable = true;
                         await _bicycleService.UpdateAsync(bicycle);
-                        await _orderService.UpdateAsync(orderModel);                       
+                        await _orderService.UpdateAsync(orderModel);
                     }
                     else
                     {
@@ -193,7 +196,7 @@ namespace bikeRental.Frontend.Controllers
                         await _bicycleService.UpdateAsync(bicycle);
                         await _orderService.UpdateAsync(orderModel);
                     }
-                }               
+                }
             }
             catch (DbUpdateException ex)
             {
@@ -208,7 +211,7 @@ namespace bikeRental.Frontend.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(Guid? id, Guid bicycleId, Guid customerId, bool? saveChangesError = false)
         {
-            if (id == null )
+            if (id == null)
             {
                 return NotFound();
             }
@@ -229,7 +232,7 @@ namespace bikeRental.Frontend.Controllers
 
             return View("/Pages/Orders/Delete.cshtml", order);
         }
-      
+
 
         [HttpPost, ActionName("Delete")]
         [Authorize]
@@ -247,13 +250,13 @@ namespace bikeRental.Frontend.Controllers
             try
             {
                 await _orderService.Delete(id);
-                if(user.Role == Core.Enums.Role.Administrator && loggedUserId != order.Customer.Id)
+                if (user.Role == Core.Enums.Role.Administrator && loggedUserId != order.Customer.Id)
                 {
                     return RedirectToAction(nameof(Index));
                 }
-             
+
                 return RedirectToAction(nameof(UserIndex));
-               
+
 
             }
             catch (DbUpdateException ex)

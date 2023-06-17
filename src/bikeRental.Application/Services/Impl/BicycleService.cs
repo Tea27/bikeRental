@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using bikeRental.Application.Models.Station;
 using bikeRental.DataAccess.Repositories.Impl;
 using static System.Collections.Specialized.BitVector32;
+using bikeRental.Core.Enums;
 
 namespace bikeRental.Application.Services.Impl;
 public class BicycleService : IBicycleService
@@ -25,7 +26,7 @@ public class BicycleService : IBicycleService
     }
     public async Task<IEnumerable<BicycleModel>> GetAllAsync()
     {
-        var bicycles = await _bicycleRepository.GetAllAsync();
+        var bicycles = _bicycleRepository.GetAll();
 
         foreach (var bicycle in bicycles)
         {
@@ -38,27 +39,10 @@ public class BicycleService : IBicycleService
 
     }
 
-    public List<string> getFieldNames()
-    {
-        Bicycle Bicycle = new Bicycle();
-        return Bicycle.GetType().GetProperties().Where(x => x.Name != "Id").Select(x => x.Name).ToList();
-    }
-
     public async Task Delete(Guid Id, Guid stationId)
     {
         var bicycle = await _bicycleRepository.GetByIdAsync(Id);
-        var station = await _stationService.GetByIdAsync(stationId);
-        if(bicycle.Type == BikeType.Acoustic)
-        {
-            station.NumberOfBikes--;
-        }
-        else
-        {
-            station.NumberOfElectricBikes--;
-        }
-        await _stationService.UpdateAsync(station);
         await _bicycleRepository.DeleteAsync(Id);
-
     }
 
     public async Task<IEnumerable<BicycleModel>> GetByStation(Guid StationId)
@@ -86,28 +70,58 @@ public class BicycleService : IBicycleService
         var bicycleModel = _mapper.Map<BicycleModel>(response);
         return bicycleModel;
     }
-
-    public IEnumerable<BicycleModel> SearchSelection(IEnumerable<BicycleModel> bicycles, string searchString)
+    public IEnumerable<BicycleModel> SearchSelection(Guid Id, string searchString)
     {
-        IEnumerable<BicycleModel> stationsSearched = bicycles.ToList();
+        var bicycles = _bicycleRepository.FindByCondition(bicycle => bicycle.Description.ToLower().Contains(searchString.Trim().ToLower()) && bicycle.Station.Id == Id);
+        return _mapper.Map<IEnumerable<BicycleModel>>(bicycles);
+    }
+    public IEnumerable<BicycleModel> SearchSelection(string searchString)
+    {
+        var bicycles = _bicycleRepository.FindByCondition(bicycle => bicycle.Description.ToLower().Contains(searchString.Trim().ToLower()));
+        return _mapper.Map<IEnumerable<BicycleModel>>(bicycles);
+    }
+    public IEnumerable<BicycleModel> FilterSelection(Guid Id, string filterString)
+    {
+        var bicycles = FilterSwitch(Id, filterString);
+        return _mapper.Map<IEnumerable<BicycleModel>>(bicycles);
+    }
+    public IEnumerable<BicycleModel> FilterSelection(string filterString)
+    {
+        var bicycles = FilterSwitch(filterString);
+        return _mapper.Map<IEnumerable<BicycleModel>>(bicycles);
+    }
 
-        if (!String.IsNullOrEmpty(searchString))
+    public IQueryable<Bicycle> FilterSwitch(string filterString)
+    {
+        switch (filterString)
         {
-            var searchStrTrim = searchString.Trim();
-            stationsSearched = bicycles.Where(t => t.Description.Contains(searchStrTrim));
+            case "Acoustic":
+                return _bicycleRepository.FindByCondition(bicycle => bicycle.Type == BikeType.Acoustic);
+            case "Electric":
+                return _bicycleRepository.FindByCondition(bicycle => bicycle.Type == BikeType.Electric);
+            default:
+                return _bicycleRepository.GetAll();
         }
-        return stationsSearched;
+    }
+    public IQueryable<Bicycle> FilterSwitch(Guid Id, string filterString)
+    {
+        switch (filterString)
+        {
+            case "Acoustic":
+                return _bicycleRepository.FindByCondition(bicycle => bicycle.Type == BikeType.Acoustic && bicycle.Station.Id == Id);
+            case "Electric":
+                return _bicycleRepository.FindByCondition(bicycle => bicycle.Type == BikeType.Electric && bicycle.Station.Id == Id);
+            default:
+                return _bicycleRepository.FindByCondition(bicycle => bicycle.Station.Id == Id);
+        }
     }
 
     public async Task<BicycleModel> AddAsync(BicycleModel bicycleModel, Guid stationId)
     {
         var bicycle = _mapper.Map<Bicycle>(bicycleModel);
-        //var station = await _stationService.GetByIdAsync(stationId);
-        //bicycle.Station = _mapper.Map<Station>(station);
-        //System.Diagnostics.Debug.WriteLine(bicycle.Station.Id + "Kurcina na kv");
 
         bicycle = await _bicycleRepository.AddAsync(bicycle, stationId);
-        
+
         return _mapper.Map<BicycleModel>(bicycle);
     }
 

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using System.Linq;
 
 namespace bikeRental.DataAccess.Repositories.Impl;
 public class StationRepository<TEntity> : IStationRepository<TEntity> where TEntity : Station
@@ -30,17 +31,16 @@ public class StationRepository<TEntity> : IStationRepository<TEntity> where TEnt
     }
     public async Task<TEntity> GetByIdAsync(Guid? id)
     {
-        return await FindByCondition(station => station.Id.Equals(id)).FirstOrDefaultAsync();
+        return await FindByCondition(station => station.Id.Equals(id)).SingleOrDefaultAsync();
     }
 
     public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
     {
         return DbSet.Where(expression).AsNoTracking();
     }
-    public async Task<IEnumerable<TEntity>> GetAllAsync()
+    public IQueryable<TEntity> GetAll()
     {
-        return await DbSet.ToListAsync();
-
+        return DbSet.AsQueryable();
     }
 
     public async Task UpdateAsync(TEntity entity)
@@ -53,14 +53,14 @@ public class StationRepository<TEntity> : IStationRepository<TEntity> where TEnt
         {
             System.Diagnostics.Debug.WriteLine(ex);
         }
-        
+
         await _context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        var station = new Station() { Id = id };
-        _context.Stations.Remove(station);
+        var station = await GetByIdAsync(id);
+        DbSet.Remove(station);
         await _context.SaveChangesAsync();
     }
 }

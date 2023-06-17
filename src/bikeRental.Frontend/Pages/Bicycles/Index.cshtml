@@ -1,9 +1,12 @@
 ﻿@using bikeRental.Application;
 @using bikeRental.Application.Models.Bicycle;
+@using bikeRental.Core.Enums;
 @model PaginatedList<bikeRental.Application.Models.Bicycle.BicycleModel>
 
 @{
 	ViewData["Title"] = "Bicylces";
+    var filterString = ViewData["filterString"] as string;
+
 }
 
 
@@ -12,25 +15,26 @@
 	<h2>All Bicycles</h2>
 	<div class="container">
 		<div class="row justify-content-between">
-			<div class="col-6">
-				<form asp-controller="Bicycles" asp-action="Index" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
+			<div class="col-8">
+				<form asp-controller="Bicycles" asp-action="Index" asp-route-searchString="@ViewData["searchString"]" method="get">
 					<div class="input-group">
-						<input type="text" placeholder="Start typing description…" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control" />
-						<div class="input-group-append">
+						<input type="text" placeholder="Start typing description…" name="SearchString" value="@ViewData["searchString"]" class="form-control" />
+                        <select class="form-select" aria-label="Example select with button addon" name="filterString">
+                            <option value="">All types</option>
+                            @foreach (var type in Enum.GetNames(typeof(BikeType)))
+                            {
+                                <option value="@type" selected="@(type == filterString)">@type</option>
+                            }
+                        </select>
+                        <div class="input-group-append">
+                             <a class="btn btn-light" asp-controller="Bicycles" asp-action="Index">
+								<i class="bi bi-x-lg"></i>
+							</a>
 							<button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
 							<a class="btn btn-light" asp-controller="Stations" asp-action="Index">Back to stations</a>
 						</div>
 					</div>
 				</form>
-			</div>
-			<div class="col-4">
-				@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
-				{
-					<div>
-
-						<a class="btn btn-outline-success" asp-controller="Bicycles" asp-action="Create" asp-route-stationId="@Model[0].Station.Id" asp-route-cname="Index"><i class="bi bi-house-add"> Create new bicycle</i></a>
-					</div>
-				}
 			</div>
 		</div>
 	</div>
@@ -90,21 +94,21 @@
 		var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 	}
 
-	<a asp-action="Index"
-	   asp-controller="Bicycles"
-	   asp-route-currentCategory="@ViewData["CurrentCategory"]"
-	   asp-route-pageNumber="@(Model.PageIndex - 1)"
-	   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-	class="btn btn-default @prevDisabled">
-		Previous
-	</a>
-	<a asp-action="Index"
-	   asp-controller="Bicycles"
-	   asp-route-currentCategory="@ViewData["CurrentCategory"]"
-	   asp-route-pageNumber="@(Model.PageIndex + 1)"
-	   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-	class="btn btn-default @nextDisabled">
-		Next
-	</a>
+    <a asp-action="Index"
+        asp-controller="Bicycles"
+       asp-route-searchString="@ViewData[""]"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-filter="@ViewData["filterString"]"
+       class="btn btn-default @prevDisabled">
+        Previous
+    </a>
+    <a asp-action="Index"
+        asp-controller="Bicycles"
+       asp-route-searchString="@ViewData["searchString"]"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-filter="@ViewData["filterString"]"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
 </div>
 

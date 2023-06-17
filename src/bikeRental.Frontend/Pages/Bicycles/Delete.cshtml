@@ -40,7 +40,7 @@
 			</dd>
 		</dl>
 
-		<form asp-controller="Bicycles" asp-action="Delete" asp-route-id="@Model.Id" asp-route-stationId="@Model.Station.Id" class="mt-4">
+		<form asp-controller="Bicycles" asp-action="Delete" asp-route-id="@Model.Id" asp-route-stationId="@Model.Station.Id" asp-route-cname="@ViewData["cname"]" class="mt-4">
 			<input type="hidden" asp-for="@Model.Id" />
 			<input type="hidden" asp-for="@Model.Station.Id" />
 			<input type="submit" value="Delete" class="btn btn-danger" />

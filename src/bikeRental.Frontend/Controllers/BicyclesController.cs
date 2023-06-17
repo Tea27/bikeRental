@@ -11,12 +11,13 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using System.Xml.Linq;
+using System.Collections.Generic;
 
 namespace bikeRental.Frontend.Controllers
 {
     public class BicyclesController : Controller
     {
-        
+
         private readonly IBicycleService _bicycleService;
         private readonly IStationService _stationService;
         private readonly IMapper _mapper;
@@ -29,26 +30,24 @@ namespace bikeRental.Frontend.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetByStation(Guid Id, string currentCategory, string currentFilter, string searchString, int? pageNumber)
+        public async Task<IActionResult> GetByStation(Guid Id, string searchString, string filterString, int? pageNumber)
         {
-
             if (searchString != null)
             {
                 pageNumber = 1;
             }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            ViewData["CurrentCategory"] = currentCategory;
-            ViewData["CurrentFilter"] = searchString;
 
             int pageSize = 6;
-            
-            var bicycles = await _bicycleService.GetByStation(Id);
 
-            bicycles = _bicycleService.SearchSelection(bicycles, searchString);
+            var station = await _stationService.GetByIdAsync(Id);
+
+            ViewData["searchString"] = searchString;
+            ViewData["filterString"] = filterString;
+            ViewData["id"] = station.Id;
+            ViewData["address"] = station.Address;
+
+            var bicycles = String.IsNullOrEmpty(searchString) ? _bicycleService.FilterSelection(Id, filterString) :
+                                                            _bicycleService.SearchSelection(Id, searchString);
 
             return View("/Pages/Bicycles/BicyclesOnStation.cshtml", PaginatedList<BicycleModel>.Create(bicycles, pageNumber ?? 1, pageSize));
 
@@ -84,7 +83,7 @@ namespace bikeRental.Frontend.Controllers
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = ("Administrator"))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id, Guid stationId)
+        public async Task<IActionResult> DeleteConfirmed(Guid id, Guid stationId, string cname)
         {
             var bicycle = await _bicycleService.GetByIdAsync(id, stationId);
 
@@ -96,13 +95,7 @@ namespace bikeRental.Frontend.Controllers
             try
             {
                 await _bicycleService.Delete(id, stationId);
-                var station = await _stationService.GetByIdAsync(stationId);
-                if (station.NumberOfElectricBikes == 0 && station.NumberOfBikes == 0)
-                {
-                    return RedirectToAction("Index", "Stations");
-                }
-                return RedirectToAction(nameof(GetByStation), new { id = stationId });
-
+                return (cname == "GetByStation") ? RedirectToAction(cname, new { id = stationId }) : RedirectToAction(cname);
             }
             catch (DbUpdateException ex)
             {
@@ -111,25 +104,22 @@ namespace bikeRental.Frontend.Controllers
         }
 
 
-        public async Task<IActionResult> Index(Guid Id, string currentCategory, string currentFilter, string searchString, int? pageNumber)
+        public IActionResult Index(string searchString, string filterString, int? pageNumber)
         {
+
             if (searchString != null)
             {
                 pageNumber = 1;
             }
-            else
-            {
-                searchString = currentFilter;
-            }
 
-            ViewData["CurrentCategory"] = currentCategory;
-            ViewData["CurrentFilter"] = searchString;
+
+            ViewData["searchString"] = searchString;
+            ViewData["filterString"] = filterString;
 
             int pageSize = 6;
 
-            var bicycles = await _bicycleService.GetAllAsync();
-
-            bicycles = _bicycleService.SearchSelection(bicycles, searchString);
+            var bicycles = String.IsNullOrEmpty(searchString) ? _bicycleService.FilterSelection(filterString) :
+                                                            _bicycleService.SearchSelection(searchString);
 
             return View("/Pages/Bicycles/Index.cshtml", PaginatedList<BicycleModel>.Create(bicycles, pageNumber ?? 1, pageSize));
 
@@ -170,7 +160,7 @@ namespace bikeRental.Frontend.Controllers
         [Authorize(Roles = ("Administrator"))]
         public async Task<IActionResult> Edit(Guid? id, Guid stationId, string cname)
         {
-            
+
             if (id == null)
             {
                 return NotFound();

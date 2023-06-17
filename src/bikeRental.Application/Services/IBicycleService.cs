@@ -23,8 +23,10 @@ public interface IBicycleService
 
     Task UpdateAsync(BicycleModel bicycleModel);
 
-    List<string> getFieldNames();
-    IEnumerable<BicycleModel> SearchSelection(IEnumerable<BicycleModel> bicycles, string searchString);
+    IEnumerable<BicycleModel> SearchSelection(string searchString);
+    IEnumerable<BicycleModel> SearchSelection(Guid Id, string searchString);
 
+    IEnumerable<BicycleModel> FilterSelection(string filterString);
+    IEnumerable<BicycleModel> FilterSelection(Guid Id, string filterString);
 }
 

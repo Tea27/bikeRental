@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using bikeRental.Application.Exceptions;
 using bikeRental.Application.Models.Station;
 using bikeRental.Application.Models.User;
 using bikeRental.Core.Entities;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace bikeRental.Application.Services.Impl;
 public class StationService : IStationService
@@ -25,25 +27,25 @@ public class StationService : IStationService
     public async Task<StationModel> AddAsync(StationModel stationModel)
     {
         var station = _mapper.Map<Station>(stationModel);
-        station =  await _stationRepository.AddAsync(station);
+        station = await _stationRepository.AddAsync(station);
         return _mapper.Map<StationModel>(station);
     }
 
     public async Task<StationModel> GetByIdAsync(Guid? id)
     {
-        var response = await _stationRepository.GetByIdAsync(id);
+        var response = await _stationRepository.GetByIdAsync(id) ?? throw new BadRequestException("Station not found.");
         return _mapper.Map<StationModel>(response);
     }
 
-    public async Task<IEnumerable<StationResponse>> GetAllAsync()
+    public IEnumerable<StationResponse> GetAll()
     {
-        var response = await _stationRepository.GetAllAsync();
+        var response = _stationRepository.GetAll();
         return _mapper.Map<IEnumerable<StationResponse>>(response);
     }
 
-    public async Task<string> GetAddressesAsync()
+    public string GetAddressess()
     {
-        var response = await _stationRepository.GetAllAsync();
+        var response = _stationRepository.GetAll();
         var addresses = response.Select(station => new
         {
             title = station.Address,
@@ -66,36 +68,25 @@ public class StationService : IStationService
         await _stationRepository.DeleteAsync(Id);
 
     }
-    public IEnumerable<StationResponse> SearchSelection(IEnumerable<StationResponse> stations, string searchString)
-    {
-        IEnumerable<StationResponse> stationsSearched = stations.ToList();
 
-        if (!String.IsNullOrEmpty(searchString))
-        {
-            var searchStrTrim = searchString.Trim();
-            stationsSearched = stations.Where(t => t.Address.Contains(searchStrTrim));
-        }
-        return stationsSearched;
-    }
-    public IEnumerable<StationResponse> SortingSelection(IEnumerable<StationResponse> stations, string sortOrder)
+    public IEnumerable<StationResponse> SearchSelection(string searchString)
     {
+        var stations = _stationRepository.FindByCondition(station => station.Address.ToLower().Contains(searchString.Trim().ToLower()));
+        return _mapper.Map<IEnumerable<StationResponse>>(stations);
+    }
+    public IEnumerable<StationResponse> SortingSelection(string sortOrder)
+    {
+        var stations = _stationRepository.GetAll();
         switch (sortOrder)
         {
-            case "Address":
-                return stations.OrderBy(s => s.Address);
             case "AddressDesc":
-                return stations.OrderByDescending(s => s.Address);
-            case "NumberOfBikes":
-                return stations.OrderBy(s => s.NumberOfBikes);
-            case "NumberOfBikesDesc":
-                return stations.OrderByDescending(s => s.NumberOfBikes);
-            case "NumberOfElectricBikes":
-                return stations.OrderBy(s => s.NumberOfElectricBikes);
-            case "NumberOfElectricBikesDesc":
-                return stations.OrderByDescending(s => s.NumberOfElectricBikes);
+                stations = stations.OrderByDescending(s => s.Address);
+                break;
             default:
-                return stations.OrderBy(s => s.Address);
+                stations = stations.OrderBy(s => s.Address);
+                break;
         }
+        return _mapper.Map<IEnumerable<StationResponse>>(stations);
     }
 }
 

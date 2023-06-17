@@ -18,12 +18,12 @@ namespace bikeRental.Frontend.Controllers
             _logger = logger;
             _stationService = stationService;
         }
-        
+
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var stations = await _stationService.GetAllAsync();
-            ViewBag.Markers = await _stationService.GetAddressesAsync();
+            var stations = _stationService.GetAll();
+            ViewBag.Markers = _stationService.GetAddressess();
             return View("/Pages/Home/Index.cshtml", stations);
         }
 

@@ -21,11 +21,9 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
         _context = context;
         DbSet = context.Set<TEntity>();
     }
-    public async Task<IEnumerable<TEntity>> GetAllAsync()
+    public IQueryable<TEntity> GetAll()
     {
-        var bicycles = await DbSet.Include(b => b.Station).ToListAsync();
-        return bicycles;
-
+        return DbSet.Include(b => b.Station).AsQueryable();
     }
     public async Task<IEnumerable<TEntity>> GetByStation(Guid? stationId)
     {
@@ -63,12 +61,12 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
 
     public async Task<TEntity> GetByIdAsync(Guid? id)
     {
-        return await FindByCondition(bicycle => bicycle.Id.Equals(id)).FirstOrDefaultAsync();
+        return await FindByCondition(bicycle => bicycle.Id.Equals(id)).SingleOrDefaultAsync();
 
     }
     public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
     {
-        return DbSet.Where(expression).AsNoTracking();
+        return DbSet.Include(x => x.Station).Where(expression).AsNoTracking();
     }
     public async Task UpdateAsync(TEntity entity, Guid stationId)
     {
@@ -86,8 +84,8 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
     }
     public async Task DeleteAsync(Guid id)
     {
-        var bicycle = new Bicycle() { Id = id };
-        _context.Bicycles.Remove(bicycle);
+        var bicycle = await GetByIdAsync(id);
+        DbSet.Remove(bicycle);
         await _context.SaveChangesAsync();
     }
 

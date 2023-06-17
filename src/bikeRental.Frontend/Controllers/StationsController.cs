@@ -2,9 +2,11 @@
 using bikeRental.Application.Models.Station;
 using bikeRental.Application.Services;
 using bikeRental.Application.Services.Impl;
+using bikeRental.Core.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Entity;
 
@@ -19,29 +21,23 @@ public class StationsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(string currentCategory, string sortOrder, string currentFilter, string searchString, int? pageNumber)
+    public IActionResult Index(string searchString, string sortOrder, int? pageNumber)
     {
         if (searchString != null)
         {
             pageNumber = 1;
         }
-        else
-        {
-            searchString = currentFilter;
-        }
 
-        ViewData["CurrentCategory"] = currentCategory;
-        ViewData["CurrentFilter"] = searchString;
+        ViewData["searchString"] = searchString;
+        ViewData["sortOrder"] = sortOrder;
         int pageSize = 5;
 
-        var stations = await _stationService.GetAllAsync();
-
-        stations = _stationService.SortingSelection(stations, sortOrder);
-
-        stations = _stationService.SearchSelection(stations, searchString);
+        var stations = String.IsNullOrEmpty(searchString) ? _stationService.SortingSelection(sortOrder) :
+                                                            _stationService.SearchSelection(searchString);
 
         return View("/Pages/Stations/Index.cshtml", PaginatedList<StationResponse>.Create(stations, pageNumber ?? 1, pageSize));
     }
+
 
     [Authorize(Roles = ("Administrator"))]
     public IActionResult Create()
@@ -51,7 +47,7 @@ public class StationsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create( StationModel stationModel)
+    public async Task<IActionResult> Create(StationModel stationModel)
     {
         try
         {
@@ -89,7 +85,7 @@ public class StationsController : Controller
     [HttpPost, ActionName("Edit")]
     [Authorize(Roles = ("Administrator"))]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditPost( StationModel stationModel)
+    public async Task<IActionResult> EditPost(StationModel stationModel)
     {
         if (stationModel == null)
         {
@@ -113,9 +109,7 @@ public class StationsController : Controller
     public async Task<IActionResult> Delete(Guid? id, bool? saveChangesError = false)
     {
         if (id == null)
-        {
-            return NotFound();
-        }
+            return BadRequest();
 
         var station = await _stationService.GetByIdAsync(id);
 
@@ -139,7 +133,7 @@ public class StationsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
-        var station = await _stationService.GetByIdAsync(id);
+        var station = _stationService.GetByIdAsync(id);
 
         if (station == null)
         {
@@ -153,7 +147,6 @@ public class StationsController : Controller
         }
         catch (DbUpdateException ex)
         {
-            
             //Log the error (uncomment ex variable name and write a log.)
             return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
         }
