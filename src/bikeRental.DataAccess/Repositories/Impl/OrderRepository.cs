@@ -55,16 +55,15 @@ namespace bikeRental.DataAccess.Repositories.Impl
 
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public IQueryable<TEntity> GetAll()
         {
-            var orders = await DbSet.Include(o => o.Customer).ToListAsync();
-            orders = await DbSet.Include(o => o.Bicycle).ToListAsync();
+            var orders = DbSet.Include(o => o.Bicycle).Include(o => o.Customer).AsQueryable();         
             return orders;
         }
 
         public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
         {
-            return DbSet.Where(expression).AsNoTracking();
+            return DbSet.Include(o => o.Customer).Include(o => o.Bicycle).Where(expression).AsNoTracking();
         }
 
        

@@ -60,14 +60,16 @@ namespace bikeRental.Application.Services.Impl
 
         public async Task<IEnumerable<OrderResponse>> GetAllAsync()
         {
-            var orders = await _orderRepository.GetAllAsync();
-
+            var orders = _orderRepository.GetAll();
+            
             foreach (var order in orders)
             {
-                var customer = await _userService.GetByIdAsync(order.Customer.Id);
+                /*var customer = await _userService.GetByIdAsync(order.Customer.Id);
                 order.Customer = _mapper.Map<ApplicationUser>(customer);
                 var bicycle = await _bicycleService.GetByIdAsync(order.Bicycle.Id);
-                order.Bicycle = _mapper.Map<Bicycle>(bicycle);
+                order.Bicycle = _mapper.Map<Bicycle>(bicycle);*/
+                order.Customer = _mapper.Map<ApplicationUser>(order.Customer);
+                order.Bicycle = _mapper.Map<Bicycle>(order.Bicycle);           
             }
             var orderModels = _mapper.Map<IEnumerable<OrderResponse>>(orders);
             return orderModels;

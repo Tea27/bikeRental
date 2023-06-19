@@ -10,7 +10,7 @@ namespace bikeRental.DataAccess.Repositories
     public interface IOrderRepository<TEntity> where TEntity : Order
     {
         Task<TEntity> AddAsync(TEntity entity, Guid customerId, Guid bicycleId);
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        IQueryable<TEntity> GetAll();
         Task<TEntity> GetByIdAsync(Guid? id);
         Task UpdateAsync(TEntity entity, Guid customerId, Guid bicycleId);
         Task DeleteAsync(Guid id);
