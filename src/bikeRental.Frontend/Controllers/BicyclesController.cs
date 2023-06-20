@@ -177,7 +177,6 @@ namespace bikeRental.Frontend.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPost(BicycleModel bicycleModel, string cname)
         {
-            System.Diagnostics.Debug.WriteLine("cname " + cname);
             if (bicycleModel == null)
             {
                 return NotFound();

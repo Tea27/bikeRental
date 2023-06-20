@@ -13,9 +13,12 @@ public class StationService : IStationService
 {
     private readonly IMapper _mapper;
     private readonly IStationRepository<Station> _stationRepository;
-    public StationService(IStationRepository<Station> stationRepository, IMapper mapper)
+    private readonly IBicycleRepository<Bicycle> _bicycleRepository;
+
+    public StationService(IStationRepository<Station> stationRepository, IBicycleRepository<Bicycle> bicycleRepository, IMapper mapper)
     {
         _stationRepository = stationRepository;
+        _bicycleRepository = bicycleRepository;
         _mapper = mapper;
     }
 
@@ -30,6 +33,13 @@ public class StationService : IStationService
     {
         var response = await _stationRepository.GetByIdAsync(id) ?? throw new BadRequestException("Station not found.");
         return _mapper.Map<StationModel>(response);
+    }
+
+    public string SaveError(Guid? id)
+    {
+        var bicyclesWithOrders = _bicycleRepository.FindByCondition(bicycle => bicycle.Station.Id == id && bicycle.Orders.Any());
+        return bicyclesWithOrders.Any() ? "Station cannot be removed, bicycles have order relation: " + string.Join(", ", bicyclesWithOrders.Select(bicycle => bicycle.Description)) :
+                                            "DB update exception please contact administrator";
     }
 
     public IEnumerable<StationResponse> GetAll()

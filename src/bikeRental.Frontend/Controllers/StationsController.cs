@@ -112,9 +112,7 @@ public class StationsController : Controller
 
         if (saveChangesError.GetValueOrDefault())
         {
-            ViewData["ErrorMessage"] =
-                "Delete failed. Try again, and if the problem persists " +
-                "see your system administrator.";
+            ViewData["ErrorMessage"] = _stationService.SaveError(id);
         }
 
         return View("/Pages/Stations/Delete.cshtml", station);

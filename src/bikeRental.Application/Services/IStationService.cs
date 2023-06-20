@@ -17,6 +17,7 @@ public interface IStationService
     Task Delete(Guid Id);
     string GetAddressess();
     IEnumerable<StationResponse> CheckSwitch(string searchString, string sortOrder);
+    string SaveError(Guid? id);
 
 }
 
