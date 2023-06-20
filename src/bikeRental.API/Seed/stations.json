@@ -1,8 +1,6 @@
 ﻿[
   {
     "Address": "Kopilica ul., 21000 Split",
-    "NumberOfBikes": 2,
-    "NumberOfElectricBikes": 2,
     "lattitude": 43.515938,
     "longitude": 16.448714,
     "Bicycles": [
@@ -34,8 +32,6 @@
   },
   {
     "Address": "Trg dr. Franje Tuđmana, 21000 Split",
-    "NumberOfBikes": 2,
-    "NumberOfElectricBikes": 2,
     "lattitude": 43.508638,
     "longitude": 16.437797,
     "Bicycles": [
@@ -67,8 +63,6 @@
   },
   {
     "Address": "Šetalište Petra Preradovića 9-7, 21000 Split",
-    "NumberOfBikes": 2,
-    "NumberOfElectricBikes": 2,
     "lattitude": 43.508146,
     "longitude": 16.441943,
     "Bicycles": [
@@ -100,8 +94,6 @@
   },
   {
     "Address": "Šetalište Ivana Meštrovića 1, 21000 Split",
-    "NumberOfBikes": 2,
-    "NumberOfElectricBikes": 2,
     "lattitude": 43.512477,
     "longitude": 16.428212,
     "Bicycles": [

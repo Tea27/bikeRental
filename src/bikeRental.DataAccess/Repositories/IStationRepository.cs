@@ -15,4 +15,5 @@ public interface IStationRepository<TEntity> where TEntity : Station
     Task UpdateAsync(TEntity entity);
     Task DeleteAsync(Guid id);
     IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression);
+    IQueryable<TEntity> FindByCondition(IQueryable<TEntity> entity, Expression<Func<TEntity, bool>> expression);
 }

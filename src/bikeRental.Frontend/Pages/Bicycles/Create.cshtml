@@ -17,8 +17,6 @@
 				<input type="hidden" asp-for="Station.Address"/>
 				<input type="hidden" asp-for="Station.lattitude"/>
 				<input type="hidden" asp-for="Station.longitude"/>
-				<input type="hidden" asp-for="Station.NumberOfBikes"/>
-				<input type="hidden" asp-for="Station.NumberOfElectricBikes"/>
 				<div class="form-group">
 					<select asp-for="Type" class="form-control"
 							asp-items="@(Html.GetEnumSelectList<BikeType>())">

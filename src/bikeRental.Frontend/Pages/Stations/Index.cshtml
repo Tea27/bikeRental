@@ -8,15 +8,14 @@
 
 
 
-@ViewData["CurrentCategory"]
 <div class="container px-4 pt-2">
 <h2>Stations</h2>
 <div class="container">
     <div class="row justify-content-between">
         <div class="col-6">
-        <form asp-controller="Stations" asp-action="Index" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
+        <form asp-controller="Stations" asp-action="Index" asp-route-searchString="@ViewData["searchString"]" method="get">
             <div class="input-group">
-                     <input type="text" placeholder="Start typing address…" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control"/>
+                     <input type="text" placeholder="Start typing address…" name="searchString" value="@ViewData["searchString"]" class="form-control"/>
                      <div class="input-group-append">
                          <button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
                          <a class="btn btn-light" asp-action="Index">Back to Full List</a>
@@ -40,7 +39,13 @@
     <tr>
             @foreach (var prop in typeof(StationResponse).GetProperties())
             {
-				@if (prop.Name != "Id" && prop.Name != "Bicycles")
+                @if(prop.Name == "Bicycles")
+                {
+                    <th>
+				        @prop.Name
+			        </th>
+                }
+				else if (prop.Name != "Id" && prop.Name != "Bicycles")
                     {
                         <th>
                             @prop.Name
@@ -49,9 +54,7 @@
 						</th>
                     }
             }
-			<th>
-				Bicycles
-			</th>
+			
 			@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
             {   
                   <th>
@@ -66,26 +69,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberOfBikes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberOfElectricBikes)
-            </td>
 			<td>
-					@if(item.NumberOfElectricBikes == 0 && item.NumberOfBikes==0)
-					{
-						<div class="d-inline-block" data-toggle="tooltip" data-placement="top" title="No bikes on this station">
-							<a class="btn btn-outline-secondary disabled" style="pointer-events:none;" asp-controller="Bicycles" asp-action="GetByStation" asp-route-id="@item.Id ">
-							<i class="bi bi-bicycle"></i>
-						</a>
-						</div>
-					}
-					else{
-					<a class="btn btn-outline-secondary" asp-controller="Bicycles" asp-action="GetByStation" asp-route-id="@item.Id">
+                    <a class="btn btn-outline-secondary" asp-controller="Bicycles" asp-action="GetByStation" asp-route-Id="@item.Id">
 						<i class="bi bi-bicycle"></i>
 					</a>
-					}
 				
 			</td>
 				@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
@@ -106,19 +93,18 @@
 
 <a asp-action="Index"
     asp-controller="Stations"
-   asp-route-currentCategory="@ViewData["CurrentCategory"]"
+   asp-route-searchString="@ViewData[""]"
    asp-route-pageNumber="@(Model.PageIndex - 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-sortOrder="@ViewData["sortOrder"]"
    class="btn btn-default @prevDisabled">
     Previous
 </a>
 <a asp-action="Index"
     asp-controller="Stations"
-   asp-route-currentCategory="@ViewData["CurrentCategory"]"
+   asp-route-searchString="@ViewData["searchString"]"
    asp-route-pageNumber="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-sortOrder="@ViewData["sortOrder"]"
    class="btn btn-default @nextDisabled">
     Next
 </a>
 </div>
-

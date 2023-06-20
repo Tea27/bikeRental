@@ -1,14 +1,9 @@
 ﻿using bikeRental.Application;
 using bikeRental.Application.Models.Station;
 using bikeRental.Application.Services;
-using bikeRental.Application.Services.Impl;
-using bikeRental.Core.Entities;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity;
 
 namespace bikeRental.Frontend.Controllers;
 public class StationsController : Controller
@@ -32,8 +27,7 @@ public class StationsController : Controller
         ViewData["sortOrder"] = sortOrder;
         int pageSize = 5;
 
-        var stations = String.IsNullOrEmpty(searchString) ? _stationService.SortingSelection(sortOrder) :
-                                                            _stationService.SearchSelection(searchString);
+        var stations = _stationService.CheckSwitch(searchString, sortOrder);
 
         return View("/Pages/Stations/Index.cshtml", PaginatedList<StationResponse>.Create(stations, pageNumber ?? 1, pageSize));
     }
@@ -68,9 +62,7 @@ public class StationsController : Controller
     public async Task<IActionResult> Edit(Guid? id)
     {
         if (id == null)
-        {
-            return NotFound();
-        }
+            return BadRequest();
 
         var station = await _stationService.GetByIdAsync(id);
 

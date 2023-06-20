@@ -50,7 +50,15 @@
 		<tr>
 			@foreach (var prop in typeof(BicycleModel).GetProperties())
 			{
-				@if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "Station")
+                @if (prop.Name == "Description")
+				{
+                    <th>
+					@prop.Name
+                        <a style="color:black" asp-action="GetByStation" asp-route-sortOrder=@($"{prop.Name}Desc")><i class="bi bi-caret-up-fill"></i></a>
+                        <a style="color:black" asp-action="GetByStation" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
+                    </th>
+				}
+				else if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "Station"  && prop.Name != "IsAvailable")
 				{
 					<th>
 						@prop.Name
@@ -83,10 +91,7 @@
 				</td>
 				<td>
 					@item.Price
-				</td>
-				<td>
-					@item.IsAvailable
-				</td>				
+				</td>			
 				@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
 				{
 					<td>
@@ -109,19 +114,21 @@
 		var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 	}
 
-	<a asp-action="GetByStation"
+	<a asp-action="Index"
         asp-controller="Bicycles"
        asp-route-searchString="@ViewData[""]"
        asp-route-pageNumber="@(Model.PageIndex - 1)"
-       asp-route-filter="@ViewData["filterString"]"
+       asp-route-filterString="@ViewData["filterString"]"
+       asp-route-sortOrder="@ViewData["sortOrder"]"
        class="btn btn-default @prevDisabled">
         Previous
     </a>
-    <a asp-action="GetByStation"
+    <a asp-action="Index"
         asp-controller="Bicycles"
        asp-route-searchString="@ViewData["searchString"]"
        asp-route-pageNumber="@(Model.PageIndex + 1)"
-       asp-route-filter="@ViewData["filterString"]"
+       asp-route-filterString="@ViewData["filterString"]"
+       asp-route-sortOrder="@ViewData["sortOrder"]"
        class="btn btn-default @nextDisabled">
         Next
     </a>

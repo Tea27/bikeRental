@@ -41,15 +41,24 @@
 
 	<table class="table table-hover mt-5">
 		<tr>
-			<th>Station</th>
+			
 			@foreach (var prop in typeof(BicycleModel).GetProperties())
 			{
-				@if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "Station")
+                @if(prop.Name == "Station" || prop.Name == "Description")
+                {
+                   <th>
+                        @prop.Name
+                        <a style="color:black" asp-action="Index" value="@ViewData["sortOrder"]" asp-route-sortOrder=@($"{prop.Name}Desc")><i class="bi bi-caret-up-fill"></i></a>
+                        <a style="color:black" asp-action="Index" value="@ViewData["sortOrder"]" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
+					</th>
+                }
+				else if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "IsAvailable")
 				{
 					<th>
 						@prop.Name
 					</th>
 				}
+                
 			}
 			@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
 			{
@@ -75,9 +84,6 @@
 				<td>
 					@item.Price
 				</td>
-				<td>
-					@item.IsAvailable
-				</td>
 				@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
 				{
 					<td>
@@ -98,7 +104,8 @@
         asp-controller="Bicycles"
        asp-route-searchString="@ViewData[""]"
        asp-route-pageNumber="@(Model.PageIndex - 1)"
-       asp-route-filter="@ViewData["filterString"]"
+       asp-route-filterString="@ViewData["filterString"]"
+       asp-route-sortOrder="@ViewData["sortOrder"]"
        class="btn btn-default @prevDisabled">
         Previous
     </a>
@@ -106,7 +113,8 @@
         asp-controller="Bicycles"
        asp-route-searchString="@ViewData["searchString"]"
        asp-route-pageNumber="@(Model.PageIndex + 1)"
-       asp-route-filter="@ViewData["filterString"]"
+       asp-route-filterString="@ViewData["filterString"]"
+       asp-route-sortOrder="@ViewData["sortOrder"]"
        class="btn btn-default @nextDisabled">
         Next
     </a>

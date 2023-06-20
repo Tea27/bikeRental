@@ -16,7 +16,7 @@ public interface IStationService
     Task UpdateAsync(StationModel stationModel);
     Task Delete(Guid Id);
     string GetAddressess();
-    IEnumerable<StationResponse> SearchSelection(string searchString);
-    IEnumerable<StationResponse> SortingSelection(string sortOrder);
+    IEnumerable<StationResponse> CheckSwitch(string searchString, string sortOrder);
+
 }
 

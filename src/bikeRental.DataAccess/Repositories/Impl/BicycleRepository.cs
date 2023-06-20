@@ -1,10 +1,4 @@
 ﻿using bikeRental.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using bikeRental.DataAccess.Repositories;
 using bikeRental.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -25,10 +19,6 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
     {
         return DbSet.Include(b => b.Station).AsQueryable();
     }
-    public async Task<IEnumerable<TEntity>> GetByStation(Guid? stationId)
-    {
-        return await FindByCondition(TEntity => TEntity.Station.Id.Equals(stationId)).ToListAsync();
-    }
 
     public async Task<TEntity> AddAsync(TEntity entity, Guid stationId)
     {
@@ -44,14 +34,6 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
         }
 
         entity.Station = station;
-        if (entity.Type.ToString() == "Acoustic")
-        {
-            entity.Station.NumberOfBikes++;
-        }
-        else
-        {
-            entity.Station.NumberOfElectricBikes++;
-        }
 
         var addedEntity = (await DbSet.AddAsync(entity)).Entity;
         await _context.SaveChangesAsync();
@@ -68,9 +50,13 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
     {
         return DbSet.Include(x => x.Station).Where(expression).AsNoTracking();
     }
+
+    public IQueryable<TEntity> FindByCondition(IQueryable<TEntity> query, Expression<Func<TEntity, bool>> expression)
+    {
+        return query.Where(expression).AsNoTracking();
+    }
     public async Task UpdateAsync(TEntity entity, Guid stationId)
     {
-        entity.Station = await _context.Stations.FindAsync(stationId);
         try
         {
             _context.Attach(entity).State = EntityState.Modified;

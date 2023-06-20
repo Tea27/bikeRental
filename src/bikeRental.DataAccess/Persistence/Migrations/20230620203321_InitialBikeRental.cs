@@ -57,8 +57,6 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Address = table.Column<string>(type: "text", nullable: true),
-                    NumberOfBikes = table.Column<int>(type: "integer", nullable: false),
-                    NumberOfElectricBikes = table.Column<int>(type: "integer", nullable: false),
                     lattitude = table.Column<double>(type: "double precision", nullable: false),
                     longitude = table.Column<double>(type: "double precision", nullable: false)
                 },
@@ -255,13 +253,13 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                         column: x => x.CustomerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Orders_Bicycles_BicycleId",
                         column: x => x.BicycleId,
                         principalTable: "Bicycles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

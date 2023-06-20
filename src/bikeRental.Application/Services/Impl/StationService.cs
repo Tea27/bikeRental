@@ -1,17 +1,12 @@
 ﻿using AutoMapper;
 using bikeRental.Application.Exceptions;
+using bikeRental.Application.Models.Bicycle;
 using bikeRental.Application.Models.Station;
-using bikeRental.Application.Models.User;
 using bikeRental.Core.Entities;
 using bikeRental.DataAccess.Repositories;
 using bikeRental.DataAccess.Repositories.Impl;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
+
 
 namespace bikeRental.Application.Services.Impl;
 public class StationService : IStationService
@@ -69,24 +64,34 @@ public class StationService : IStationService
 
     }
 
-    public IEnumerable<StationResponse> SearchSelection(string searchString)
+    public IEnumerable<StationResponse> CheckSwitch(string searchString, string sortOrder)
     {
-        var stations = _stationRepository.FindByCondition(station => station.Address.ToLower().Contains(searchString.Trim().ToLower()));
+        bool SearchIsEmpty = String.IsNullOrEmpty(searchString);
+
+        var stations = _stationRepository.GetAll();
+
+        stations = (SearchIsEmpty) switch
+        {
+            false => Search(Sort(stations, sortOrder), searchString),
+            _ => Sort(stations, sortOrder),
+        };
+
         return _mapper.Map<IEnumerable<StationResponse>>(stations);
     }
-    public IEnumerable<StationResponse> SortingSelection(string sortOrder)
+
+    public IQueryable<Station> Search(IQueryable<Station> stations, string searchString)
     {
-        var stations = _stationRepository.GetAll();
+        return _stationRepository.FindByCondition(stations, station => station.Address.ToLower().Contains(searchString.Trim().ToLower()));
+    }
+    public IQueryable<Station> Sort(IQueryable<Station> stations, string sortOrder)
+    {
         switch (sortOrder)
         {
             case "AddressDesc":
-                stations = stations.OrderByDescending(s => s.Address);
-                break;
+                return stations.OrderByDescending(s => s.Address);
             default:
-                stations = stations.OrderBy(s => s.Address);
-                break;
+                return stations.OrderBy(s => s.Address);
         }
-        return _mapper.Map<IEnumerable<StationResponse>>(stations);
     }
 
 

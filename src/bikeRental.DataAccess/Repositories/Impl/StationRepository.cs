@@ -38,6 +38,10 @@ public class StationRepository<TEntity> : IStationRepository<TEntity> where TEnt
     {
         return DbSet.Where(expression).AsNoTracking();
     }
+    public IQueryable<TEntity> FindByCondition(IQueryable<TEntity> entity, Expression<Func<TEntity, bool>> expression)
+    {
+        return entity.Where(expression).AsNoTracking();
+    }
     public IQueryable<TEntity> GetAll()
     {
         return DbSet.AsQueryable();

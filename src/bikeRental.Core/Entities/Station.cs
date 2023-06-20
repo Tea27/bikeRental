@@ -10,11 +10,6 @@ namespace bikeRental.Core.Entities
     public class Station : BaseEntity
     {
         public string Address { get; set; }
-
-        public int NumberOfBikes { get; set; }
-
-        public int NumberOfElectricBikes { get; set; }
-
         public double lattitude { get; set; }
         public double longitude { get; set; }
         public ICollection<Bicycle> Bicycles { get; set; }

@@ -1,12 +1,6 @@
 ﻿using bikeRental.Application.Models.Bicycle;
-using bikeRental.Application.Models.Order;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace bikeRental.Application.Models.Station;
 public class StationModel : BaseResponseModel
@@ -18,12 +12,6 @@ public class StationModel : BaseResponseModel
     public string Address { get; set; }
 
     [Required]
-    [DisplayName("Number of Acoustic")]
-    [Range(0, int.MaxValue, ErrorMessage = "The {0} field must be greater than or equal to {1}.")]
-    //  [RegularExpression(@"^\d+$", ErrorMessage = "Only digits are allowed.")]
-    public int NumberOfBikes { get; set; }
-
-    [Required]
     [DisplayName("Lattitude")]
     [Range(0, double.MaxValue, ErrorMessage = "The {0} field must be greater than or equal to {1}.")]
     public double lattitude { get; set; }
@@ -31,12 +19,6 @@ public class StationModel : BaseResponseModel
     [DisplayName("Longitude")]
     [Range(0, double.MaxValue, ErrorMessage = "The {0} field must be greater than or equal to {1}.")]
     public double longitude { get; set; }
-
-    [Required]
-    //[RegularExpression(@"^\d+$", ErrorMessage = "Only digits are allowed.")]
-    [DisplayName("Number of Electric")]
-    [Range(0, int.MaxValue, ErrorMessage = "The {0} field must be greater than or equal to {1}.")]
-    public int NumberOfElectricBikes { get; set; }
 
     public ICollection<BicycleModel> Bicycles { get; set; }
 }

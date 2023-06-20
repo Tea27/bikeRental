@@ -10,9 +10,6 @@ using System.Threading.Tasks;
 namespace bikeRental.Application.Services;
 public interface IBicycleService
 {
-    Task<IEnumerable<BicycleModel>> GetAllAsync();
-    Task<IEnumerable<BicycleModel>> GetByStation(Guid StationId);
-
     Task<BicycleModel> GetByIdAsync(Guid? id);
 
     Task Delete(Guid Id, Guid stationId);
@@ -21,10 +18,6 @@ public interface IBicycleService
 
     Task UpdateAsync(BicycleModel bicycleModel);
 
-    IEnumerable<BicycleModel> SearchSelection(string searchString);
-    IEnumerable<BicycleModel> SearchSelection(Guid Id, string searchString);
-
-    IEnumerable<BicycleModel> FilterSelection(string filterString);
-    IEnumerable<BicycleModel> FilterSelection(Guid Id, string filterString);
+    IEnumerable<BicycleModel> CheckSwitch(string filterString, string searchString, string sortOrder, Guid? Id = null);
 }
 

@@ -30,7 +30,7 @@ namespace bikeRental.Frontend.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetByStation(Guid Id, string searchString, string filterString, int? pageNumber)
+        public async Task<IActionResult> GetByStation(Guid Id, string searchString, string filterString, string sortOrder, int? pageNumber)
         {
             if (searchString != null)
             {
@@ -43,11 +43,11 @@ namespace bikeRental.Frontend.Controllers
 
             ViewData["searchString"] = searchString;
             ViewData["filterString"] = filterString;
+            ViewData["sortOrder"] = sortOrder;
             ViewData["id"] = station.Id;
             ViewData["address"] = station.Address;
 
-            var bicycles = String.IsNullOrEmpty(searchString) ? _bicycleService.FilterSelection(Id, filterString) :
-                                                            _bicycleService.SearchSelection(Id, searchString);
+            var bicycles = _bicycleService.CheckSwitch(filterString, searchString, sortOrder, Id);
 
             return View("/Pages/Bicycles/BicyclesOnStation.cshtml", PaginatedList<BicycleModel>.Create(bicycles, pageNumber ?? 1, pageSize));
 
@@ -104,7 +104,7 @@ namespace bikeRental.Frontend.Controllers
         }
 
 
-        public IActionResult Index(string searchString, string filterString, int? pageNumber)
+        public IActionResult Index(string searchString, string filterString, string sortOrder, int? pageNumber)
         {
 
             if (searchString != null)
@@ -115,24 +115,23 @@ namespace bikeRental.Frontend.Controllers
 
             ViewData["searchString"] = searchString;
             ViewData["filterString"] = filterString;
+            ViewData["sortOrder"] = sortOrder;
 
             int pageSize = 6;
 
-            var bicycles = String.IsNullOrEmpty(searchString) ? _bicycleService.FilterSelection(filterString) :
-                                                            _bicycleService.SearchSelection(searchString);
+            var bicycles = _bicycleService.CheckSwitch(filterString, searchString, sortOrder);
 
             return View("/Pages/Bicycles/Index.cshtml", PaginatedList<BicycleModel>.Create(bicycles, pageNumber ?? 1, pageSize));
 
         }
 
         [Authorize(Roles = ("Administrator"))]
-        public async Task<IActionResult> Create(Guid? stationId, string cname)
+        public async Task<IActionResult> Create(Guid? stationId)
         {
             if (stationId == null)
             {
                 return NotFound();
             }
-            ViewData["cname"] = cname;
 
             var bicycle = new BicycleModel { Station = await _stationService.GetByIdAsync(stationId) };
             return View("/Pages/Bicycles/Create.cshtml", bicycle);
@@ -176,8 +175,9 @@ namespace bikeRental.Frontend.Controllers
         [HttpPost, ActionName("Edit")]
         [Authorize(Roles = ("Administrator"))]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(BicycleModel bicycleModel)
+        public async Task<IActionResult> EditPost(BicycleModel bicycleModel, string cname)
         {
+            System.Diagnostics.Debug.WriteLine("cname " + cname);
             if (bicycleModel == null)
             {
                 return NotFound();
@@ -192,7 +192,7 @@ namespace bikeRental.Frontend.Controllers
                 ModelState.AddModelError("", "Unable to save changes. " + ex);
             }
 
-            return RedirectToAction(nameof(GetByStation), new { id = bicycleModel.Station.Id });
+            return (cname == "GetByStation") ? RedirectToAction(cname, new { id = bicycleModel.Station.Id }) : RedirectToAction(cname);
         }
 
     }

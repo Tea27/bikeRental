@@ -13,12 +13,6 @@ public class StationResponse : BaseResponseModel
 {
     public string Address { get; set; }
 
-    [DisplayName("Number of acoustic bikes")]
-    public int NumberOfBikes { get; set; }
-
-    [DisplayName("Number of electric bikes")]
-    public int NumberOfElectricBikes { get; set; }
-
     public ICollection<BicycleModel> Bicycles { get; set; }
 }
 

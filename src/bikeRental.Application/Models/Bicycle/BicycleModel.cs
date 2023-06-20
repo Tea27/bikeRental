@@ -1,8 +1,6 @@
 ﻿using bikeRental.Application.Models.Order;
 using bikeRental.Application.Models.Station;
 using bikeRental.Core.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -10,6 +8,9 @@ namespace bikeRental.Application.Models.Bicycle
 {
     public class BicycleModel : BaseResponseModel
     {
+        [Required]
+        public StationModel Station { get; set; }
+
         [Required]
         public BikeType Type { get; set; }
 
@@ -28,8 +29,5 @@ namespace bikeRental.Application.Models.Bicycle
         public bool IsAvailable { get; set; }
 
         public ICollection<OrderModel> Orders { get; set; }
-
-        [Required]
-        public StationModel Station { get; set; }
     }
 }
