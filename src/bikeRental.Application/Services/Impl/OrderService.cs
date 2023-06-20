@@ -113,15 +113,11 @@ namespace bikeRental.Application.Services.Impl
         /** 
          * Search orders for specific date
          * */
-        public IEnumerable<OrderResponse> SearchSelectionAsync(IEnumerable<OrderResponse> orders, DateTime dateSearch)
+        public IEnumerable<OrderResponse> SearchSelectionAsync(IEnumerable<OrderResponse> orders, DateTime dateSearchFrom, DateTime dateSearchTo)
         {
-            IEnumerable<OrderResponse> ordersSearched = orders.ToList();           
-            if (!dateSearch.Equals(new DateTime(0001, 01, 01, 00, 00, 00)) && dateSearch < DateTime.Now)
-            {
-                ordersSearched = orders.Where(o =>
-                    (o.RentalStartTime.Ticks <= dateSearch.Ticks && o.RentalEndTime.Ticks >=dateSearch.Ticks));
-            }
-            return ordersSearched;
+            IEnumerable<OrderResponse> ordersSearched = orders.ToList();                
+            return orders.Where(o => (o.RentalStartTime.Date.Ticks >= dateSearchFrom.Date.Ticks && o.RentalEndTime.Date.Ticks <= dateSearchTo.Date.Ticks));
+          
         }
         public IEnumerable<OrderResponse> SortingSelection(IEnumerable<OrderResponse> orders, string sortOrder)
         {

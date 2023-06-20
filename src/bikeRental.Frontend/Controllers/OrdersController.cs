@@ -36,27 +36,26 @@ namespace bikeRental.Frontend.Controllers
 
         [HttpGet]
         [Authorize(Roles = ("Administrator"))]
-        public async Task<IActionResult> Index(string currentCategory, string sortOrder, DateTime currentFilter, DateTime searchDate, int? pageNumber)
+        public async Task<IActionResult> Index(string currentCategory, string sortOrder, DateTime searchDateFrom, DateTime searchDateTo, int? pageNumber)
         {
-            if (!searchDate.Equals(new DateTime(0001, 01, 01, 00, 00, 00)))
+            if (pageNumber == null)
             {
                 pageNumber = 1;
             }
-            else
-            {
-                searchDate = currentFilter;
-            }
-
-            ViewData["CurrentCategory"] = currentCategory;
-            ViewData["CurrentFilter"] = searchDate;
+          
+            ViewData["SearchDateFrom"] = searchDateFrom;
+            ViewData["SearchDateTo"] = searchDateTo;
             ViewData["SortOrder"] = sortOrder;
             int pageSize = 4;
 
             var orders = await _orderService.GetAllAsync();
 
             orders = _orderService.SortingSelection(orders, sortOrder);
-            orders = _orderService.SearchSelectionAsync(orders, searchDate);
-
+            if (searchDateTo != DateTime.MinValue)
+            {
+                orders = _orderService.SearchSelectionAsync(orders, searchDateFrom, searchDateTo);
+            }
+            
             return View("/Pages/Orders/Index.cshtml", PaginatedList<OrderResponse>.Create(orders, pageNumber ?? 1, pageSize));
         }
 
@@ -71,46 +70,22 @@ namespace bikeRental.Frontend.Controllers
 
             int pageSize = 4;
 
-            var orders = await _orderService.GetAllAsync();
-            List<OrderResponse> userOrders = new List<OrderResponse>();
+            var orders = await _orderService.GetByCustomer(userID);
+         
+            orders = _orderService.SortingSelection(orders, sortOrder);
 
-            var stations = _stationService.GetAll();
-
-            foreach (OrderResponse order in orders)
-            {
-                if (order.Customer.Id == userID)
-                {
-                    foreach (StationResponse s in stations)
-                    {
-                        var bicycles = s.Bicycles;
-                        foreach (BicycleModel b in bicycles)
-                        {
-                            if (order.Bicycle.Id == b.Id)
-                            {
-                                var station = await _stationService.GetByIdAsync(s.Id);
-                                order.Bicycle.Station = station;
-                                userOrders.Add(order);
-                            }
-                        }
-                    }
-                }
-            }
-
-            IEnumerable<OrderResponse> response = userOrders.AsEnumerable();
-            response = _orderService.SortingSelection(response, sortOrder);
-
-            return View("/Pages/Orders/UserIndex.cshtml", PaginatedList<OrderResponse>.Create(response, pageNumber ?? 1, pageSize));
+            return View("/Pages/Orders/UserIndex.cshtml", PaginatedList<OrderResponse>.Create(orders, pageNumber ?? 1, pageSize));
         }
 
         [Authorize]
-        public async Task<IActionResult> Create(Guid? bicycleId, Guid stationId)
+        public async Task<IActionResult> Create(Guid? bicycleId)
         {
             var userID = Guid.Parse(User.Identity.GetUserId());
-            if (bicycleId == null || stationId == null)
+            if (bicycleId == null )
             {
-                return NotFound();
+                return BadRequest();
             }
-
+         
             var order = new OrderModel
             {
                 RentalStartTime = DateTime.Now,
@@ -128,7 +103,7 @@ namespace bikeRental.Frontend.Controllers
         [Authorize]
         public async Task<IActionResult> Create(OrderModel orderModel)
         {
-            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            //var errors = ModelState.Values.SelectMany(v => v.Errors);
             try
             {
                 if (ModelState.IsValid)
@@ -151,10 +126,12 @@ namespace bikeRental.Frontend.Controllers
         [Authorize]
         public async Task<IActionResult> Finish(Guid? orderId, Guid bicycleId, Guid stationId)
         {
+            ViewData["Stations"] = _stationService.GetAll();
+       
             var userID = Guid.Parse(User.Identity.GetUserId());
-            if (orderId == null || bicycleId == null || stationId == null)
+            if (orderId == null)
             {
-                return NotFound();
+                return BadRequest();
             }
             var order = await _orderService.GetByIdAsync(orderId, userID, bicycleId);
             var station = await _stationService.GetByIdAsync(stationId);
@@ -167,8 +144,9 @@ namespace bikeRental.Frontend.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Finish(OrderModel orderModel)
+        public async Task<IActionResult> Finish(OrderModel orderModel, Guid stationId)
         {
+            
             var errors = ModelState.Values.SelectMany(v => v.Errors);
             try
             {
@@ -182,17 +160,20 @@ namespace bikeRental.Frontend.Controllers
                     orderModel.RentalPrice = Math.Ceiling(Decimal.Divide(total, 30)) * orderModel.Bicycle.Price;
 
                     if (orderModel.RentalPrice != 0)
-                    {
+                    {   
+                       
                         var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id);
-                        bicycle.IsAvailable = true;
+                        bicycle.IsAvailable = true;                
                         await _bicycleService.UpdateAsync(bicycle);
                         await _orderService.UpdateAsync(orderModel);
                     }
                     else
-                    {
+                    {                       
+                        var station = await _stationService.GetByIdAsync(stationId);
                         orderModel.RentalPrice = orderModel.Bicycle.Price;
                         var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id);
                         bicycle.IsAvailable = true;
+                        bicycle.Station = station;
                         await _bicycleService.UpdateAsync(bicycle);
                         await _orderService.UpdateAsync(orderModel);
                     }

@@ -13,7 +13,7 @@ namespace bikeRental.Application.Services
         Task<OrderModel> GetByIdAsync(Guid? id);
         Task<OrderModel> GetByIdAsync(Guid? id, Guid customerId, Guid bicycleId);
         Task<IEnumerable<OrderResponse>> GetAllAsync();
-        IEnumerable<OrderResponse> SearchSelectionAsync(IEnumerable<OrderResponse> orders, DateTime dateSearch);
+        IEnumerable<OrderResponse> SearchSelectionAsync(IEnumerable<OrderResponse> orders, DateTime dateSearchFrom, DateTime dateSearchTo );
         Task UpdateAsync(OrderModel orderModel);
         IEnumerable<OrderResponse> SortingSelection(IEnumerable<OrderResponse> orders, string sortOrder);
         Task Delete(Guid Id);

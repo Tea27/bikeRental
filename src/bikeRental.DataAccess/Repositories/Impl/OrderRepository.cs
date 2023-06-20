@@ -57,13 +57,13 @@ namespace bikeRental.DataAccess.Repositories.Impl
 
         public IQueryable<TEntity> GetAll()
         {
-            var orders = DbSet.Include(o => o.Bicycle).Include(o => o.Customer).AsQueryable();         
+            var orders = DbSet.Include(o => o.Customer).Include(o => o.Bicycle).ThenInclude(b => b.Station).AsQueryable();         
             return orders;
         }
 
         public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
         {
-            return DbSet.Include(o => o.Customer).Include(o => o.Bicycle).Where(expression).AsNoTracking();
+            return DbSet.Include(o => o.Customer).Include(o => o.Bicycle).ThenInclude(b => b.Station).Where(expression).AsNoTracking();
         }
 
        

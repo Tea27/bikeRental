@@ -13,11 +13,13 @@
     <h2>All Orders</h2>
     <div class="container">
         <div class="row justify-content-between">
-            <div class="col-6">
+            <div class="col-12">
                 <form asp-controller="Orders" asp-action="Index" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
                     <div class="input-group">
-                     
-                        <input type="datetime-local" name="SearchDate" value="@ViewData["CurrentFilter"]" class="form-control" />
+                        <label for="SearchDateFrom">Date from:</label>
+                        <input type="date" name="SearchDateFrom" value="@ViewData["SearchDateFrom"]" class="form-control" />
+                        <label for="SearchDateTo">Date to:</label>
+                         <input type="date" name="SearchDateTo" value="@ViewData["SearchDateTo"]" class="form-control" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
                             <a class="btn btn-light" asp-action="Index">Back to Full List</a>

@@ -1,14 +1,17 @@
-﻿@model bikeRental.Application.Models.Order.OrderModel
+﻿@using bikeRental.Application.Models.Station;
+@model bikeRental.Application.Models.Order.OrderModel
 
 @{
     ViewData["Title"] = "Finish";
+    var stations = ViewData["Stations"] as IEnumerable<StationResponse>;
+    Guid stationId = new Guid() ;
 }
 
 <div class="container mx-4 pt-2">
     <div class="row justify-content-center">
         <div class="col-md-4">
             <h2>End your ride</h2>
-            <form asp-action="Finish">
+            <form asp-action="Finish" asp-route-address="@stationId">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="Customer.Id" />
@@ -31,7 +34,14 @@
                 <input type="hidden" asp-for="RentalStartTime" />
                 <input type="hidden" asp-for="RentalEndTime" />
                 <input type="hidden" asp-for="RentalPrice" />
-
+                <select class="form-select required" aria-label="Example select with button addon" name="stationId">
+                    <option value="">All stations</option>
+                    @foreach (var station in stations)
+                    {
+                        <option value="@station.Id" selected="@(station.Id == stationId)">@station.Address</option>                     
+                        
+                    }
+                </select>
                 <h4>Your renting time ends now! </h4>
 
 
