@@ -52,7 +52,7 @@
                         <a style="color:black" asp-action="Index" value="@ViewData["sortOrder"]" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
 					</th>
                 }
-				else if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "IsAvailable")
+				else if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "Status")
 				{
 					<th>
 						@prop.Name

@@ -13,6 +13,7 @@ using bikeRental.Application.Models.User;
 using System.Xml.Linq;
 using bikeRental.Application.Models.Bicycle;
 using AutoMapper;
+using bikeRental.Core.Enums;
 
 namespace bikeRental.Frontend.Controllers
 {
@@ -109,7 +110,7 @@ namespace bikeRental.Frontend.Controllers
                 if (ModelState.IsValid)
                 {
                     var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id);
-                    bicycle.IsAvailable = false;
+                    bicycle.Status = BikeStatus.InUse;
                     await _bicycleService.UpdateAsync(bicycle);
                     await _orderService.AddAsync(orderModel, orderModel.Customer.Id, orderModel.Bicycle.Id);
                 }
@@ -163,7 +164,7 @@ namespace bikeRental.Frontend.Controllers
                     {   
                        
                         var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id);
-                        bicycle.IsAvailable = true;                
+                        bicycle.Status = BikeStatus.Available;                
                         await _bicycleService.UpdateAsync(bicycle);
                         await _orderService.UpdateAsync(orderModel);
                     }
@@ -172,7 +173,7 @@ namespace bikeRental.Frontend.Controllers
                         var station = await _stationService.GetByIdAsync(stationId);
                         orderModel.RentalPrice = orderModel.Bicycle.Price;
                         var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id);
-                        bicycle.IsAvailable = true;
+                        bicycle.Status = BikeStatus.Available;
                         bicycle.Station = station;
                         await _bicycleService.UpdateAsync(bicycle);
                         await _orderService.UpdateAsync(orderModel);

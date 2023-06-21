@@ -33,4 +33,8 @@ public class EditUserModel : BaseResponseModel
     [Required]
     [Display(Name = "User role")]
     public Role Role { get; set; }
+
+    [Required]
+    [Display(Name = "Account status")]
+    public AccountStatus Status { get; set; }
 }

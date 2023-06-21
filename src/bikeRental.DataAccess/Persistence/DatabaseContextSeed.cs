@@ -28,7 +28,7 @@ public static class DatabaseContextSeed
         if (!userManager.Users.Any())
         {
             var emailStore = (IUserEmailStore<ApplicationUser>)userStore;
-            var user = new ApplicationUser { UserName = "admin@admin.com", Email = "admin@admin.com", EmailConfirmed = true, FirstName = "Admin", LastName = "Admin" };
+            var user = new ApplicationUser { UserName = "admin@admin.com", Email = "admin@admin.com", EmailConfirmed = true, FirstName = "Admin", LastName = "Admin", Status = AccountStatus.Active};
             await userStore.SetUserNameAsync(user, user.Email, CancellationToken.None);
             await emailStore.SetEmailAsync(user, user.Email, CancellationToken.None);
 

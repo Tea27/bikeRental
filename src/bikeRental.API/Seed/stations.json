@@ -8,25 +8,25 @@
         "Type": "Electric",
         "Description": "VIVI 26 Inch Electric Mountain Bike",
         "Price": 7.22,
-        "IsAvailable": true
+        "Status": "Available"
       },
       {
         "Type": "Electric",
         "Description": "MYATU E-Bike 20 Inch Electric Bicycle",
         "Price": 7.68,
-        "IsAvailable": true
+        "Status": "Available"
       },
       {
         "Type": "Acoustic",
         "Description": "Hiland mountain bike MTB",
         "Price": 5.53,
-        "IsAvailable": true
+        "Status": "Available"
       },
       {
         "Type": "Acoustic",
         "Description": "Tretwerk - Mountain Bike",
         "Price": 4.90,
-        "IsAvailable": true
+        "Status": "Available"
       }
     ]
   },
@@ -39,25 +39,25 @@
         "Type": "Electric",
         "Description": "VIVI 26 Inch Electric Mountain Bike",
         "Price": 7.22,
-        "IsAvailable": true
+        "Status": "Available"
       },
       {
         "Type": "Electric",
         "Description": "YYG E-Bike Electric Bicycle",
         "Price": 7.76,
-        "IsAvailable": true
+        "Status": "Available"
       },
       {
         "Type": "Acoustic",
         "Description": "Tretwerk - Mountain Bike",
         "Price": 4.90,
-        "IsAvailable": true
+        "Status": "Available"
       },
       {
         "Type": "Acoustic",
         "Description": "RibasuBB 26 Inch",
         "Price": 5.20,
-        "IsAvailable": true
+        "Status": "Available"
       }
     ]
   },
@@ -70,25 +70,25 @@
         "Type": "Electric",
         "Description": "YYG E-Bike Electric Bicycle",
         "Price": 7.76,
-        "IsAvailable": true
+        "Status": "Available"
       },
       {
         "Type": "Electric",
         "Description": "VIVI 26 Inch Electric Mountain Bike",
         "Price": 7.22,
-        "IsAvailable": true
+        "Status": "Available"
       },
       {
         "Type": "Acoustic",
         "Description": "Tretwerk - Mountain Bike",
         "Price": 4.90,
-        "IsAvailable": true
+        "Status": "Available"
       },
       {
         "Type": "Acoustic",
         "Description": "RibasuBB 26 Inch",
         "Price": 5.20,
-        "IsAvailable": true
+        "Status": "Available"
       }
     ]
   },
@@ -101,25 +101,25 @@
         "Type": "Electric",
         "Description": "YYG E-Bike Electric Bicycle",
         "Price": 7.76,
-        "IsAvailable": true
+        "Status": "Available"
       },
       {
         "Type": "Electric",
         "Description": "VIVI 26 Inch Electric Mountain Bike",
         "Price": 7.22,
-        "IsAvailable": true
+        "Status": "Available"
       },
       {
         "Type": "Acoustic",
         "Description": "RibasuBB 26 Inch",
         "Price": 5.20,
-        "IsAvailable": true
+        "Status": "Available"
       },
       {
         "Type": "Acoustic",
         "Description": "Tretwerk - Mountain Bike",
         "Price": 4.90,
-        "IsAvailable": true
+        "Status": "Available"
       }
     ]
   }

@@ -20,7 +20,7 @@ namespace bikeRental.Core.Entities
 
         public decimal Price { get; set; }
 
-        public bool IsAvailable { get; set; }
+        public BikeStatus Status { get; set; }
 
         public ICollection<Order> Orders { get; set; }
 

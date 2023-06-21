@@ -26,7 +26,7 @@ namespace bikeRental.Application.Models.Bicycle
 
         [Required]
         [DisplayName("Status")]
-        public bool IsAvailable { get; set; }
+        public BikeStatus Status { get; set; }
 
         public ICollection<OrderModel> Orders { get; set; }
     }

@@ -114,7 +114,6 @@ public class UserService : IUserService
     {
         var user = _mapper.Map<ApplicationUser>(userModel);
         await _userRepository.AddAsync(user, userModel.Role.ToString(), userModel.Password);
-        //return _mapper.Map<UserModel>(user);
     }
 
     public async Task<UserModel> GetByIdAsync(Guid? id)
