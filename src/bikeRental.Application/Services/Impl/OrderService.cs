@@ -140,5 +140,15 @@ namespace bikeRental.Application.Services.Impl
             }
         }
 
+        public decimal GetRentalPrice(DateTime rentalStartTime, DateTime rentalEndTime, decimal price)
+        {
+            var diffOfDates = rentalEndTime.Subtract(rentalStartTime);
+            var days = diffOfDates.Days;
+            var hours = diffOfDates.Hours;
+            var minutes = diffOfDates.Minutes;
+            var total = minutes + (hours * 60) + (days * 24 * 60);
+            return total < 30 ? price : Math.Ceiling(Decimal.Divide(total, 30))*price;
+        }
+
     }
 }

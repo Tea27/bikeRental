@@ -1,6 +1,8 @@
 ﻿using bikeRental.Application;
+using bikeRental.Application.Models.Bicycle;
 using bikeRental.Application.Models.Station;
 using bikeRental.Application.Services;
+using bikeRental.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +11,12 @@ namespace bikeRental.Frontend.Controllers;
 public class StationsController : Controller
 {
     private readonly IStationService _stationService;
+    private readonly IBicycleService _bicycleService;
 
-    public StationsController(IStationService stationService)
+    public StationsController(IStationService stationService, IBicycleService bicycleService)
     {
         _stationService = stationService;
+        _bicycleService = bicycleService;
     }
 
     [HttpGet]
@@ -100,6 +104,9 @@ public class StationsController : Controller
     [Authorize(Roles = ("Administrator"))]
     public async Task<IActionResult> Delete(Guid? id, bool? saveChangesError = false)
     {
+        ViewData["Stations"] =  _stationService.GetAll();
+        ViewData["hasBicycles"] = "no";
+
         if (id == null)
             return BadRequest();
 
@@ -109,8 +116,11 @@ public class StationsController : Controller
         {
             return NotFound();
         }
-
-        if (saveChangesError.GetValueOrDefault())
+        if (station.Bicycles.Any())
+        {
+            ViewData["hasBicycles"] = "yes";
+        }
+            if (saveChangesError.GetValueOrDefault())
         {
             ViewData["ErrorMessage"] = _stationService.SaveError(id);
         }
@@ -121,9 +131,9 @@ public class StationsController : Controller
     [HttpPost, ActionName("Delete")]
     [Authorize(Roles = ("Administrator"))]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(Guid id)
+    public async Task<IActionResult> DeleteConfirmed(Guid id, Guid stationId)
     {
-        var station = _stationService.GetByIdAsync(id);
+        var station = await _stationService.GetByIdAsync(id);
 
         if (station == null)
         {
@@ -132,6 +142,16 @@ public class StationsController : Controller
 
         try
         {
+            if (station.Bicycles.Any()) 
+            {
+                /*foreach (var bike in station.Bicycles)
+                {
+                    bike.Station.Id = stationId;
+                    await _bicycleService.UpdateAsync(bike);
+                }*/
+                await _bicycleService.UpdateManyAsync(station.Bicycles);
+                station.Bicycles.Clear();
+            }           
             await _stationService.Delete(id);
             return RedirectToAction(nameof(Index));
         }

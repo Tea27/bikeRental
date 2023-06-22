@@ -90,8 +90,29 @@ public class BicycleService : IBicycleService
     public async Task UpdateAsync(BicycleModel bicycleModel)
     {
         var bicycleNew = _mapper.Map<Bicycle>(bicycleModel);
-        await _bicycleRepository.UpdateAsync(bicycleNew, bicycleModel.Station.Id);
+        await _bicycleRepository.UpdateAsync(bicycleNew);
     }
+
+    public async Task UpdateManyAsync(ICollection<BicycleModel> bicycleModels)
+    {
+        IEnumerable<Bicycle> bicycles = Enumerable.Empty<Bicycle>();
+        foreach(var bicycle in bicycleModels)
+        {
+            var bicycleNew = _mapper.Map<Bicycle>(bicycle);
+            bicycles.Append(bicycleNew);
+            Console.WriteLine("--------"+ bicycleNew.Description);
+        }
+        await _bicycleRepository.UpdateManyAsync(bicycles.ToList<Bicycle>());
+    }
+
+    /*public async Task MoveBikesToAnotherStation(ICollection<BicycleModel> bicycles, Guid stationId)
+    {
+        foreach (var bike in bicycles)
+        {
+            bike.Station.Id = stationId;
+            _ = UpdateAsync(bike);
+        }
+    }*/
 
 
 }

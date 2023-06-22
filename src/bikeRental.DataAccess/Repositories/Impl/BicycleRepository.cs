@@ -55,7 +55,7 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
     {
         return query.Where(expression).AsNoTracking();
     }
-    public async Task UpdateAsync(TEntity entity, Guid stationId)
+    public async Task UpdateAsync(TEntity entity)
     {
         try
         {
@@ -72,6 +72,24 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
     {
         var bicycle = await GetByIdAsync(id);
         DbSet.Remove(bicycle);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateManyAsync(IEnumerable<TEntity> entities)
+    {
+        Console.WriteLine("----ulazim u repo-" );
+        try
+        {
+            foreach ( var entity in entities)
+            {
+                _context.Attach(entity).State = EntityState.Modified;            
+            }         
+        }
+        catch (DbUpdateException ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex);
+        }
+
         await _context.SaveChangesAsync();
     }
 

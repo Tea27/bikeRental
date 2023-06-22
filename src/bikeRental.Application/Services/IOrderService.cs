@@ -20,5 +20,7 @@ namespace bikeRental.Application.Services
         Task<IEnumerable<OrderResponse>> GetByCustomer(Guid CustomerId);
         Task<IEnumerable<OrderResponse>> GetByBicycle(Guid BicycleId);
 
+        decimal GetRentalPrice(DateTime rentalStartTime, DateTime rentalEndTime, decimal price);
+
     }
 }

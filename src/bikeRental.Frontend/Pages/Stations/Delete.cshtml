@@ -1,7 +1,11 @@
-﻿@model bikeRental.Application.Models.Station.StationModel
+﻿@using bikeRental.Application.Models.Station
+@model bikeRental.Application.Models.Station.StationModel
 @{
     ViewData["Title"] = "Delete";
     var error = ViewData["ErrorMessage"] as string;
+    var stations = ViewData["Stations"] as IEnumerable<StationResponse>;
+    Guid stationId = new Guid();
+    var hasBicycles = ViewData["hasBicycles"] as string;
 }
 
 
@@ -20,7 +24,19 @@
                 </dd>
             </dl>
 
-            <form asp-action="Delete" class="mt-4" id="deleteForm">
+            <form asp-action="Delete" class="mt-4" id="deleteForm" asp-route-stationId="@stationId">
+                @if(hasBicycles == "yes"){
+                <select class="form-select required" aria-label="Example select with button addon" name="stationId">
+                    <option value="">Move bicycles to another station</option>
+                    @foreach (var station in stations)
+                    {
+                        @if (station.Id != Model.Id)
+                        {
+                            <option value="@station.Id" selected="@(station.Id == stationId)">@station.Address</option>
+                        }
+                    }
+                </select>
+                }               
                 <input type="hidden" asp-for="@Model.Id" />
                 <button type="submit" class="btn btn-danger">Delete</button>
                 <a class="btn btn-light" asp-action="Index">Back to Full List</a>

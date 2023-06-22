@@ -7,13 +7,12 @@
     ViewData["Title"] = "Orders";
 }
 
-@ViewData["CurrentCategory"]
 <div class="container px-4 pt-2">
     <h2>Orders</h2>
     <div class="container">
         <div class="row justify-content-between">
             <div class="col-6">
-                <form asp-controller="Orders" asp-action="UserIndex" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
+                <form asp-controller="Orders" asp-action="UserIndex" method="get">
                     <div class="input-group">
 @*
                         <input type="datetime-local" name="SearchDate" value="@ViewData["CurrentFilter"]" class="form-control" />
@@ -24,15 +23,6 @@
                     </div>
                 </form>
             </div>
-           @* <div class="col-4">
-                @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
-                {
-                    <div>
-
-                        <a class="btn btn-outline-success" asp-controller="Orders" asp-action="Create"><i class="bi bi-house-add"> Create new Order</i></a>
-                    </div>
-                }
-            </div>*@
         </div>
     </div>
 
@@ -51,13 +41,6 @@
                         }                    
                     </th>
                 }
-            }
-
-            @if (User.Identity!.IsAuthenticated)
-            {
-                <th>
-                    Delete
-                </th>
             }
            
             <th>
@@ -87,14 +70,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Bicycle.Description)
                     </td>
-
-                    @if (User.Identity!.IsAuthenticated)
-                    {
-                        <td>
-                           @* <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>*@
-@*                            <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.Id" asp-route-bicycleId="@item.Bicycle.Id" asp-route-customerId="@item.Customer.Id"><i class="bi bi-trash"></i></a>
-*@                        </td>
-                    }
+                  
                     <td>
                         <i class="bi bi-check2-circle"></i>
                     </td>
@@ -116,13 +92,6 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Bicycle.Description)
                     </td>
-
-                    if (User.Identity!.IsAuthenticated)
-                    {
-                        <td>
-                            <i class="bi bi-dash"></i>
-                        </td>
-                    }
                     <td>
                         <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Finish" asp-route-orderId="@item.Id" asp-route-bicycleId="@item.Bicycle.Id" asp-route-stationId="@item.Bicycle.Station.Id"><i class="bi bi-stop"></i>
                     </a>
@@ -140,7 +109,6 @@
 
     <a asp-action="UserIndex"
        asp-controller="Orders"
-       asp-route-currentCategory="@ViewData["CurrentCategory"]"
        asp-route-pageNumber="@(Model.PageIndex - 1)"
        asp-route-sortOrder="@ViewData["SortOrder"]"
        class="btn btn-default @prevDisabled">
@@ -148,7 +116,6 @@
     </a>
     <a asp-action="UserIndex"
        asp-controller="Orders"
-       asp-route-currentCategory="@ViewData["CurrentCategory"]"
        asp-route-pageNumber="@(Model.PageIndex + 1)"
        asp-route-sortOrder="@ViewData["SortOrder"]"
        class="btn btn-default @nextDisabled">

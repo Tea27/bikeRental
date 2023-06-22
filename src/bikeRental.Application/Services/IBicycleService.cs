@@ -19,5 +19,7 @@ public interface IBicycleService
     Task UpdateAsync(BicycleModel bicycleModel);
 
     IEnumerable<BicycleModel> CheckSwitch(string filterString, string searchString, string sortOrder, Guid? Id = null);
+    Task UpdateManyAsync(ICollection<BicycleModel> bicycleModels);
+    //void MoveBikesToAnotherStation(ICollection<BicycleModel> bicycles, Guid stationId);
 }
 

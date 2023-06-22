@@ -91,8 +91,8 @@
 				</td>
 				<td>
 					@item.Price
-				</td>			
-				@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+				</td>
+                @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator") && item.Status != BikeStatus.InUse)
 				{
 					<td>
 						<a class="btn btn-outline-primary" asp-controller="Bicycles" asp-action="Edit" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id" asp-route-cname="GetByStation"><i class="bi bi-pen"></i></a>
