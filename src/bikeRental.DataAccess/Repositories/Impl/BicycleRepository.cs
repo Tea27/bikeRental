@@ -75,15 +75,17 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateManyAsync(IEnumerable<TEntity> entities)
-    {
-        Console.WriteLine("----ulazim u repo-" );
+    public async Task UpdateManyAsync(List<Guid> bicycleIds, Station station)
+    {       
         try
-        {
-            foreach ( var entity in entities)
+        {            
+            var bicyclesToUpdate = await DbSet.Where(b => bicycleIds.Contains(b.Id)).ToListAsync();
+
+            foreach (var bicycle in bicyclesToUpdate)
             {
-                _context.Attach(entity).State = EntityState.Modified;            
-            }         
+                Console.WriteLine("----bike---" + bicycle.Id);
+                bicycle.Station = station;
+            }
         }
         catch (DbUpdateException ex)
         {

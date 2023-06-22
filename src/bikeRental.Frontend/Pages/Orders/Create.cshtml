@@ -35,7 +35,7 @@
                 
                 <div class="form-group mt-3">
                     <input type="submit" value="Create" class="btn btn-primary" />
-                    <a class="btn btn-light" asp-controller="Orders" asp-action="UserIndex">Back to Full List</a>
+                    <a class="btn btn-light" asp-controller="Bicycles" asp-action="GetByStation" asp-route-Id="@Model.Bicycle.Station.Id">Back to Full List</a>
                 </div>
             </form>
         </div>

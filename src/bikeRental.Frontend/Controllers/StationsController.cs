@@ -144,12 +144,8 @@ public class StationsController : Controller
         {
             if (station.Bicycles.Any()) 
             {
-                /*foreach (var bike in station.Bicycles)
-                {
-                    bike.Station.Id = stationId;
-                    await _bicycleService.UpdateAsync(bike);
-                }*/
-                await _bicycleService.UpdateManyAsync(station.Bicycles);
+                await _bicycleService.UpdateManyAsync(station.Bicycles, station);
+                //await _bicycleService.UpdateManyAsync(station.Bicycles);
                 station.Bicycles.Clear();
             }           
             await _stationService.Delete(id);

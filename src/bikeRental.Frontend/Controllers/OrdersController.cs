@@ -145,7 +145,7 @@ namespace bikeRental.Frontend.Controllers
         [Authorize]
         public async Task<IActionResult> Finish(OrderModel orderModel, Guid stationId)
         {
-            var user = await _userService.GetByIdAsync(Guid.Parse(User.Identity.GetUserId()));
+            var user = await _userService.GetByIdAsync(Guid.Parse(User.Identity.GetUserId()));      
 
             if(user.Id != orderModel.Customer.Id)
             {
@@ -159,7 +159,10 @@ namespace bikeRental.Frontend.Controllers
                     orderModel.RentalPrice = _orderService.GetRentalPrice(orderModel.RentalStartTime, orderModel.RentalEndTime, orderModel.Bicycle.Price);
                     var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id);
                     bicycle.Status = BikeStatus.Available;
-                    bicycle.Station = await _stationService.GetByIdAsync(stationId);
+                    if(orderModel.Bicycle.Station.Id != stationId)
+                    {                       
+                        bicycle.Station = await _stationService.GetByIdAsync(stationId);                        
+                    }
                     await _bicycleService.UpdateAsync(bicycle);
                     await _orderService.UpdateAsync(orderModel);
                 }

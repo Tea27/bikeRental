@@ -3,6 +3,7 @@ using bikeRental.Core.Entities;
 using bikeRental.Application.Models.Bicycle;
 using bikeRental.DataAccess.Repositories;
 using bikeRental.Core.Enums;
+using bikeRental.Application.Models.Station;
 
 namespace bikeRental.Application.Services.Impl;
 public class BicycleService : IBicycleService
@@ -93,16 +94,14 @@ public class BicycleService : IBicycleService
         await _bicycleRepository.UpdateAsync(bicycleNew);
     }
 
-    public async Task UpdateManyAsync(ICollection<BicycleModel> bicycleModels)
+    public async Task UpdateManyAsync(ICollection<BicycleModel> bicycleModels, StationModel stationModel)
     {
-        IEnumerable<Bicycle> bicycles = Enumerable.Empty<Bicycle>();
-        foreach(var bicycle in bicycleModels)
+        var bicycleIds = new List<Guid>();
+        foreach (var bicycle in bicycleModels)
         {
-            var bicycleNew = _mapper.Map<Bicycle>(bicycle);
-            bicycles.Append(bicycleNew);
-            Console.WriteLine("--------"+ bicycleNew.Description);
+            bicycleIds.Add(bicycle.Id);
         }
-        await _bicycleRepository.UpdateManyAsync(bicycles.ToList<Bicycle>());
+        await _bicycleRepository.UpdateManyAsync(bicycleIds, _mapper.Map<Station>(stationModel));
     }
 
     /*public async Task MoveBikesToAnotherStation(ICollection<BicycleModel> bicycles, Guid stationId)
