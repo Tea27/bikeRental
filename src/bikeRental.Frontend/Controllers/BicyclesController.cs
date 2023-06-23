@@ -7,11 +7,13 @@ using bikeRental.Application.Models.Bicycle;
 using bikeRental.Application.Services;
 using bikeRental.Application.Services.Impl;
 using Microsoft.EntityFrameworkCore;
-
+using bikeRental.Core.Enums;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using System.Xml.Linq;
 using System.Collections.Generic;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+
 
 namespace bikeRental.Frontend.Controllers
 {
@@ -94,7 +96,7 @@ namespace bikeRental.Frontend.Controllers
 
             try
             {
-                await _bicycleService.Delete(id, stationId);
+                await _bicycleService.Delete(id);
                 return (cname == "GetByStation") ? RedirectToAction(cname, new { id = stationId }) : RedirectToAction(cname);
             }
             catch (DbUpdateException ex)
@@ -192,6 +194,28 @@ namespace bikeRental.Frontend.Controllers
             }
 
             return (cname == "GetByStation") ? RedirectToAction(cname, new { id = bicycleModel.Station.Id }) : RedirectToAction(cname);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Disable(IEnumerable<BicycleModel> bicycles)
+        {
+
+            foreach (var bicycle in bicycles)
+            {               
+                if (bicycle.Orders.Any())
+                {
+                   
+                    bicycle.Status = BikeStatus.Disabled;
+                    await _bicycleService.UpdateAsync(bicycle);
+                }
+                else
+                {
+                    await _bicycleService.Delete(bicycle.Id);
+                }
+            }
+            var stations = _stationService.GetAll();
+            return View("/Pages/Home/Index.cshtml", stations);
         }
 
     }

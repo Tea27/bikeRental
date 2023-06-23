@@ -43,7 +43,7 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
 
     public async Task<TEntity> GetByIdAsync(Guid? id)
     {
-        return await FindByCondition(bicycle => bicycle.Id.Equals(id)).SingleOrDefaultAsync();
+        return await FindByCondition(bicycle => bicycle.Id.Equals(id)).Include(b => b.Orders).SingleOrDefaultAsync();
 
     }
     public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
@@ -75,25 +75,7 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateManyAsync(List<Guid> bicycleIds, Station station)
-    {       
-        try
-        {            
-            var bicyclesToUpdate = await DbSet.Where(b => bicycleIds.Contains(b.Id)).ToListAsync();
-
-            foreach (var bicycle in bicyclesToUpdate)
-            {
-                Console.WriteLine("----bike---" + bicycle.Id);
-                bicycle.Station = station;
-            }
-        }
-        catch (DbUpdateException ex)
-        {
-            System.Diagnostics.Debug.WriteLine(ex);
-        }
-
-        await _context.SaveChangesAsync();
-    }
+   
 
 
 }

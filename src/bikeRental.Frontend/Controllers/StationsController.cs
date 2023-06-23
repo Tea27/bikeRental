@@ -3,6 +3,7 @@ using bikeRental.Application.Models.Bicycle;
 using bikeRental.Application.Models.Station;
 using bikeRental.Application.Services;
 using bikeRental.Core.Entities;
+using bikeRental.Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -104,23 +105,19 @@ public class StationsController : Controller
     [Authorize(Roles = ("Administrator"))]
     public async Task<IActionResult> Delete(Guid? id, bool? saveChangesError = false)
     {
-        ViewData["Stations"] =  _stationService.GetAll();
-        ViewData["hasBicycles"] = "no";
 
         if (id == null)
             return BadRequest();
 
         var station = await _stationService.GetByIdAsync(id);
+        ViewData["Bicycles"] = station.Bicycles;
 
         if (station == null)
         {
             return NotFound();
         }
-        if (station.Bicycles.Any())
-        {
-            ViewData["hasBicycles"] = "yes";
-        }
-            if (saveChangesError.GetValueOrDefault())
+       
+        if (saveChangesError.GetValueOrDefault())
         {
             ViewData["ErrorMessage"] = _stationService.SaveError(id);
         }
@@ -131,23 +128,11 @@ public class StationsController : Controller
     [HttpPost, ActionName("Delete")]
     [Authorize(Roles = ("Administrator"))]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(Guid id, Guid stationId)
+    public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
-        var station = await _stationService.GetByIdAsync(id);
-
-        if (station == null)
-        {
-            return RedirectToAction(nameof(Delete));
-        }
-
+       
         try
         {
-            if (station.Bicycles.Any()) 
-            {
-                await _bicycleService.UpdateManyAsync(station.Bicycles, station);
-                //await _bicycleService.UpdateManyAsync(station.Bicycles);
-                station.Bicycles.Clear();
-            }           
             await _stationService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
@@ -157,5 +142,6 @@ public class StationsController : Controller
             return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
         }
     }
+
 }
 

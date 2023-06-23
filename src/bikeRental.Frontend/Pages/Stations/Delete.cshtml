@@ -1,11 +1,9 @@
-﻿@using bikeRental.Application.Models.Station
+﻿@using bikeRental.Application.Models.Bicycle
 @model bikeRental.Application.Models.Station.StationModel
 @{
     ViewData["Title"] = "Delete";
     var error = ViewData["ErrorMessage"] as string;
-    var stations = ViewData["Stations"] as IEnumerable<StationResponse>;
-    Guid stationId = new Guid();
-    var hasBicycles = ViewData["hasBicycles"] as string;
+    var bicycles = ViewData["Bicycles"] as IEnumerable<BicycleModel>;
 }
 
 
@@ -24,8 +22,8 @@
                 </dd>
             </dl>
 
-            <form asp-action="Delete" class="mt-4" id="deleteForm" asp-route-stationId="@stationId">
-                @if(hasBicycles == "yes"){
+            <form asp-action="Delete" class="mt-4" id="deleteForm">
+                @*@if(hasBicycles == "yes"){
                 <select class="form-select required" aria-label="Example select with button addon" name="stationId">
                     <option value="">Move bicycles to another station</option>
                     @foreach (var station in stations)
@@ -36,7 +34,7 @@
                         }
                     }
                 </select>
-                }               
+                }            *@   
                 <input type="hidden" asp-for="@Model.Id" />
                 <button type="submit" class="btn btn-danger">Delete</button>
                 <a class="btn btn-light" asp-action="Index">Back to Full List</a>
@@ -59,6 +57,9 @@
             <div class="modal-body">
                 <p>@error</p>
             </div>
+                <div class="modal-footer">
+                    <a class="btn btn-outline-success" asp-controller="Bicycles" asp-action="Disable" asp-route-bicycles="@ViewData["Bicycles"]">Disable bicycles</a>
+                </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>

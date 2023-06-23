@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿deusing AutoMapper;
 using bikeRental.Core.Entities;
 using bikeRental.Application.Models.Bicycle;
 using bikeRental.DataAccess.Repositories;
@@ -18,7 +18,7 @@ public class BicycleService : IBicycleService
         _stationService = stationService;
     }
    
-    public async Task Delete(Guid Id, Guid stationId)
+    public async Task Delete(Guid Id)
     {
         var bicycle = await _bicycleRepository.GetByIdAsync(Id);
         await _bicycleRepository.DeleteAsync(Id);
@@ -94,24 +94,8 @@ public class BicycleService : IBicycleService
         await _bicycleRepository.UpdateAsync(bicycleNew);
     }
 
-    public async Task UpdateManyAsync(ICollection<BicycleModel> bicycleModels, StationModel stationModel)
-    {
-        var bicycleIds = new List<Guid>();
-        foreach (var bicycle in bicycleModels)
-        {
-            bicycleIds.Add(bicycle.Id);
-        }
-        await _bicycleRepository.UpdateManyAsync(bicycleIds, _mapper.Map<Station>(stationModel));
-    }
 
-    /*public async Task MoveBikesToAnotherStation(ICollection<BicycleModel> bicycles, Guid stationId)
-    {
-        foreach (var bike in bicycles)
-        {
-            bike.Station.Id = stationId;
-            _ = UpdateAsync(bike);
-        }
-    }*/
+
 
 
 }

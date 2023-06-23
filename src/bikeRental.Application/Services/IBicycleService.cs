@@ -12,14 +12,13 @@ public interface IBicycleService
 {
     Task<BicycleModel> GetByIdAsync(Guid? id);
 
-    Task Delete(Guid Id, Guid stationId);
+    Task Delete(Guid Id);
 
     Task<BicycleModel> AddAsync(BicycleModel entity, Guid stationId);
 
     Task UpdateAsync(BicycleModel bicycleModel);
 
     IEnumerable<BicycleModel> CheckSwitch(string filterString, string searchString, string sortOrder, Guid? Id = null);
-    Task UpdateManyAsync(ICollection<BicycleModel> bicycleModels, StationModel stationModel);
-        //void MoveBikesToAnotherStation(ICollection<BicycleModel> bicycles, Guid stationId);
+    
     }
 
