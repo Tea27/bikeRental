@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 using System.Linq;
+using bikeRental.Core.Enums;
 
 namespace bikeRental.DataAccess.Repositories.Impl;
 public class StationRepository<TEntity> : IStationRepository<TEntity> where TEntity : Station
@@ -49,7 +50,7 @@ public class StationRepository<TEntity> : IStationRepository<TEntity> where TEnt
     }
     public IQueryable<TEntity> GetAll()
     {
-        return DbSet.AsQueryable();
+        return DbSet.AsQueryable();        
     }
 
     public async Task UpdateAsync(TEntity entity)

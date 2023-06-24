@@ -51,13 +51,15 @@ public class StationService : IStationService
 
     public IEnumerable<StationResponse> GetAll()
     {
-        var response = _stationRepository.GetAll();
+        //var response = _stationRepository.GetAll();
+        var response = _stationRepository.FindByCondition(station => station.Bicycles.Count == 0 || station.Bicycles.Any(b => b.Status != BikeStatus.Disabled));
         return _mapper.Map<IEnumerable<StationResponse>>(response);
     }
 
     public string GetAddressess()
     {
-        var response = _stationRepository.GetAll();
+        var response = _stationRepository.FindByCondition(station => station.Bicycles.Count == 0 || station.Bicycles.Any(b => b.Status != BikeStatus.Disabled));
+        //var response = _stationRepository.GetAll();
         var addresses = response.Select(station => new
         {
             title = station.Address,
@@ -85,8 +87,9 @@ public class StationService : IStationService
     {
         bool SearchIsEmpty = String.IsNullOrEmpty(searchString);
 
-        var stations = _stationRepository.FindByCondition(station => station.Bicycles.Any(b => b.Status != BikeStatus.Disabled));
-
+        //var stations = _stationRepository.FindByCondition(station => station.Bicycles.Any(b => b.Status != BikeStatus.Disabled));
+        //var stations = _stationRepository.GetAll();
+        var stations = _stationRepository.FindByCondition(station => station.Bicycles.Count==0 || station.Bicycles.Any(b => b.Status != BikeStatus.Disabled));
         stations = (SearchIsEmpty) switch
         {
             false => Search(Sort(stations, sortOrder), searchString),

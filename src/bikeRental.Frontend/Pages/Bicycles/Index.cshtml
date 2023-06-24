@@ -52,7 +52,7 @@
                         <a style="color:black" asp-action="Index" value="@ViewData["sortOrder"]" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
 					</th>
                 }
-				else if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "Status")
+				else if (prop.Name != "Id" && prop.Name != "Orders")
 				{
 					<th>
 						@prop.Name
@@ -84,6 +84,9 @@
 				<td>
 					@item.Price
 				</td>
+                <td>
+                    @item.Status
+                </td>
                 @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator") && item.Status != BikeStatus.InUse)
 				{
 					<td>

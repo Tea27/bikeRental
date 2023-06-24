@@ -14,6 +14,7 @@ using System.Xml.Linq;
 using bikeRental.Application.Models.Bicycle;
 using AutoMapper;
 using bikeRental.Core.Enums;
+using System.IO.Enumeration;
 
 namespace bikeRental.Frontend.Controllers
 {
@@ -159,7 +160,7 @@ namespace bikeRental.Frontend.Controllers
                     orderModel.RentalPrice = _orderService.GetRentalPrice(orderModel.RentalStartTime, orderModel.RentalEndTime, orderModel.Bicycle.Price);
                     var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id);
                     bicycle.Status = BikeStatus.Available;
-                    if(orderModel.Bicycle.Station.Id != stationId)
+                    if(orderModel.Bicycle.Station.Id != stationId)                      
                     {   var station = await _stationService.GetByIdAsync(stationId);
                         bicycle.Station = station;                 
                     }

@@ -62,7 +62,7 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
             var existingEntity = await DbSet.FindAsync(entity.Id);
             _context.Entry(existingEntity).State = EntityState.Detached;
             _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();          
         }
         catch (DbUpdateException ex)
         {
