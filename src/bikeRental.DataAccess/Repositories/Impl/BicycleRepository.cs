@@ -43,7 +43,7 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
 
     public async Task<TEntity> GetByIdAsync(Guid? id)
     {
-        return await FindByCondition(bicycle => bicycle.Id.Equals(id)).Include(b => b.Orders).SingleOrDefaultAsync();
+        return await FindByCondition(bicycle => bicycle.Id.Equals(id)).SingleOrDefaultAsync();
 
     }
     public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
@@ -59,24 +59,22 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
     {
         try
         {
-            _context.Attach(entity).State = EntityState.Modified;
+            var existingEntity = await DbSet.FindAsync(entity.Id);
+            _context.Entry(existingEntity).State = EntityState.Detached;
+            _context.Entry(entity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
         catch (DbUpdateException ex)
         {
             System.Diagnostics.Debug.WriteLine(ex);
         }
-
-        await _context.SaveChangesAsync();
     }
     public async Task DeleteAsync(Guid id)
     {
-        var bicycle = await GetByIdAsync(id);
-        DbSet.Remove(bicycle);
+        var entity = await DbSet.FindAsync(id);
+        _context.Entry(entity).State = EntityState.Detached;
+        _context.Set<TEntity>().Remove(entity);
         await _context.SaveChangesAsync();
     }
-
-   
-
-
 }
 

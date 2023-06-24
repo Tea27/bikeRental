@@ -3,6 +3,7 @@ using bikeRental.Application.Exceptions;
 using bikeRental.Application.Models.Bicycle;
 using bikeRental.Application.Models.Station;
 using bikeRental.Core.Entities;
+using bikeRental.Core.Enums;
 using bikeRental.DataAccess.Repositories;
 using bikeRental.DataAccess.Repositories.Impl;
 using Newtonsoft.Json;
@@ -38,8 +39,14 @@ public class StationService : IStationService
     public string SaveError(Guid? id)
     {
         var bicyclesWithOrders = _bicycleRepository.FindByCondition(bicycle => bicycle.Station.Id == id && bicycle.Orders.Any());
+
         return bicyclesWithOrders.Any() ? "Station cannot be removed, bicycles have order relation: " + string.Join(", ", bicyclesWithOrders.Select(bicycle => bicycle.Description)) :
                                             "DB update exception please contact administrator";
+    }
+
+    public bool HasOrders(Guid? id)
+    {
+        return _bicycleRepository.FindByCondition(bicycle => bicycle.Station.Id == id && bicycle.Orders.Any()).Any();
     }
 
     public IEnumerable<StationResponse> GetAll()
@@ -78,7 +85,7 @@ public class StationService : IStationService
     {
         bool SearchIsEmpty = String.IsNullOrEmpty(searchString);
 
-        var stations = _stationRepository.GetAll();
+        var stations = _stationRepository.FindByCondition(station => station.Bicycles.Any(b => b.Status != BikeStatus.Disabled));
 
         stations = (SearchIsEmpty) switch
         {
@@ -101,6 +108,23 @@ public class StationService : IStationService
                 return stations.OrderByDescending(s => s.Address);
             default:
                 return stations.OrderBy(s => s.Address);
+        }
+    }
+
+    public async Task DisableBicycles(Guid id)
+    {
+        var station =  await _stationRepository.GetByIdAsync(id);
+        foreach (var bicycle in station.Bicycles)
+        {
+            if (bicycle.Orders.Any())
+            {
+                bicycle.Status = BikeStatus.Disabled;
+                await _bicycleRepository.UpdateAsync(bicycle);
+            }
+            else
+            {
+                await _bicycleRepository.DeleteAsync(bicycle.Id);
+            }
         }
     }
 

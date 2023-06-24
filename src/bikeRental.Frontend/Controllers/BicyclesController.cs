@@ -197,26 +197,8 @@ namespace bikeRental.Frontend.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> Disable(IEnumerable<BicycleModel> bicycles)
-        {
+       
 
-            foreach (var bicycle in bicycles)
-            {               
-                if (bicycle.Orders.Any())
-                {
-                   
-                    bicycle.Status = BikeStatus.Disabled;
-                    await _bicycleService.UpdateAsync(bicycle);
-                }
-                else
-                {
-                    await _bicycleService.Delete(bicycle.Id);
-                }
-            }
-            var stations = _stationService.GetAll();
-            return View("/Pages/Home/Index.cshtml", stations);
-        }
 
     }
 }

@@ -37,7 +37,7 @@ namespace bikeRental.Frontend.Controllers
 
         [HttpGet]
         [Authorize(Roles = ("Administrator"))]
-        public async Task<IActionResult> Index(string currentCategory, string sortOrder, DateTime searchDateFrom, DateTime searchDateTo, int? pageNumber)
+        public IActionResult Index(string currentCategory, string sortOrder, DateTime searchDateFrom, DateTime searchDateTo, int? pageNumber)
         {
             if (pageNumber == null)
             {
@@ -49,12 +49,12 @@ namespace bikeRental.Frontend.Controllers
             ViewData["SortOrder"] = sortOrder;
             int pageSize = 6;
 
-            var orders = await _orderService.GetAllAsync();
+            var orders = _orderService.GetAll();
 
             orders = _orderService.SortingSelection(orders, sortOrder);
             if (searchDateTo != DateTime.MinValue)
             {
-                orders = _orderService.SearchSelectionAsync(orders, searchDateFrom, searchDateTo);
+                orders = _orderService.SearchSelection(orders, searchDateFrom, searchDateTo);
             }
             
             return View("/Pages/Orders/Index.cshtml", PaginatedList<OrderResponse>.Create(orders, pageNumber ?? 1, pageSize));
@@ -160,8 +160,8 @@ namespace bikeRental.Frontend.Controllers
                     var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id);
                     bicycle.Status = BikeStatus.Available;
                     if(orderModel.Bicycle.Station.Id != stationId)
-                    {                       
-                        bicycle.Station = await _stationService.GetByIdAsync(stationId);                        
+                    {   var station = await _stationService.GetByIdAsync(stationId);
+                        bicycle.Station = station;                 
                     }
                     await _bicycleService.UpdateAsync(bicycle);
                     await _orderService.UpdateAsync(orderModel);

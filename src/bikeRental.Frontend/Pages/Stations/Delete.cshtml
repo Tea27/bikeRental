@@ -58,7 +58,7 @@
                 <p>@error</p>
             </div>
                 <div class="modal-footer">
-                    <a class="btn btn-outline-success" asp-controller="Bicycles" asp-action="Disable" asp-route-bicycles="@ViewData["Bicycles"]">Disable bicycles</a>
+                    <a class="btn btn-outline-success" asp-controller="Stations" asp-action="Disable" asp-route-id="@Model.Id">Disable bicycles</a>
                 </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

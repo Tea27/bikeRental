@@ -391,12 +391,12 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                     b.HasOne("bikeRental.Core.Entities.Bicycle", "Bicycle")
                         .WithMany("Orders")
                         .HasForeignKey("BicycleId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("bikeRental.Core.Identity.ApplicationUser", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Bicycle");
 

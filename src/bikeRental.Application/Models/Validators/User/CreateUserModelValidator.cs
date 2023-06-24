@@ -5,9 +5,9 @@ using bikeRental.Core.Identity;
 
 namespace bikeRental.Application.Models.Validators.User;
 
-public class CreateUserModelValidator : AbstractValidator<CreateUserModel>
-{
-    private readonly UserManager<ApplicationUser> _userManager;
+//public class CreateUserModelValidator : AbstractValidator<CreateUserModel>
+//{
+//    private readonly UserManager<ApplicationUser> _userManager;
 
     //public CreateUserModelValidator(UserManager<ApplicationUser> userManager)
     //{
@@ -34,17 +34,17 @@ public class CreateUserModelValidator : AbstractValidator<CreateUserModel>
     //        .WithMessage("Email address is already in use");
     //}
 
-    private async Task<bool> EmailAddressIsUniqueAsync(string email, CancellationToken cancellationToken = new())
-    {
-        var user = await _userManager.FindByEmailAsync(email);
+//    private async Task<bool> EmailAddressIsUniqueAsync(string email, CancellationToken cancellationToken = new())
+//    {
+//        var user = await _userManager.FindByEmailAsync(email);
 
-        return user == null;
-    }
+//        return user == null;
+//    }
 
-    private async Task<bool> UsernameIsUniqueAsync(string username, CancellationToken cancellationToken = new())
-    {
-        var user = await _userManager.FindByNameAsync(username);
+//    private async Task<bool> UsernameIsUniqueAsync(string username, CancellationToken cancellationToken = new())
+//    {
+//        var user = await _userManager.FindByNameAsync(username);
 
-        return user == null;
-    }
-}
+//        return user == null;
+//    }
+//}

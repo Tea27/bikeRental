@@ -18,6 +18,7 @@ public interface IStationService
     string GetAddressess();
     IEnumerable<StationResponse> CheckSwitch(string searchString, string sortOrder);
     string SaveError(Guid? id);
-
+    Task DisableBicycles(Guid id);
+    bool HasOrders(Guid? id);
 }
 

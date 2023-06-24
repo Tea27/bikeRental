@@ -1,9 +1,10 @@
-﻿deusing AutoMapper;
+﻿using bikeRental.Application.Models.Bicycle;
 using bikeRental.Core.Entities;
-using bikeRental.Application.Models.Bicycle;
+using AutoMapper;
 using bikeRental.DataAccess.Repositories;
 using bikeRental.Core.Enums;
 using bikeRental.Application.Models.Station;
+using System.Data.Entity;
 
 namespace bikeRental.Application.Services.Impl;
 public class BicycleService : IBicycleService
@@ -93,10 +94,6 @@ public class BicycleService : IBicycleService
         var bicycleNew = _mapper.Map<Bicycle>(bicycleModel);
         await _bicycleRepository.UpdateAsync(bicycleNew);
     }
-
-
-
-
 
 }
 

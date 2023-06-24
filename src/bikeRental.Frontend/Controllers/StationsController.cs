@@ -116,7 +116,7 @@ public class StationsController : Controller
         {
             return NotFound();
         }
-       
+        
         if (saveChangesError.GetValueOrDefault())
         {
             ViewData["ErrorMessage"] = _stationService.SaveError(id);
@@ -133,15 +133,28 @@ public class StationsController : Controller
        
         try
         {
+            if (_stationService.HasOrders(id))
+            {
+                throw new DbUpdateException();
+            }
             await _stationService.Delete(id);
+
             return RedirectToAction(nameof(Index));
         }
         catch (DbUpdateException ex)
         {
             //Log the error (uncomment ex variable name and write a log.)
-            return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
+            return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true }) ;
         }
     }
+    [HttpGet]
+    public async Task<IActionResult> Disable(Guid id)
+    {
+        await _stationService.DisableBicycles(id);
+
+        return RedirectToAction(nameof(Index));
+    }
+
 
 }
 

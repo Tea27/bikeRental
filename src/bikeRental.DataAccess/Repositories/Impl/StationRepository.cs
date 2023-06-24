@@ -36,11 +36,16 @@ public class StationRepository<TEntity> : IStationRepository<TEntity> where TEnt
 
     public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
     {
-        return DbSet.Where(expression).Include(s => s.Bicycles).AsNoTracking();
+        return DbSet.Where(expression).Include(s => s.Bicycles).ThenInclude(b => b.Orders).AsNoTracking();
     }
     public IQueryable<TEntity> FindByCondition(IQueryable<TEntity> entity, Expression<Func<TEntity, bool>> expression)
     {
         return entity.Where(expression).AsNoTracking();
+    }
+
+    public async Task<TEntity> FindWithOrders(Guid Id)
+    {
+        return await DbSet.Where(station => station.Id == Id).Include(s => s.Bicycles).ThenInclude(b => b.Orders).AsNoTracking().FirstOrDefaultAsync();
     }
     public IQueryable<TEntity> GetAll()
     {

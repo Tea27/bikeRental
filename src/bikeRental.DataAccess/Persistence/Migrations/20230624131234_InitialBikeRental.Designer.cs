@@ -12,7 +12,7 @@ using bikeRental.DataAccess.Persistence;
 namespace bikeRental.DataAccess.Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230621162219_InitialBikeRental")]
+    [Migration("20230624131234_InitialBikeRental")]
     partial class InitialBikeRental
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -393,12 +393,12 @@ namespace bikeRental.DataAccess.Persistence.Migrations
                     b.HasOne("bikeRental.Core.Entities.Bicycle", "Bicycle")
                         .WithMany("Orders")
                         .HasForeignKey("BicycleId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("bikeRental.Core.Identity.ApplicationUser", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Bicycle");
 

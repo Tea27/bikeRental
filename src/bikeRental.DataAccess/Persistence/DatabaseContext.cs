@@ -43,17 +43,17 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser, ApplicationRol
         builder.Entity<Bicycle>()
                 .HasOne(b => b.Station)
                 .WithMany(s => s.Bicycles)
-                .OnDelete(DeleteBehavior.Cascade);
+        .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Order>()
             .HasOne(o => o.Customer)
             .WithMany(c => c.Orders)
-            .OnDelete(DeleteBehavior.Restrict); 
+        .OnDelete(DeleteBehavior.Cascade); 
 
         builder.Entity<Order>()
             .HasOne(o => o.Bicycle)
             .WithMany(b => b.Orders)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Station>()
             .HasIndex(s => s.Address)

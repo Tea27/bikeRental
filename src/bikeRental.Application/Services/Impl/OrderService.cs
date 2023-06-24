@@ -58,7 +58,7 @@ namespace bikeRental.Application.Services.Impl
             return orderModel;
         }
 
-        public async Task<IEnumerable<OrderResponse>> GetAllAsync()
+        public IEnumerable<OrderResponse> GetAll()
         {
             var orders = _orderRepository.GetAll();
             
@@ -113,7 +113,7 @@ namespace bikeRental.Application.Services.Impl
         /** 
          * Search orders for specific date
          * */
-        public IEnumerable<OrderResponse> SearchSelectionAsync(IEnumerable<OrderResponse> orders, DateTime dateSearchFrom, DateTime dateSearchTo)
+        public IEnumerable<OrderResponse> SearchSelection(IEnumerable<OrderResponse> orders, DateTime dateSearchFrom, DateTime dateSearchTo)
         {
             IEnumerable<OrderResponse> ordersSearched = orders.ToList();                
             return orders.Where(o => (o.RentalStartTime.Date.Ticks >= dateSearchFrom.Date.Ticks && o.RentalEndTime.Date.Ticks <= dateSearchTo.Date.Ticks));
