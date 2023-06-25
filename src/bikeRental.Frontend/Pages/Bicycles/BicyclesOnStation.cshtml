@@ -81,31 +81,33 @@
 		</tr>
 		@foreach (var item in Model)
 		{
-
-			<tr>
-				<td>
-					@item.Type
-				</td>
-				<td>
-					@item.Description
-				</td>
-				<td>
-					@item.Price
-				</td>
-                @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator") && item.Status != BikeStatus.InUse)
-				{
-					<td>
-						<a class="btn btn-outline-primary" asp-controller="Bicycles" asp-action="Edit" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id" asp-route-cname="GetByStation"><i class="bi bi-pen"></i></a>
-						<a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="Delete" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id" asp-route-cname="GetByStation"><i class="bi bi-trash"></i></a>
-					</td>
-				}
-                @if (User.Identity!.IsAuthenticated && item.Status == BikeStatus.Available)
-                {
+            if(item.Status != BikeStatus.Disabled)
+            {
+                <tr>
                     <td>
-                        <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Create" asp-route-bicycleId="@item.Id" ><i class="bi bi-plus-lg"></i></a>
+                        @item.Type
                     </td>
-                }
-			</tr>
+                    <td>
+                        @item.Description
+                    </td>
+                    <td>
+                        @item.Price
+                    </td>
+                    @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator") && item.Status != BikeStatus.InUse)
+                    {
+                        <td>
+                            <a class="btn btn-outline-primary" asp-controller="Bicycles" asp-action="Edit" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id" asp-route-cname="GetByStation"><i class="bi bi-pen"></i></a>
+                            <a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="Delete" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id" asp-route-cname="GetByStation"><i class="bi bi-trash"></i></a>
+                        </td>
+                    }
+                    @if (User.Identity!.IsAuthenticated && item.Status == BikeStatus.Available)
+                    {
+                        <td>
+                            <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Create" asp-route-bicycleId="@item.Id"><i class="bi bi-plus-lg"></i></a>
+                        </td>
+                    }
+                </tr>
+            }           
 		}
 	</table>
 

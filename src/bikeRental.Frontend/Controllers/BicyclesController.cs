@@ -61,7 +61,7 @@ namespace bikeRental.Frontend.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             ViewData["cname"] = cname;
@@ -75,8 +75,7 @@ namespace bikeRental.Frontend.Controllers
             if (saveChangesError.GetValueOrDefault())
             {
                 ViewData["ErrorMessage"] =
-                    "Delete failed. Try again, and if the problem persists " +
-                    "see your system administrator.";
+                   "Bicycle cannot be removed, it has order relation: ";                  
             }
 
             return View("/Pages/Bicycles/Delete.cshtml", bicycle);
@@ -87,7 +86,7 @@ namespace bikeRental.Frontend.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id, Guid stationId, string cname)
         {
-            var bicycle = await _bicycleService.GetByIdAsync(id);
+            var bicycle = await _bicycleService.GetByIdAsyncIncludeOrders(id);
 
             if (bicycle == null)
             {
@@ -96,6 +95,10 @@ namespace bikeRental.Frontend.Controllers
 
             try
             {
+                if (bicycle.Orders.Any())
+                {
+                    throw new DbUpdateException();
+                }
                 await _bicycleService.Delete(id);
                 return (cname == "GetByStation") ? RedirectToAction(cname, new { id = stationId }) : RedirectToAction(cname);
             }
@@ -196,8 +199,18 @@ namespace bikeRental.Frontend.Controllers
             return (cname == "GetByStation") ? RedirectToAction(cname, new { id = bicycleModel.Station.Id }) : RedirectToAction(cname);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Disable(Guid id, string cname)
+        {
+            var bicycle = await _bicycleService.GetByIdAsync(id);
+            bicycle.Status = BikeStatus.Disabled;
+            await _bicycleService.UpdateAsync(bicycle);
 
-       
+            return (cname == "GetByStation") ? RedirectToAction(cname, new { id = bicycle.Station.Id }) : RedirectToAction(cname);
+        }
+
+
+
 
 
     }

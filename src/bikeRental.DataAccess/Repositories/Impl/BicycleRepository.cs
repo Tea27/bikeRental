@@ -76,5 +76,11 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
         _context.Set<TEntity>().Remove(entity);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<TEntity> GetByIdAsyncIncludeOrders(Guid? id)
+    {
+        return await FindByCondition(bicycle => bicycle.Id.Equals(id)).Include(b => b.Orders).SingleOrDefaultAsync();
+
+    }
 }
 

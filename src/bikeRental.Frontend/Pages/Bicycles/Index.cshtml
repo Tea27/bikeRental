@@ -91,7 +91,10 @@
 				{
 					<td>
 						<a class="btn btn-outline-primary" asp-controller="Bicycles" asp-action="Edit" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id" asp-route-cname="Index"><i class="bi bi-pen"></i></a>
-						<a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="Delete" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id" asp-route-cname="Index"><i class="bi bi-trash"></i></a>
+                        @if(item.Status != BikeStatus.Disabled)
+                        {
+                            <a class="btn btn-outline-danger" asp-controller="Bicycles" asp-action="Delete" asp-route-id="@item.Id" asp-route-stationId="@item.Station.Id" asp-route-cname="Index"><i class="bi bi-trash"></i></a>
+                        }                        
 					</td>
 				}
 			</tr>

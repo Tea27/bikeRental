@@ -16,6 +16,8 @@ public interface IBicycleRepository<TEntity> where TEntity : Bicycle
     Task DeleteAsync(Guid id);
     IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression);
     IQueryable<TEntity> FindByCondition(IQueryable<TEntity> query, Expression<Func<TEntity, bool>> expression);
-    
+    Task<TEntity> GetByIdAsyncIncludeOrders(Guid? id);
+
+
 }
 

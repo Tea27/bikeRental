@@ -19,6 +19,7 @@ public interface IBicycleService
     Task UpdateAsync(BicycleModel bicycleModel);
 
     IEnumerable<BicycleModel> CheckSwitch(string filterString, string searchString, string sortOrder, Guid? Id = null);
+    Task<BicycleModel> GetByIdAsyncIncludeOrders(Guid? id);
 
     }
 

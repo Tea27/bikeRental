@@ -18,4 +18,5 @@ public interface IUserService
     Task LogoutAsync();
     IEnumerable<UserModel> SearchSelection(IEnumerable<UserModel> users, string searchString);
     IEnumerable<UserModel> SortingSelection(IEnumerable<UserModel> users, string sortOrder);
+    Task<UserModel> GetByIdAsyncIncludeOrders(Guid? id);
 }

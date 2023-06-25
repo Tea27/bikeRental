@@ -190,4 +190,10 @@ public class UserService : IUserService
                 return users.OrderBy(s => s.LastName);
         }
     }
+
+    public async Task<UserModel> GetByIdAsyncIncludeOrders(Guid? id)
+    {
+        var response = await _userRepository.GetByIdAsyncIncludeOrders(id);
+        return _mapper.Map<UserModel>(response);
+    }
 }

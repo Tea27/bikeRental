@@ -103,6 +103,11 @@ public class UserRepository<TEntity> : IUserRepository<TEntity> where TEntity : 
             System.Diagnostics.Debug.WriteLine(ex);
         }
     }
+    public async Task<TEntity> GetByIdAsyncIncludeOrders(Guid? id)
+    {
+        return await FindByCondition(customer => customer.Id.Equals(id)).Include(c => c.Orders).SingleOrDefaultAsync();
+
+    }
 
 }
 

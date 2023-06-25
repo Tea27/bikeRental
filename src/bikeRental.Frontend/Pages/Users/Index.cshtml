@@ -38,7 +38,7 @@
         <tr>           
             @foreach (var prop in typeof(UserModel).GetProperties())
             {
-                @if (prop.Name != "Id" && prop.Name != "Role")
+                @if (prop.Name != "Id"@* && prop.Name != "Role"*@ && prop.Name != "Orders")
                 {
                     <th>
                         @prop.Name
@@ -64,6 +64,7 @@
                 <td>@user.LastName</td>
                 <td>@user.Email</td>
                 <td>@user.Role</td>
+                <td>@user.Status</td>
                 @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
                 {
                     <td>

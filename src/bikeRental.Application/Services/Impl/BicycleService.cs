@@ -95,5 +95,15 @@ public class BicycleService : IBicycleService
         await _bicycleRepository.UpdateAsync(bicycleNew);
     }
 
+    public async Task<BicycleModel> GetByIdAsyncIncludeOrders(Guid? id)
+    {
+        var response = await _bicycleRepository.GetByIdAsyncIncludeOrders(id);
+        return _mapper.Map<BicycleModel>(response);
+    }
+
+
+
+
+
 }
 

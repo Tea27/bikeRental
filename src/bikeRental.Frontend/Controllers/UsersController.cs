@@ -15,6 +15,7 @@ using System;
 using System.Security.Cryptography;
 using System.Data.Entity.Validation;
 using Microsoft.AspNetCore.Authentication;
+using bikeRental.Core.Enums;
 
 namespace bikeRental.Frontend.Controllers;
 public class UsersController : Controller
@@ -103,8 +104,7 @@ public class UsersController : Controller
         if (saveChangesError.GetValueOrDefault())
         {
             ViewData["ErrorMessage"] =
-                "Delete failed. Try again, and if the problem persists " +
-                "see your system administrator.";
+                 "User cannot be removed, it has order relation";
         }
 
         return View("/Pages/Users/Delete.cshtml", user);
@@ -115,8 +115,8 @@ public class UsersController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
-        var user = await _userService.GetByIdAsync(id);
-
+        var user = await _userService.GetByIdAsyncIncludeOrders(id);
+        TempData["UserId"] = id;
         if (user == null)
         {
             return RedirectToAction(nameof(Delete));
@@ -124,18 +124,22 @@ public class UsersController : Controller
 
         try
         {
-
+            if (user.Orders.Any())
+            {
+                throw new DbUpdateException();
+            }
             await _userService.DeleteAsync(id);
         }
         catch (DbUpdateException ex)
         {
             System.Diagnostics.Debug.WriteLine(ex);
-            return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
+            return RedirectToAction(nameof(Delete), new {  saveChangesError = true });
         }
         return RedirectToAction(nameof(Index));
     }
     public ActionResult Redirect(Guid? id, string name)
     {
+        System.Diagnostics.Debug.WriteLine("-------------id usera--------" + id);
         TempData["UserId"] = id;
         return RedirectToAction(name);
     }
@@ -233,4 +237,16 @@ public class UsersController : Controller
     {
         return View("/Pages/Users/Manage/Index.cshtml");
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Disable(Guid id)
+    {
+        var customer = await _userService.GetByIdAsync(id);
+        customer.Status = AccountStatus.Disabled;
+        var editUserModel = _mapper.Map<EditUserModel>(customer);
+        await _userService.UpdateAsync(editUserModel);
+
+        return RedirectToAction(nameof(Index));
+    }
+
 }
