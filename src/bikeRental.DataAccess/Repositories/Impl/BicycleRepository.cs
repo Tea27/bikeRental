@@ -59,21 +59,19 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
     {
         try
         {
-            var existingEntity = await DbSet.FindAsync(entity.Id);
-            _context.Entry(existingEntity).State = EntityState.Detached;
-            _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();          
+            _context.Attach(entity).State = EntityState.Modified;
         }
         catch (DbUpdateException ex)
         {
             System.Diagnostics.Debug.WriteLine(ex);
         }
+
+        await _context.SaveChangesAsync();
     }
     public async Task DeleteAsync(Guid id)
     {
-        var entity = await DbSet.FindAsync(id);
-        _context.Entry(entity).State = EntityState.Detached;
-        _context.Set<TEntity>().Remove(entity);
+        var bicycle = await GetByIdAsync(id);
+        DbSet.Remove(bicycle);
         await _context.SaveChangesAsync();
     }
 

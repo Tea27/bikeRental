@@ -1,20 +1,12 @@
-﻿using bikeRental.Application.Models.Station;
-using bikeRental.Application;
+﻿using bikeRental.Application;
 using bikeRental.Application.Services;
-using bikeRental.Application.Services.Impl;
 using Microsoft.AspNetCore.Mvc;
 using bikeRental.Application.Models.Order;
 using Microsoft.AspNetCore.Authorization;
 using System.Data.Entity.Infrastructure;
-using bikeRental.Core.Entities;
 using Microsoft.AspNet.Identity;
-using bikeRental.Core.Identity;
-using bikeRental.Application.Models.User;
-using System.Xml.Linq;
-using bikeRental.Application.Models.Bicycle;
 using AutoMapper;
 using bikeRental.Core.Enums;
-using System.IO.Enumeration;
 
 namespace bikeRental.Frontend.Controllers
 {
@@ -134,7 +126,7 @@ namespace bikeRental.Frontend.Controllers
                 return BadRequest();
             }
             var order = await _orderService.GetByIdAsync(orderId, userID, bicycleId);
-            var station = await _stationService.GetByIdAsync(stationId);
+            var station = await _stationService.GetByIdAsync(order.Bicycle.Station.Id);
             order.Bicycle.Station = station;
             order.RentalEndTime = DateTime.Now;
             return View("/Pages/Orders/Finish.cshtml", order);
@@ -157,15 +149,7 @@ namespace bikeRental.Frontend.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    orderModel.RentalPrice = _orderService.GetRentalPrice(orderModel.RentalStartTime, orderModel.RentalEndTime, orderModel.Bicycle.Price);
-                    var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id);
-                    bicycle.Status = BikeStatus.Available;
-                    if(orderModel.Bicycle.Station.Id != stationId)                      
-                    {   var station = await _stationService.GetByIdAsync(stationId);
-                        bicycle.Station = station;                 
-                    }
-                    await _bicycleService.UpdateAsync(bicycle);
-                    await _orderService.UpdateAsync(orderModel);
+                    await _orderService.FinishOrder(orderModel, stationId);
                 }
             }
             catch (DbUpdateException ex)

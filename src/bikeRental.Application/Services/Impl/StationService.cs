@@ -117,7 +117,9 @@ public class StationService : IStationService
     public async Task DisableBicycles(Guid id)
     {
         var station =  await _stationRepository.GetByIdAsync(id);
-        foreach (var bicycle in station.Bicycles)
+        var bicycles = station.Bicycles.ToList();
+
+        foreach (var bicycle in bicycles)
         {
             if (bicycle.Orders.Any())
             {

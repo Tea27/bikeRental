@@ -76,13 +76,13 @@
                         @Html.DisplayFor(modelItem => item.Bicycle.Description)
                     </td>
 
-                    @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+                    @*@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
                     {
                         <td>
-                           @* <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>*@
+                            <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>
                             <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.Id" asp-route-bicycleId="@item.Bicycle.Id" asp-route-customerId="@item.Customer.Id"><i class="bi bi-trash"></i></a>
                         </td>
-                    }
+                    }*@
                     
                 }
                 

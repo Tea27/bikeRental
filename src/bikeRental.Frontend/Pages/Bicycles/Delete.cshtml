@@ -62,9 +62,11 @@
                 </div>
                 <div class="modal-body">
                     <p>@error</p>
+                    ovo je ime @ViewData["cname"]
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-outline-success" asp-controller="Bicycles" asp-action="Disable" asp-action="@ViewData["cname"]" asp-route-id="@Model.Id">Disable bicycle</a>
+                    <a class="btn btn-outline-success" asp-controller="Bicycles" asp-action="Disable" asp-route-id="@Model.Id" asp-route-cname="@ViewData["cname"]">Disable bicycle</a>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

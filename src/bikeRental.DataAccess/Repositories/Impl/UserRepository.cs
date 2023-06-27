@@ -63,7 +63,7 @@ public class UserRepository<TEntity> : IUserRepository<TEntity> where TEntity : 
             editItem.LastName = entity.LastName;
             editItem.Email = entity.Email;
             editItem.UserName = entity.UserName;
-            System.Diagnostics.Debug.WriteLine("ovo je username " + editItem.UserName);
+            editItem.Status = entity.Status;
 
             await _userManager.UpdateAsync(editItem);
 

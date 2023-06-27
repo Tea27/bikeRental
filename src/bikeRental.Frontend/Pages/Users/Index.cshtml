@@ -1,5 +1,6 @@
 ﻿@using bikeRental.Application;
 @using bikeRental.Application.Models.User;
+@using bikeRental.Core.Enums;
 @model PaginatedList<bikeRental.Application.Models.User.UserModel>
 @{
     ViewData["Title"] = "Customers";
@@ -68,8 +69,11 @@
                 @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
                 {
                     <td>
-                        <a class="btn btn-outline-primary url" asp-controller="Users" asp-action="Redirect" asp-route-name="Edit" asp-route-id="@user.Id"><i class="bi bi-pen"></i></a> 
-                        <a class="btn btn-outline-danger url" asp-controller="Users" asp-action="Redirect" asp-route-name="Delete"  asp-route-id="@user.Id"><i class="bi bi-trash"></i></a>
+                        <a class="btn btn-outline-primary url" asp-controller="Users" asp-action="Redirect" asp-route-name="Edit" asp-route-id="@user.Id"><i class="bi bi-pen"></i></a>
+                            @if(user.Status != AccountStatus.Disabled)
+                            {
+                                 <a class="btn btn-outline-danger url" asp-controller="Users" asp-action="Redirect" asp-route-name="Delete"  asp-route-id="@user.Id"><i class="bi bi-trash"></i></a>
+                            }
                     </td> 
                 }
             </tr>

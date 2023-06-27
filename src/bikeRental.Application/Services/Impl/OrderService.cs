@@ -3,6 +3,7 @@ using bikeRental.Application.Models.Bicycle;
 using bikeRental.Application.Models.Order;
 using bikeRental.Application.Models.Station;
 using bikeRental.Core.Entities;
+using bikeRental.Core.Enums;
 using bikeRental.Core.Identity;
 using bikeRental.DataAccess.Repositories;
 using bikeRental.DataAccess.Repositories.Impl;
@@ -23,15 +24,16 @@ namespace bikeRental.Application.Services.Impl
         private readonly IBicycleRepository<Bicycle> _bicycleRepository;
         private readonly IBicycleService _bicycleService;
         private readonly IUserService _userService;
+        private readonly IStationService _stationService;
 
-
-        public OrderService(IOrderRepository<Order> orderRepository, IBicycleRepository<Bicycle> bicycleRepository, IMapper mapper, IBicycleService bicycleService, IUserService userService)
+        public OrderService(IOrderRepository<Order> orderRepository, IStationService stationService, IBicycleRepository<Bicycle> bicycleRepository, IMapper mapper, IBicycleService bicycleService, IUserService userService)
         {
             _orderRepository = orderRepository;
             _bicycleRepository = bicycleRepository;
             _mapper = mapper;
             _bicycleService = bicycleService;
             _userService = userService;
+            _stationService = stationService;
         }
 
         public async Task<OrderModel> AddAsync(OrderModel orderModel, Guid customerId, Guid bicycleId)
@@ -148,6 +150,20 @@ namespace bikeRental.Application.Services.Impl
             var minutes = diffOfDates.Minutes;
             var total = minutes + (hours * 60) + (days * 24 * 60);
             return total < 30 ? price : Math.Ceiling(Decimal.Divide(total, 30))*price;
+        }
+
+        public async Task FinishOrder(OrderModel orderModel, Guid stationId)
+        {
+            orderModel.RentalPrice = GetRentalPrice(orderModel.RentalStartTime, orderModel.RentalEndTime, orderModel.Bicycle.Price);
+            var bicycle = await _bicycleService.GetByIdAsync(orderModel.Bicycle.Id);
+            bicycle.Status = BikeStatus.Available;
+            if (orderModel.Bicycle.Station.Id != stationId)
+            {
+                var station = await _stationService.GetByIdAsync(stationId);
+                bicycle.Station = station;
+            }
+            await _bicycleService.UpdateAsync(bicycle);
+            await UpdateAsync(orderModel);
         }
 
     }

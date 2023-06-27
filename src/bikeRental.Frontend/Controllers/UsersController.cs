@@ -91,7 +91,7 @@ public class UsersController : Controller
         Guid? id = TempData["UserId"] as Guid?;
         if (id == null)
         {
-            return NotFound();
+            return BadRequest();
         }
 
         var user = await _userService.GetByIdAsync(id);
@@ -151,7 +151,7 @@ public class UsersController : Controller
 
         if (id == null)
         {
-            return NotFound();
+            return BadRequest();
         }
 
         var userModel = await _userService.GetByIdAsync(id);
@@ -200,6 +200,8 @@ public class UsersController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> LoginPost(LoginUserModel user)
     {
+        var userLoging = await _userManager.FindByEmailAsync(user.Email);
+        if (userLoging.Status == AccountStatus.Disabled) return BadRequest("Your account is disabled");
         if (ModelState.IsValid)
         {
             var result = await _userService.LoginAsync(user);
@@ -208,11 +210,6 @@ public class UsersController : Controller
             {
                 return RedirectToAction("Index", "Home");
             }
-            //if (result.IsLockedOut)
-            //{
-            //   // _logger.LogWarning("User account locked out.");
-            //    return RedirectToPage("./Lockout");
-            //}
             else
             {
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
@@ -231,19 +228,14 @@ public class UsersController : Controller
         return RedirectToAction("Index", "Home");
     }
 
-    [HttpGet]
-    [ActionName("Manage")]
-    public IActionResult Manage()
-    {
-        return View("/Pages/Users/Manage/Index.cshtml");
-    }
-
+    
     [HttpGet]
     public async Task<IActionResult> Disable(Guid id)
     {
         var customer = await _userService.GetByIdAsync(id);
         customer.Status = AccountStatus.Disabled;
         var editUserModel = _mapper.Map<EditUserModel>(customer);
+
         await _userService.UpdateAsync(editUserModel);
 
         return RedirectToAction(nameof(Index));

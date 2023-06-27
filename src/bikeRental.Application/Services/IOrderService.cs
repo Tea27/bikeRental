@@ -19,8 +19,8 @@ namespace bikeRental.Application.Services
         Task Delete(Guid Id);
         Task<IEnumerable<OrderResponse>> GetByCustomer(Guid CustomerId);
         Task<IEnumerable<OrderResponse>> GetByBicycle(Guid BicycleId);
-
         decimal GetRentalPrice(DateTime rentalStartTime, DateTime rentalEndTime, decimal price);
+        Task FinishOrder(OrderModel orderModel, Guid stationId);
 
     }
 }
