@@ -19,10 +19,10 @@ public class BicycleService : IBicycleService
         _stationService = stationService;
     }
    
-    public async Task Delete(Guid Id)
-    {
-        var bicycle = await _bicycleRepository.GetByIdAsync(Id);
-        await _bicycleRepository.DeleteAsync(Id);
+    public async Task Delete(Guid id)
+    {        
+        var bicycle = await _bicycleRepository.GetByIdAsync(id);
+        await _bicycleRepository.DeleteAsync(bicycle);
     }
 
     public async Task<BicycleModel> GetByIdAsync(Guid? id)

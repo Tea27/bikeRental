@@ -13,7 +13,7 @@ public interface IBicycleRepository<TEntity> where TEntity : Bicycle
     Task<TEntity> AddAsync(TEntity entity, Guid stationId);
     Task<TEntity> GetByIdAsync(Guid? id);
     Task UpdateAsync(TEntity entity);
-    Task DeleteAsync(Guid id);
+    Task DeleteAsync(TEntity entity);
     IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression);
     IQueryable<TEntity> FindByCondition(IQueryable<TEntity> query, Expression<Func<TEntity, bool>> expression);
     Task<TEntity> GetByIdAsyncIncludeOrders(Guid? id);

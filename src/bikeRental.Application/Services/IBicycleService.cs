@@ -12,7 +12,7 @@ public interface IBicycleService
 {
     Task<BicycleModel> GetByIdAsync(Guid? id);
 
-    Task Delete(Guid Id);
+    Task Delete(Guid id);
 
     Task<BicycleModel> AddAsync(BicycleModel entity, Guid stationId);
 

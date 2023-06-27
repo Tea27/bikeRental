@@ -63,27 +63,27 @@
             }
            
     </tr>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-			<td>
+       @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
                     <a class="btn btn-outline-secondary" asp-controller="Bicycles" asp-action="GetByStation" asp-route-Id="@item.Id">
-						<i class="bi bi-bicycle"></i>
-					</a>
-				
-			</td>
-				@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
-            {
+                        <i class="bi bi-bicycle"></i>
+                    </a>
+
+                </td>
+                @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
+                {
                     <td>
-                        <a class="btn btn-outline-primary" asp-controller="Stations" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a> 
+                        <a class="btn btn-outline-primary" asp-controller="Stations" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>
                         <a class="btn btn-outline-danger" asp-controller="Stations" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
-                    </td> 
-            }
-        </tr> 
-    }
+                    </td>
+                }
+            </tr>
+        }  
 </table>
 
 @{

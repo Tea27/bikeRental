@@ -116,19 +116,21 @@ public class StationService : IStationService
 
     public async Task DisableBicycles(Guid id)
     {
+        
         var station =  await _stationRepository.GetByIdAsync(id);
-        var bicycles = station.Bicycles.ToList();
-
+        var bicycles = station.Bicycles;
         foreach (var bicycle in bicycles)
         {
-            if (bicycle.Orders.Any())
+            if (bicycle.Orders.Count!=0)
             {
                 bicycle.Status = BikeStatus.Disabled;
+                System.Diagnostics.Debug.WriteLine("---bicikla---" + bicycle.Description + " status  " + bicycle.Status);
                 await _bicycleRepository.UpdateAsync(bicycle);
             }
             else
             {
-                await _bicycleRepository.DeleteAsync(bicycle.Id);
+                System.Diagnostics.Debug.WriteLine("---bicikla---" + bicycle.Description + " status  " + bicycle.Status);
+                await _bicycleRepository.DeleteAsync(bicycle);
             }
         }
     }

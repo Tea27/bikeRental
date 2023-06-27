@@ -7,6 +7,7 @@ using bikeRental.Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static System.Collections.Specialized.BitVector32;
 
 namespace bikeRental.Frontend.Controllers;
 public class StationsController : Controller
@@ -110,7 +111,7 @@ public class StationsController : Controller
             return BadRequest();
 
         var station = await _stationService.GetByIdAsync(id);
-        ViewData["Bicycles"] = station.Bicycles;
+        //ViewData["Bicycles"] = station.Bicycles;
 
         if (station == null)
         {
@@ -148,10 +149,10 @@ public class StationsController : Controller
         }
     }
     [HttpGet]
-    public async Task<IActionResult> Disable(Guid id)
+    public async Task<IActionResult> Disable(Guid id)  //idstanice
     {
         await _stationService.DisableBicycles(id);
-
+        System.Diagnostics.Debug.WriteLine("-povratak iz station disable bicycles");
         return RedirectToAction(nameof(Index));
     }
 

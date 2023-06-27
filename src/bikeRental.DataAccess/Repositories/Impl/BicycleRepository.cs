@@ -57,6 +57,7 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
     }
     public async Task UpdateAsync(TEntity entity)
     {
+        System.Diagnostics.Debug.WriteLine("-ulazak u update bicikle");
         try
         {
             _context.Attach(entity).State = EntityState.Modified;
@@ -67,12 +68,19 @@ public class BicycleRepository<TEntity> : IBicycleRepository<TEntity> where TEnt
         }
 
         await _context.SaveChangesAsync();
+
+        System.Diagnostics.Debug.WriteLine("-izlazak iz update bicikle");
+        
     }
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(TEntity entity)
     {
-        var bicycle = await GetByIdAsync(id);
-        DbSet.Remove(bicycle);
+
+        //System.Diagnostics.Debug.WriteLine("-ulazak u delete bicikle");
+        //var bicycle = await GetByIdAsync(id);
+        DbSet.Remove(entity);
         await _context.SaveChangesAsync();
+
+        System.Diagnostics.Debug.WriteLine("-izlazak iz delete bicikle");
     }
 
     public async Task<TEntity> GetByIdAsyncIncludeOrders(Guid? id)
