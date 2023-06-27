@@ -50,8 +50,7 @@ public class StationService : IStationService
     }
 
     public IEnumerable<StationResponse> GetAll()
-    {
-        //var response = _stationRepository.GetAll();
+    {    
         var response = _stationRepository.FindByCondition(station => station.Bicycles.Count == 0 || station.Bicycles.Any(b => b.Status != BikeStatus.Disabled));
         return _mapper.Map<IEnumerable<StationResponse>>(response);
     }
@@ -59,7 +58,6 @@ public class StationService : IStationService
     public string GetAddressess()
     {
         var response = _stationRepository.FindByCondition(station => station.Bicycles.Count == 0 || station.Bicycles.Any(b => b.Status != BikeStatus.Disabled));
-        //var response = _stationRepository.GetAll();
         var addresses = response.Select(station => new
         {
             title = station.Address,
@@ -86,9 +84,6 @@ public class StationService : IStationService
     public IEnumerable<StationResponse> CheckSwitch(string searchString, string sortOrder)
     {
         bool SearchIsEmpty = String.IsNullOrEmpty(searchString);
-
-        //var stations = _stationRepository.FindByCondition(station => station.Bicycles.Any(b => b.Status != BikeStatus.Disabled));
-        //var stations = _stationRepository.GetAll();
         var stations = _stationRepository.FindByCondition(station => station.Bicycles.Count==0 || station.Bicycles.Any(b => b.Status != BikeStatus.Disabled));
         stations = (SearchIsEmpty) switch
         {
@@ -124,12 +119,10 @@ public class StationService : IStationService
             if (bicycle.Orders.Count!=0)
             {
                 bicycle.Status = BikeStatus.Disabled;
-                System.Diagnostics.Debug.WriteLine("---bicikla---" + bicycle.Description + " status  " + bicycle.Status);
                 await _bicycleRepository.UpdateAsync(bicycle);
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("---bicikla---" + bicycle.Description + " status  " + bicycle.Status);
                 await _bicycleRepository.DeleteAsync(bicycle);
             }
         }

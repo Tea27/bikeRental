@@ -33,8 +33,8 @@
 					<span asp-validation-for="Price" class="text-danger"></span>
 				</div>
 				<div class="form-group">
-                <select asp-for="Status" class="form-control" 
-                    asp-items="@(Html.GetEnumSelectList<BikeStatus>())">
+                <select asp-for="Status" class="form-control"
+                            asp-items="@(Html.GetEnumSelectList<BikeStatus>().Select(s=>{s.Value=((BikeStatus)int.Parse(s.Value)).ToString(); return s;}).Where(s => s.Value != "InUse"))">
                 </select>
                 <label asp-for="Status"></label>
 

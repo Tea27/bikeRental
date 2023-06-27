@@ -66,10 +66,6 @@ namespace bikeRental.Application.Services.Impl
             
             foreach (var order in orders)
             {
-                /*var customer = await _userService.GetByIdAsync(order.Customer.Id);
-                order.Customer = _mapper.Map<ApplicationUser>(customer);
-                var bicycle = await _bicycleService.GetByIdAsync(order.Bicycle.Id);
-                order.Bicycle = _mapper.Map<Bicycle>(bicycle);*/
                 order.Customer = _mapper.Map<ApplicationUser>(order.Customer);
                 order.Bicycle = _mapper.Map<Bicycle>(order.Bicycle);           
             }
@@ -112,9 +108,6 @@ namespace bikeRental.Application.Services.Impl
         }
 
 
-        /** 
-         * Search orders for specific date
-         * */
         public IEnumerable<OrderResponse> SearchSelection(IEnumerable<OrderResponse> orders, DateTime dateSearchFrom, DateTime dateSearchTo)
         {
             IEnumerable<OrderResponse> ordersSearched = orders.ToList();                

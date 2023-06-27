@@ -111,7 +111,6 @@ public class StationsController : Controller
             return BadRequest();
 
         var station = await _stationService.GetByIdAsync(id);
-        //ViewData["Bicycles"] = station.Bicycles;
 
         if (station == null)
         {
@@ -149,10 +148,9 @@ public class StationsController : Controller
         }
     }
     [HttpGet]
-    public async Task<IActionResult> Disable(Guid id)  //idstanice
+    public async Task<IActionResult> Disable(Guid id)
     {
         await _stationService.DisableBicycles(id);
-        System.Diagnostics.Debug.WriteLine("-povratak iz station disable bicycles");
         return RedirectToAction(nameof(Index));
     }
 
