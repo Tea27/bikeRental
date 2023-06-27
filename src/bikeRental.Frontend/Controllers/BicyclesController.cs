@@ -135,7 +135,7 @@ namespace bikeRental.Frontend.Controllers
         {
             if (stationId == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var bicycle = new BicycleModel { Station = await _stationService.GetByIdAsync(stationId) };
@@ -167,7 +167,7 @@ namespace bikeRental.Frontend.Controllers
 
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             ViewData["cname"] = cname;
@@ -184,7 +184,7 @@ namespace bikeRental.Frontend.Controllers
         {
             if (bicycleModel == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             try

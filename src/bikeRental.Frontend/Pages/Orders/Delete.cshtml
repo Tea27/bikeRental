@@ -41,9 +41,7 @@
                  <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Customer)
                 </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Customer.UserName)
-                </dd>
+               
             </dl>
 
             <form asp-controller="Orders" asp-action="Delete" asp-route-id="@Model.Id" asp-route-bicycleId="@Model.Bicycle.Id" asp-route-customerId="@Model.Customer.Id" class="mt-4">

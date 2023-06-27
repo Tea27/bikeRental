@@ -14,8 +14,8 @@ using bikeRental.DataAccess.Repositories.Impl;
 using bikeRental.Application.Models.Station;
 using bikeRental.Core.Enums;
 using System.Data.Entity;
-using bikeRental.Core.Entities;
-using Microsoft.AspNetCore.Routing.Template;
+
+
 
 namespace bikeRental.Application.Services.Impl;
 
@@ -90,26 +90,37 @@ public class UserService : IUserService
 
 
 
-    public async Task<IEnumerable<UserModel>> GetAllUsers()
+    public IEnumerable<UserModel> GetAllUsers(IQueryable<ApplicationUser> response)
     {
-        var response = await _userRepository.GetAllAsync();
         var users = new List<UserModel>();
-        foreach (var user in response)
+        Console.WriteLine("Pozvan");
+
+        foreach (var user in response.ToList())
         {
             var userDto = _mapper.Map<UserModel>(user);
+
             try
             {
-                var role = _userManager.GetRolesAsync(user).Result.First();
-                userDto.Role = (Role)Enum.Parse(typeof(Role), role);
+                var roles = _userManager.GetRolesAsync(user).Result;
+                if (roles.Any())
+                {
+                    var role = roles.First();
+                    userDto.Role = (Role)Enum.Parse(typeof(Role), role);
+                    Console.WriteLine("Rola " + role);
+
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+
             users.Add(userDto);
         }
+
         return users;
     }
+
     public async Task AddAsync(RegisterUserModel userModel)
     {
         var user = _mapper.Map<ApplicationUser>(userModel);
@@ -150,23 +161,35 @@ public class UserService : IUserService
 
         await _userRepository.UpdateAsync(user, newRole);
     }
-
-    public IEnumerable<UserModel> SearchSelection(IEnumerable<UserModel> users, string searchString)
+    public IEnumerable<UserModel> CheckSwitch(string filterString, string searchString, string sortOrder)
     {
-        IEnumerable<UserModel> usersSearched = users.ToList();
+        bool SearchIsEmpty = String.IsNullOrEmpty(searchString);
+        bool FilterIsEmpty = String.IsNullOrEmpty(filterString);
 
-        if (!String.IsNullOrEmpty(searchString))
+        var users = _userRepository.GetAll();
+        switch (SearchIsEmpty, FilterIsEmpty)
         {
-            var searchStrTrim = searchString.Trim();
-            usersSearched = users.Where(t => t.FirstName.Contains(searchStrTrim)
-                                          || t.LastName.Contains(searchStrTrim)
-                                          || t.UserName.Contains(searchStrTrim)
-                                          || t.Email.Contains(searchStrTrim)
-                                          );
+            case (false, true):
+                var searched = Search(Sort(users, sortOrder), searchString);
+                return GetAllUsers(searched);
+            case (true, false):
+                return Filter(Sort(users, sortOrder), filterString);
+            case (false, false):
+                return Filter(Search(Sort(users, sortOrder), searchString), filterString);
+            default:
+                var sorted = Sort(users, sortOrder);
+                return GetAllUsers(sorted);
         }
-        return usersSearched;
     }
-    public IEnumerable<UserModel> SortingSelection(IEnumerable<UserModel> users, string sortOrder)
+
+
+    public IQueryable<ApplicationUser> Search(IQueryable<ApplicationUser> users, string searchString)
+    {
+        return _userRepository.FindByCondition(users, user => (user.FirstName.ToLower().Contains(searchString.Trim().ToLower())
+                                                            || user.LastName.ToLower().Contains(searchString.Trim().ToLower())
+                                                            || user.Email.ToLower().Contains(searchString.Trim().ToLower())));
+    }
+    public IQueryable<ApplicationUser> Sort(IQueryable<ApplicationUser> users, string sortOrder)
     {
         switch (sortOrder)
         {
@@ -174,20 +197,25 @@ public class UserService : IUserService
                 return users.OrderBy(s => s.FirstName);
             case "FirstNameDesc":
                 return users = users.OrderByDescending(s => s.FirstName);
-            case "LastName":
-                return users.OrderBy(s => s.LastName);
             case "LastNameDesc":
                 return users.OrderByDescending(s => s.LastName);
-            case "UserName":
-                return users.OrderBy(s => s.UserName);
-            case "UserNameDesc":
-                return users.OrderByDescending(s => s.UserName);
             case "Email":
                 return users.OrderBy(s => s.Email);
             case "EmailDesc":
                 return users.OrderByDescending(s => s.Email);
             default:
                 return users.OrderBy(s => s.LastName);
+        }
+    }
+    public IEnumerable<UserModel> Filter(IQueryable<ApplicationUser> appUsers, string filterString)
+    {
+        var users = GetAllUsers(appUsers);
+        switch (filterString)
+        {
+            case "Administrator":
+                return users.Where(u => u.Role == Role.Administrator);
+            default:
+                return users.Where(u => u.Role == Role.Customer);
         }
     }
 

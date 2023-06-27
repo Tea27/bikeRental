@@ -16,8 +16,8 @@ public class UserProfile : Profile
         CreateMap<ApplicationUser, UserModel>();
         CreateMap<EditUserModel, UserModel>();
         CreateMap<UserModel, EditUserModel>();
-        CreateMap<ApplicationUser, EditUserModel>()
-            .ForMember(dst => dst.UserName, opt => opt.MapFrom(model => model.UserName));
+        CreateMap<ApplicationUser, EditUserModel>();
+            //.ForMember(dst => dst.UserName, opt => opt.MapFrom(model => model.UserName));
         CreateMap<EditUserModel, ApplicationUser>();
         CreateMap<RegisterUserModel, ApplicationUser>();
     }

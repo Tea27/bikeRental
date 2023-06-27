@@ -4,6 +4,8 @@
 @model PaginatedList<bikeRental.Application.Models.User.UserModel>
 @{
     ViewData["Title"] = "Customers";
+    var filterString = ViewData["filterString"] as string;
+
 }
 
 @ViewData["CurrentCategory"]
@@ -12,10 +14,20 @@
 <div class="container mt-4">
     <div class="row justify-content-between">
         <div class="col-6">
-        <form asp-controller="Users" asp-action="Index" asp-route-currentCategory="@ViewData["CurrentCategory"]" method="get">
+        <form asp-controller="Users" asp-action="Index" asp-route-searchString="@ViewData["searchString"]" method="get">
             <div class="input-group">
-                     <input type="text" placeholder="Start typing address…" name="SearchString" value="@ViewData["CurrentFilter"]" class="form-control"/>
+                     <input type="text" placeholder="Start typing…" name="searchString" value="@ViewData["searchString"]" class="form-control"/>
+                      <select class="form-select" aria-label="Example select with button addon" name="filterString">
+                            <option value="">All Roles</option>
+                            @foreach (var type in Enum.GetNames(typeof(Role)))
+                            {
+                                <option value="@type" selected="@(type == filterString)">@type</option>
+                            }
+                        </select>
                      <div class="input-group-append">
+                          <a class="btn btn-light" asp-controller="Users" asp-action="Index">
+								<i class="bi bi-x-lg"></i>
+							</a>
                          <button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
                          <a class="btn btn-light" asp-action="Index">Back to Full List</a>
                      </div>
@@ -39,12 +51,19 @@
         <tr>           
             @foreach (var prop in typeof(UserModel).GetProperties())
             {
-                @if (prop.Name != "Id"@* && prop.Name != "Role"*@ && prop.Name != "Orders")
+                @if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "Username" && prop.Name != "Role" && prop.Name != "Status")
                 {
                     <th>
                         @prop.Name
                         <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}Desc")><i class="bi bi-caret-up-fill"></i></a>
                         <a style="color:black" asp-action="Index" asp-route-sortOrder=@($"{prop.Name}")><i class="bi bi-caret-down-fill"></i></a>
+                    </th>
+                }
+                else if (prop.Name != "Id" && prop.Name != "Orders" && prop.Name != "Username")
+                {
+                    <th>
+                        @prop.Name
+                       
                     </th>
                 }
             }
@@ -60,7 +79,6 @@
         @foreach (var user in Model)
         {
             <tr>
-                <td>@user.UserName</td>
                 <td>@user.FirstName</td>
                 <td>@user.LastName</td>
                 <td>@user.Email</td>
@@ -82,25 +100,26 @@
 </table>
 
 @{
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-}
+		var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+		var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+	}
 
-<a asp-action="Index"
-    asp-controller="Users"
-   asp-route-currentCategory="@ViewData["CurrentCategory"]"
-   asp-route-pageNumber="@(Model.PageIndex - 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @prevDisabled">
-    Previous
-</a>
-<a asp-action="Index"
-    asp-controller="Users"
-   asp-route-currentCategory="@ViewData["CurrentCategory"]"
-   asp-route-pageNumber="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @nextDisabled">
-    Next
-</a>
-
+    <a asp-action="Index"
+        asp-controller="Users"
+       asp-route-searchString="@ViewData[""]"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-filterString="@ViewData["filterString"]"
+       asp-route-sortOrder="@ViewData["sortOrder"]"
+       class="btn btn-default @prevDisabled">
+        Previous
+    </a>
+    <a asp-action="Index"
+        asp-controller="Users"
+       asp-route-searchString="@ViewData["searchString"]"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-filterString="@ViewData["filterString"]"
+       asp-route-sortOrder="@ViewData["sortOrder"]"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
 </div>

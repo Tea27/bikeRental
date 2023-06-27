@@ -12,7 +12,6 @@ namespace bikeRental.Application.Models.User;
 
 public class UserModel : BaseResponseModel
 {
-    public string UserName { get; set; }
 
     public string FirstName { get; set; }
 

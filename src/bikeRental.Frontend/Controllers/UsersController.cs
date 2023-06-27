@@ -33,25 +33,21 @@ public class UsersController : Controller
 
     [HttpGet]
     [Authorize(Roles = ("Administrator"))]
-    public async Task<IActionResult> Index(string currentCategory, string currentFilter, string searchString, string sortOrder, int? pageNumber)
+    public async Task<IActionResult> Index(string searchString, string filterString, string sortOrder, int? pageNumber)
     {
         if (searchString != null)
         {
             pageNumber = 1;
         }
-        else
-        {
-            searchString = currentFilter;
-        }
 
-        ViewData["CurrentCategory"] = currentCategory;
-        ViewData["CurrentFilter"] = searchString;
-        int pageSize = 5;
-        var users = await _userService.GetAllUsers();
 
-        users = _userService.SortingSelection(users, sortOrder);
+        ViewData["searchString"] = searchString;
+        ViewData["filterString"] = filterString;
+        ViewData["sortOrder"] = sortOrder;
 
-        users = _userService.SearchSelection(users, searchString);
+        int pageSize = 6;
+
+        var users  = _userService.CheckSwitch(filterString, searchString, sortOrder);
 
         return View("/Pages/Users/Index.cshtml", PaginatedList<UserModel>.Create(users, pageNumber ?? 1, pageSize));
     }
@@ -98,7 +94,7 @@ public class UsersController : Controller
 
         if (user == null)
         {
-            return NotFound();
+            return BadRequest();
         }
 
         if (saveChangesError.GetValueOrDefault())
@@ -139,7 +135,6 @@ public class UsersController : Controller
     }
     public ActionResult Redirect(Guid? id, string name)
     {
-        System.Diagnostics.Debug.WriteLine("-------------id usera--------" + id);
         TempData["UserId"] = id;
         return RedirectToAction(name);
     }
@@ -158,7 +153,7 @@ public class UsersController : Controller
 
         if (userModel == null)
         {
-            return NotFound();
+            return BadRequest();
         }
 
         var editUserModel = _mapper.Map<EditUserModel>(userModel);

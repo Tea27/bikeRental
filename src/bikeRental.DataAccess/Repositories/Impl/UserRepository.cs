@@ -31,10 +31,9 @@ public class UserRepository<TEntity> : IUserRepository<TEntity> where TEntity : 
         _userStore = userStore;
     }
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync()
+    public IQueryable<TEntity> GetAll()
     {
-        return await DbSet.ToListAsync();
-
+        return DbSet.AsQueryable();
     }
 
     public async Task<TEntity> GetByIdAsync(Guid? id)
@@ -52,6 +51,11 @@ public class UserRepository<TEntity> : IUserRepository<TEntity> where TEntity : 
     {
         return DbSet.Where(expression).AsNoTracking();
     }
+
+    public IQueryable<TEntity> FindByCondition(IQueryable<TEntity> query, Expression<Func<TEntity, bool>> expression)
+    {
+        return query.Where(expression).AsNoTracking();
+    }
     public async Task UpdateAsync(TEntity entity, string newRole)
     {
         
@@ -62,7 +66,7 @@ public class UserRepository<TEntity> : IUserRepository<TEntity> where TEntity : 
             editItem.FirstName = entity.FirstName;
             editItem.LastName = entity.LastName;
             editItem.Email = entity.Email;
-            editItem.UserName = entity.UserName;
+            editItem.UserName = entity.Email;
             editItem.Status = entity.Status;
 
             await _userManager.UpdateAsync(editItem);

@@ -74,7 +74,7 @@ public class StationsController : Controller
 
         if (station == null)
         {
-            return NotFound();
+            return BadRequest();
         }
 
         return View("/Pages/Stations/Edit.cshtml", station);
@@ -87,7 +87,7 @@ public class StationsController : Controller
     {
         if (stationModel == null)
         {
-            return NotFound();
+            return BadRequest();
         }
 
         try
@@ -115,7 +115,7 @@ public class StationsController : Controller
 
         if (station == null)
         {
-            return NotFound();
+            return BadRequest();
         }
         
         if (saveChangesError.GetValueOrDefault())
