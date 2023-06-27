@@ -205,7 +205,6 @@ namespace bikeRental.Frontend.Controllers
             var bicycle = await _bicycleService.GetByIdAsync(id);
             bicycle.Status = BikeStatus.Disabled;
             await _bicycleService.UpdateAsync(bicycle);
-            System.Diagnostics.Debug.WriteLine("ovo je cname" + cname);
 
             return (cname == "GetByStation") ? RedirectToAction(cname, new { id = bicycle.Station.Id }) : RedirectToAction(cname);
         }
