@@ -30,7 +30,7 @@ namespace bikeRental.Frontend.Controllers
 
         [HttpGet]
         [Authorize(Roles = ("Administrator"))]
-        public IActionResult Index(string currentCategory, string sortOrder, DateTime searchDateFrom, DateTime searchDateTo, int? pageNumber)
+        public IActionResult Index(string sortOrder, DateTime searchDateFrom, DateTime searchDateTo, int? pageNumber)
         {
             if (pageNumber == null)
             {
@@ -45,7 +45,7 @@ namespace bikeRental.Frontend.Controllers
             var orders = _orderService.GetAll();
 
             orders = _orderService.SortingSelection(orders, sortOrder);
-            if (searchDateTo != DateTime.MinValue)
+            if (searchDateFrom != DateTime.MinValue || searchDateTo != DateTime.MinValue)
             {
                 orders = _orderService.SearchSelection(orders, searchDateFrom, searchDateTo);
             }
@@ -55,17 +55,23 @@ namespace bikeRental.Frontend.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> UserIndex(string sortOrder, int? pageNumber)
+        public async Task<IActionResult> UserIndex(string sortOrder, DateTime searchDateFrom, DateTime searchDateTo, int? pageNumber)
         {
             var userID = Guid.Parse(User.Identity.GetUserId());
 
             ViewData["SortOrder"] = sortOrder;
+            ViewData["SearchDateFrom"] = searchDateFrom;
+            ViewData["SearchDateTo"] = searchDateTo;
 
             int pageSize = 6;
 
             var orders = await _orderService.GetByCustomer(userID);
          
             orders = _orderService.SortingSelection(orders, sortOrder);
+            if (searchDateFrom != DateTime.MinValue || searchDateTo != DateTime.MinValue)
+            {
+                orders = _orderService.SearchSelection(orders, searchDateFrom, searchDateTo);
+            }
 
             return View("/Pages/Orders/UserIndex.cshtml", PaginatedList<OrderResponse>.Create(orders, pageNumber ?? 1, pageSize));
         }

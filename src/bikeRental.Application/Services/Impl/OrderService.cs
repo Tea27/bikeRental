@@ -102,9 +102,10 @@ namespace bikeRental.Application.Services.Impl
             await _orderRepository.UpdateAsync(order, orderModel.Customer.Id, orderModel.Bicycle.Id);
         }
         public IEnumerable<OrderResponse> SearchSelection(IEnumerable<OrderResponse> orders, DateTime dateSearchFrom, DateTime dateSearchTo)
-        {
-            IEnumerable<OrderResponse> ordersSearched = orders.ToList();                
-            return orders.Where(o => (o.RentalStartTime.Date.Ticks >= dateSearchFrom.Date.Ticks && o.RentalEndTime.Date.Ticks <= dateSearchTo.Date.Ticks));
+        {               
+            return orders.Where(o => (o.RentalStartTime.Date >= dateSearchFrom.Date 
+                                      && o.RentalEndTime.Date <= dateSearchTo.Date 
+                                      && o.RentalStartTime != o.RentalEndTime));
           
         }
         public IEnumerable<OrderResponse> SortingSelection(IEnumerable<OrderResponse> orders, string sortOrder)

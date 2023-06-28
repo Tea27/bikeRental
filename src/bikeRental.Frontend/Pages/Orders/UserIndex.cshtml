@@ -11,15 +11,17 @@
     <h2>Orders</h2>
     <div class="container">
         <div class="row justify-content-between">
-            <div class="col-6">
+            <div class="col-12">
                 <form asp-controller="Orders" asp-action="UserIndex" method="get">
                     <div class="input-group">
-@*
-                        <input type="datetime-local" name="SearchDate" value="@ViewData["CurrentFilter"]" class="form-control" />
+                        <label for="SearchDateFrom">Date from:</label>
+                        <input type="date" name="SearchDateFrom" id="SearchDateFrom" value="@ViewData["SearchDateFrom"]" class="form-control" />
+                        <label for="SearchDateTo">Date to:</label>
+                        <input type="date" name="SearchDateTo" id="SearchDateTo" value="@ViewData["SearchDateTo"]" max="@DateTime.Now" class="form-control" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
                             <a class="btn btn-light" asp-action="UserIndex">Back to Full List</a>
-                        </div>*@
+                        </div>
                     </div>
                 </form>
             </div>
@@ -110,6 +112,8 @@
        asp-controller="Orders"
        asp-route-pageNumber="@(Model.PageIndex - 1)"
        asp-route-sortOrder="@ViewData["SortOrder"]"
+       asp-route-searchDateFrom="@ViewData["SearchDateFrom"]"
+       asp-route-searchDateTo="@ViewData["SearchDateTo"]"
        class="btn btn-default @prevDisabled">
         Previous
     </a>
@@ -117,6 +121,8 @@
        asp-controller="Orders"
        asp-route-pageNumber="@(Model.PageIndex + 1)"
        asp-route-sortOrder="@ViewData["SortOrder"]"
+         asp-route-searchDateFrom="@ViewData["SearchDateFrom"]"
+     asp-route-searchDateTo="@ViewData["SearchDateTo"]"
        class="btn btn-default @nextDisabled">
         Next
     </a>
