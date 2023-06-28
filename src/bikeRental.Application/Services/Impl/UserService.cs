@@ -93,7 +93,6 @@ public class UserService : IUserService
     public IEnumerable<UserModel> GetAllUsers(IQueryable<ApplicationUser> response)
     {
         var users = new List<UserModel>();
-        Console.WriteLine("Pozvan");
 
         foreach (var user in response.ToList())
         {
@@ -106,8 +105,6 @@ public class UserService : IUserService
                 {
                     var role = roles.First();
                     userDto.Role = (Role)Enum.Parse(typeof(Role), role);
-                    Console.WriteLine("Rola " + role);
-
                 }
             }
             catch (Exception ex)
@@ -129,7 +126,7 @@ public class UserService : IUserService
 
     public async Task<UserModel> GetByIdAsync(Guid? id)
     {
-        var user = await _userRepository.GetByIdAsync(id);
+        var user = await _userRepository.GetByIdAsync(id) ?? throw new BadRequestException("User not found.");
         var userModel = _mapper.Map<UserModel>(user);
 
         var role = _userManager.GetRolesAsync(user).Result.First();

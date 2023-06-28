@@ -1,13 +1,9 @@
 ﻿using bikeRental.Application;
-using bikeRental.Application.Models.Bicycle;
 using bikeRental.Application.Models.Station;
 using bikeRental.Application.Services;
-using bikeRental.Core.Entities;
-using bikeRental.Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static System.Collections.Specialized.BitVector32;
 
 namespace bikeRental.Frontend.Controllers;
 public class StationsController : Controller
@@ -143,7 +139,6 @@ public class StationsController : Controller
         }
         catch (DbUpdateException ex)
         {
-            //Log the error (uncomment ex variable name and write a log.)
             return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true }) ;
         }
     }

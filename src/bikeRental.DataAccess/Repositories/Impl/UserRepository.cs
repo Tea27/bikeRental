@@ -1,19 +1,8 @@
-﻿using bikeRental.Core.Entities;
-using bikeRental.Core.Identity;
+﻿using bikeRental.Core.Identity;
 using bikeRental.DataAccess.Persistence;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.Security.Principal;
-using Microsoft.AspNet.Identity.EntityFramework;
-
-//using Microsoft.AspNet.Identity;
 
 namespace bikeRental.DataAccess.Repositories.Impl;
 
@@ -41,12 +30,6 @@ public class UserRepository<TEntity> : IUserRepository<TEntity> where TEntity : 
         return await FindByCondition(user => user.Id.Equals(id)).FirstOrDefaultAsync();
     }
 
-    public async Task<IdentityUser<Guid>> GetIdentityUser(Guid? id)
-    {
-        return await FindByCondition(user => user.Id.Equals(id))
-        .Cast<IdentityUser<Guid>>()
-        .FirstOrDefaultAsync();
-    }
     public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
     {
         return DbSet.Where(expression).AsNoTracking();

@@ -1,20 +1,12 @@
 ﻿using bikeRental.Application;
 using bikeRental.Application.Models.User;
 using bikeRental.Application.Services;
-using bikeRental.Application.Services.Impl;
-using bikeRental.Core.Entities;
 using bikeRental.Core.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
-using System.Web;
-using System;
-using System.Security.Cryptography;
-using System.Data.Entity.Validation;
-using Microsoft.AspNetCore.Authentication;
 using bikeRental.Core.Enums;
 
 namespace bikeRental.Frontend.Controllers;
@@ -33,13 +25,12 @@ public class UsersController : Controller
 
     [HttpGet]
     [Authorize(Roles = ("Administrator"))]
-    public async Task<IActionResult> Index(string searchString, string filterString, string sortOrder, int? pageNumber)
+    public IActionResult Index(string searchString, string filterString, string sortOrder, int? pageNumber)
     {
         if (searchString != null)
         {
             pageNumber = 1;
         }
-
 
         ViewData["searchString"] = searchString;
         ViewData["filterString"] = filterString;
@@ -68,7 +59,7 @@ public class UsersController : Controller
             if (ModelState.IsValid)
             {
                 await _userService.AddAsync(userModel);
-                return User.Identity.IsAuthenticated && User.IsInRole("Administrator") ? RedirectToAction(nameof(Index)) : RedirectToAction(nameof(Login));
+                return User.IsInRole("Administrator") ? RedirectToAction(nameof(Index)) : RedirectToAction(nameof(Login));
             }
         }
         catch (DbUpdateException ex)
@@ -197,6 +188,7 @@ public class UsersController : Controller
     {
         var userLoging = await _userManager.FindByEmailAsync(user.Email);
         if (userLoging.Status == AccountStatus.Disabled) return BadRequest("Your account is disabled");
+
         if (ModelState.IsValid)
         {
             var result = await _userService.LoginAsync(user);

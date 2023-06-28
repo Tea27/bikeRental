@@ -5,6 +5,7 @@ using bikeRental.DataAccess.Repositories;
 using bikeRental.Core.Enums;
 using bikeRental.Application.Models.Station;
 using System.Data.Entity;
+using bikeRental.Application.Exceptions;
 
 namespace bikeRental.Application.Services.Impl;
 public class BicycleService : IBicycleService
@@ -21,13 +22,13 @@ public class BicycleService : IBicycleService
    
     public async Task Delete(Guid id)
     {        
-        var bicycle = await _bicycleRepository.GetByIdAsync(id);
+        var bicycle = await _bicycleRepository.GetByIdAsync(id) ?? throw new BadRequestException("Bicycle not found.");
         await _bicycleRepository.DeleteAsync(bicycle);
     }
 
     public async Task<BicycleModel> GetByIdAsync(Guid? id)
     {
-        var response = await _bicycleRepository.GetByIdAsync(id);
+        var response = await _bicycleRepository.GetByIdAsync(id) ?? throw new BadRequestException("Bicycle not found.");
         return _mapper.Map<BicycleModel>(response);
     }
 

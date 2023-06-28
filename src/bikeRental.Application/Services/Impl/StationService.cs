@@ -112,7 +112,7 @@ public class StationService : IStationService
     public async Task DisableBicycles(Guid id)
     {
         
-        var station =  await _stationRepository.GetByIdAsync(id);
+        var station =  await _stationRepository.GetByIdAsync(id) ?? throw new BadRequestException("Station not found.");
         var bicycles = station.Bicycles;
         foreach (var bicycle in bicycles)
         {

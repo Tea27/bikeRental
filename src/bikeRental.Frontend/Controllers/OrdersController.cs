@@ -36,9 +36,9 @@ namespace bikeRental.Frontend.Controllers
             {
                 pageNumber = 1;
             }
-          
-            ViewData["SearchDateFrom"] = searchDateFrom;
-            ViewData["SearchDateTo"] = searchDateTo;
+
+            ViewData["SearchDateFrom"] = searchDateFrom == DateTime.MinValue ? DateTime.Now.ToString("yyyy-MM-dd") : searchDateFrom.ToString("yyyy-MM-dd");
+            ViewData["SearchDateTo"] = searchDateTo == DateTime.MinValue ? DateTime.Now.ToString("yyyy-MM-dd") : searchDateTo.ToString("yyyy-MM-dd");
             ViewData["SortOrder"] = sortOrder;
             int pageSize = 6;
 
@@ -60,14 +60,15 @@ namespace bikeRental.Frontend.Controllers
             var userID = Guid.Parse(User.Identity.GetUserId());
 
             ViewData["SortOrder"] = sortOrder;
-            ViewData["SearchDateFrom"] = searchDateFrom;
-            ViewData["SearchDateTo"] = searchDateTo;
+            ViewData["SearchDateFrom"] = searchDateFrom == DateTime.MinValue ? DateTime.Now.ToString("yyyy-MM-dd") : searchDateFrom.ToString("yyyy-MM-dd");
+            ViewData["SearchDateTo"] = searchDateTo == DateTime.MinValue ? DateTime.Now.ToString("yyyy-MM-dd") : searchDateTo.ToString("yyyy-MM-dd");
 
             int pageSize = 6;
 
             var orders = await _orderService.GetByCustomer(userID);
-         
             orders = _orderService.SortingSelection(orders, sortOrder);
+
+
             if (searchDateFrom != DateTime.MinValue || searchDateTo != DateTime.MinValue)
             {
                 orders = _orderService.SearchSelection(orders, searchDateFrom, searchDateTo);

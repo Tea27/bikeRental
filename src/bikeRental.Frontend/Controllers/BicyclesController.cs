@@ -1,18 +1,11 @@
-﻿using bikeRental.Application.Models.Station;
-using bikeRental.Application;
-using bikeRental.Core.Entities;
+﻿using bikeRental.Application;
 using Microsoft.AspNetCore.Mvc;
-using System.Drawing.Printing;
 using bikeRental.Application.Models.Bicycle;
 using bikeRental.Application.Services;
-using bikeRental.Application.Services.Impl;
 using Microsoft.EntityFrameworkCore;
 using bikeRental.Core.Enums;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using System.Xml.Linq;
-using System.Collections.Generic;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 
 namespace bikeRental.Frontend.Controllers

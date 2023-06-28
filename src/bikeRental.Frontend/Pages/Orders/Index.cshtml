@@ -5,6 +5,8 @@
 
 @{
     ViewData["Title"] = "Orders";
+    var dateFrom = ViewData["SearchDateFrom"] as string;
+    var dateTo = ViewData["SearchDateTo"] as string;
 }
 
 <div class="container px-4 pt-2">
@@ -15,9 +17,9 @@
                 <form asp-controller="Orders" asp-action="Index"  method="get">
                     <div class="input-group">
                         <label for="SearchDateFrom">Date from:</label>
-                        <input type="date" name="SearchDateFrom" id="SearchDateFrom" value="@ViewData["SearchDateFrom"]" class="form-control" />
+                        <input type="date" name="SearchDateFrom" id="SearchDateFrom" value="@dateFrom" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" />
                         <label for="SearchDateTo">Date to:</label>
-                        <input type="date" name="SearchDateTo" id="SearchDateTo" value="@ViewData["SearchDateTo"]" max="@DateTime.Now" class="form-control" />
+                        <input type="date" name="SearchDateTo" id="SearchDateTo" value="@dateTo" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-warning">Search <i class="bi bi-bicycle"></i></button>
                             <a class="btn btn-light" asp-action="Index">Back to Full List</a>
@@ -44,13 +46,6 @@
                     </th>
                 }
             }
-            
-            @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
-            {
-                <th>
-                    Delete
-                </th>
-            }
 
         </tr>
         @foreach (var item in Model)
@@ -73,14 +68,6 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Bicycle.Description)
                     </td>
-
-                    @*@if (User.Identity!.IsAuthenticated && User.IsInRole("Administrator"))
-                    {
-                        <td>
-                            <a class="btn btn-outline-primary" asp-controller="Orders" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pen"></i></a>
-                            <a class="btn btn-outline-danger" asp-controller="Orders" asp-action="Delete" asp-route-id="@item.Id" asp-route-bicycleId="@item.Bicycle.Id" asp-route-customerId="@item.Customer.Id"><i class="bi bi-trash"></i></a>
-                        </td>
-                    }*@
                     
                 }
                 
