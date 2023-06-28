@@ -159,62 +159,6 @@ namespace bikeRental.Frontend.Controllers
                 ModelState.AddModelError("", "Unable to save changes. " + ex);
             }
             return RedirectToAction(nameof(UserIndex));
-        }
-
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Delete(Guid? id, Guid bicycleId, Guid customerId, bool? saveChangesError = false)
-        {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-
-            var order = await _orderService.GetByIdAsync(id, customerId, bicycleId);
-
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            if (saveChangesError.GetValueOrDefault())
-            {
-                ViewData["ErrorMessage"] =
-                    "Delete failed. Try again, and if the problem persists " +
-                    "see your system administrator.";
-            }
-
-            return View("/Pages/Orders/Delete.cshtml", order);
-        }
-
-
-        [HttpPost, ActionName("Delete")]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id, Guid bicycleId, Guid customerId)
-        {
-            var order = await _orderService.GetByIdAsync(id, customerId, bicycleId);     
-            var user = await _userService.GetByIdAsync(Guid.Parse(User.Identity.GetUserId()));
-
-            if (user.Role != Role.Administrator)
-            {
-                return BadRequest();
-            }
-
-            if (order == null)
-            {
-                return RedirectToAction(nameof(Delete));
-            }
-
-            try
-            {
-                await _orderService.Delete(id);              
-                return RedirectToAction(nameof(Index));
-            }
-            catch (DbUpdateException ex)
-            {
-                return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
-            }
-        }
+        }      
     }
 }

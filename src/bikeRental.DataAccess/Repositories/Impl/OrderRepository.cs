@@ -91,16 +91,6 @@ namespace bikeRental.DataAccess.Repositories.Impl
             }
 
             await _context.SaveChangesAsync();
-        }
-
-       
-        public async Task DeleteAsync(Guid id)
-        {
-            var order = new Order() { Id = id };
-            _context.Orders.Remove(order);
-            await _context.SaveChangesAsync();
-        }
-
-       
+        }             
     }
 }

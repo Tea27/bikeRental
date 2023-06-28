@@ -16,7 +16,6 @@ namespace bikeRental.Application.Services
         IEnumerable<OrderResponse> SearchSelection(IEnumerable<OrderResponse> orders, DateTime dateSearchFrom, DateTime dateSearchTo );
         Task UpdateAsync(OrderModel orderModel);
         IEnumerable<OrderResponse> SortingSelection(IEnumerable<OrderResponse> orders, string sortOrder);
-        Task Delete(Guid Id);
         Task<IEnumerable<OrderResponse>> GetByCustomer(Guid CustomerId);
         Task<IEnumerable<OrderResponse>> GetByBicycle(Guid BicycleId);
         decimal GetRentalPrice(DateTime rentalStartTime, DateTime rentalEndTime, decimal price);

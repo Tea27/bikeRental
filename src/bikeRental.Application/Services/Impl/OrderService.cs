@@ -101,13 +101,6 @@ namespace bikeRental.Application.Services.Impl
             var order = _mapper.Map<Order>(orderModel);
             await _orderRepository.UpdateAsync(order, orderModel.Customer.Id, orderModel.Bicycle.Id);
         }
-        public async Task Delete(Guid Id)
-        {
-            var order = await _orderRepository.GetByIdAsync(Id);        
-            await _orderRepository.DeleteAsync(Id);
-        }
-
-
         public IEnumerable<OrderResponse> SearchSelection(IEnumerable<OrderResponse> orders, DateTime dateSearchFrom, DateTime dateSearchTo)
         {
             IEnumerable<OrderResponse> ordersSearched = orders.ToList();                

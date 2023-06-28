@@ -13,7 +13,6 @@ namespace bikeRental.DataAccess.Repositories
         IQueryable<TEntity> GetAll();
         Task<TEntity> GetByIdAsync(Guid? id);
         Task UpdateAsync(TEntity entity, Guid customerId, Guid bicycleId);
-        Task DeleteAsync(Guid id);
         Task<IEnumerable<TEntity>> GetByCustomer(Guid? customerId);
         Task<IEnumerable<TEntity>> GetByBicycle(Guid? bicycleId);
     }
