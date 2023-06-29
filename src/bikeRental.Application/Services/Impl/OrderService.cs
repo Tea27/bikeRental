@@ -63,12 +63,6 @@ namespace bikeRental.Application.Services.Impl
         public IEnumerable<OrderResponse> GetAll()
         {
             var orders = _orderRepository.GetAll();
-            
-            foreach (var order in orders)
-            {
-                order.Customer = _mapper.Map<ApplicationUser>(order.Customer);
-                order.Bicycle = _mapper.Map<Bicycle>(order.Bicycle);           
-            }
             var orderModels = _mapper.Map<IEnumerable<OrderResponse>>(orders);
             return orderModels;
         }
