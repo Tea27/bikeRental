@@ -1,12 +1,25 @@
 ﻿@using bikeRental.Application;
 @using bikeRental.Application.Models.Order;
-@model PaginatedList<bikeRental.Application.Models.Order.OrderResponse>
+@model PaginatedList<bikeRental.Application.Models.Order.OrderModel>
 
 
 @{
     ViewData["Title"] = "Orders";
     var dateFrom = ViewData["SearchDateFrom"] as string;
     var dateTo = ViewData["SearchDateTo"] as string;
+    var sentDateTo = DateTime.MinValue.ToString("yyyy-MM-dd");
+    var sentDateFrom = DateTime.MinValue.ToString("yyyy-MM-dd");
+    if (dateFrom == DateTime.MinValue.ToString("yyyy-MM-dd") || dateTo == DateTime.MinValue.ToString("yyyy-MM-dd"))
+    {
+        dateFrom = DateTime.Now.ToString("yyyy-MM-dd");
+        dateTo = DateTime.Now.ToString("yyyy-MM-dd");
+
+    }
+    else
+    {
+        sentDateFrom = dateFrom;
+        sentDateTo = dateTo;
+    }
 }
 
 <div class="container px-4 pt-2">
@@ -32,7 +45,7 @@
 
     <table class="table table-hover mt-5 ">
         <tr>
-            @foreach (var prop in typeof(OrderResponse).GetProperties())
+            @foreach (var prop in typeof(OrderModel).GetProperties())
             {
                 @if (prop.Name != "Id")
                 {
@@ -84,8 +97,8 @@
        asp-controller="Orders"
        asp-route-pageNumber="@(Model.PageIndex - 1)"
        asp-route-sortOrder="@ViewData["SortOrder"]"
-       asp-route-searchDateFrom="@ViewData["SearchDateFrom"]"
-       asp-route-searchDateTo="@ViewData["SearchDateTo"]"
+       asp-route-searchDateFrom="@sentDateFrom"
+       asp-route-searchDateTo="@sentDateTo"
        class="btn btn-default @prevDisabled">
         Previous
     </a>
@@ -93,8 +106,8 @@
        asp-controller="Orders"
        asp-route-pageNumber="@(Model.PageIndex + 1)"
        asp-route-sortOrder="@ViewData["SortOrder"]"
-       asp-route-searchDateFrom="@ViewData["SearchDateFrom"]"
-       asp-route-searchDateTo="@ViewData["SearchDateTo"]"
+       asp-route-searchDateFrom="@sentDateFrom"
+       asp-route-searchDateTo="@sentDateTo"
        class="btn btn-default @nextDisabled">
         Next
     </a>

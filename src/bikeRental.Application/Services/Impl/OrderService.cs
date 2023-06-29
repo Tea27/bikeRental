@@ -60,17 +60,17 @@ namespace bikeRental.Application.Services.Impl
             return orderModel;
         }
 
-        public IEnumerable<OrderResponse> GetAll()
+        public IEnumerable<OrderModel> GetAll()
         {
             var orders = _orderRepository.GetAll();
-            var orderModels = _mapper.Map<IEnumerable<OrderResponse>>(orders);
+            var orderModels = _mapper.Map<IEnumerable<OrderModel>>(orders);
             return orderModels;
         }
 
-        public async Task<IEnumerable<OrderResponse>> GetByCustomer(Guid CustomerId)
+        public async Task<IEnumerable<OrderModel>> GetByCustomer(Guid CustomerId)
         {
             var orders = await _orderRepository.GetByCustomer(CustomerId);
-            var response = _mapper.Map<IEnumerable<OrderResponse>>(orders);
+            var response = _mapper.Map<IEnumerable<OrderModel>>(orders);
             foreach (var order in response)
             {
                 order.Customer = await _userService.GetByIdAsync(CustomerId);
@@ -78,10 +78,10 @@ namespace bikeRental.Application.Services.Impl
             return response;
         }
 
-        public async Task<IEnumerable<OrderResponse>> GetByBicycle(Guid BicycleId)
+        public async Task<IEnumerable<OrderModel>> GetByBicycle(Guid BicycleId)
         {
             var orders = await _orderRepository.GetByBicycle(BicycleId);
-            var response = _mapper.Map<IEnumerable<OrderResponse>>(orders);
+            var response = _mapper.Map<IEnumerable<OrderModel>>(orders);
             foreach (var order in response)
             {
                 order.Bicycle = await _bicycleService.GetByIdAsync(BicycleId);
@@ -95,14 +95,14 @@ namespace bikeRental.Application.Services.Impl
             var order = _mapper.Map<Order>(orderModel);
             await _orderRepository.UpdateAsync(order, orderModel.Customer.Id, orderModel.Bicycle.Id);
         }
-        public IEnumerable<OrderResponse> SearchSelection(IEnumerable<OrderResponse> orders, DateTime dateSearchFrom, DateTime dateSearchTo)
+        public IEnumerable<OrderModel> SearchSelection(IEnumerable<OrderModel> orders, DateTime dateSearchFrom, DateTime dateSearchTo)
         {               
             return orders.Where(o => (o.RentalStartTime.Date >= dateSearchFrom.Date 
                                       && o.RentalEndTime.Date <= dateSearchTo.Date 
                                       && o.RentalStartTime != o.RentalEndTime));
           
         }
-        public IEnumerable<OrderResponse> SortingSelection(IEnumerable<OrderResponse> orders, string sortOrder)
+        public IEnumerable<OrderModel> SortingSelection(IEnumerable<OrderModel> orders, string sortOrder)
         {
             switch (sortOrder)
             {

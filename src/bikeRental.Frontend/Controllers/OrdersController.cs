@@ -37,8 +37,8 @@ namespace bikeRental.Frontend.Controllers
                 pageNumber = 1;
             }
 
-            ViewData["SearchDateFrom"] = searchDateFrom == DateTime.MinValue ? DateTime.Now.ToString("yyyy-MM-dd") : searchDateFrom.ToString("yyyy-MM-dd");
-            ViewData["SearchDateTo"] = searchDateTo == DateTime.MinValue ? DateTime.Now.ToString("yyyy-MM-dd") : searchDateTo.ToString("yyyy-MM-dd");
+            ViewData["SearchDateFrom"] =searchDateFrom.ToString("yyyy-MM-dd");
+            ViewData["SearchDateTo"] =searchDateTo.ToString("yyyy-MM-dd");
             ViewData["SortOrder"] = sortOrder;
             int pageSize = 6;
 
@@ -50,7 +50,7 @@ namespace bikeRental.Frontend.Controllers
                 orders = _orderService.SearchSelection(orders, searchDateFrom, searchDateTo);
             }
             
-            return View("/Pages/Orders/Index.cshtml", PaginatedList<OrderResponse>.Create(orders, pageNumber ?? 1, pageSize));
+            return View("/Pages/Orders/Index.cshtml", PaginatedList<OrderModel>.Create(orders, pageNumber ?? 1, pageSize));
         }
 
         [HttpGet]
@@ -60,8 +60,8 @@ namespace bikeRental.Frontend.Controllers
             var userID = Guid.Parse(User.Identity.GetUserId());
 
             ViewData["SortOrder"] = sortOrder;
-            ViewData["SearchDateFrom"] = searchDateFrom == DateTime.MinValue ? DateTime.Now.ToString("yyyy-MM-dd") : searchDateFrom.ToString("yyyy-MM-dd");
-            ViewData["SearchDateTo"] = searchDateTo == DateTime.MinValue ? DateTime.Now.ToString("yyyy-MM-dd") : searchDateTo.ToString("yyyy-MM-dd");
+            ViewData["SearchDateFrom"] = searchDateFrom.ToString("yyyy-MM-dd");
+            ViewData["SearchDateTo"] = searchDateTo.ToString("yyyy-MM-dd");
 
             int pageSize = 6;
 
@@ -74,7 +74,7 @@ namespace bikeRental.Frontend.Controllers
                 orders = _orderService.SearchSelection(orders, searchDateFrom, searchDateTo);
             }
 
-            return View("/Pages/Orders/UserIndex.cshtml", PaginatedList<OrderResponse>.Create(orders, pageNumber ?? 1, pageSize));
+            return View("/Pages/Orders/UserIndex.cshtml", PaginatedList<OrderModel>.Create(orders, pageNumber ?? 1, pageSize));
         }
 
         [Authorize]
