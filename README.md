@@ -25,4 +25,3 @@
 ### Authors
   - [Vera Marija Guja](https://www.github.com/VeraMarija)
   - [Tea Basic](https://www.github.com/Tea27)
-  - [Ante Melvan](https://github.com/ante31)
